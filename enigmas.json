@@ -1,0 +1,274 @@
+{
+  "enigmas": [
+    {
+      "pergunta": "Quanto é 10 + 5 * 2?",
+      "opcoes": ["30", "20", "25", "15"],
+      "correta": 1,
+      "dificuldade": "FACIL"
+    },
+    {
+      "pergunta": "Qual destes NÃO é um tipo primitivo em Java?",
+      "opcoes": ["int", "boolean", "String", "char"],
+      "correta": 2,
+      "dificuldade": "FACIL"
+    },
+    {
+      "pergunta": "O que significa CPU?",
+      "opcoes": ["Central Process Unit", "Computer Personal Unit", "Central Power Unit", "Core Process Unit"],
+      "correta": 0,
+      "dificuldade": "FACIL"
+    },
+    {
+      "pergunta": "Em Java, como terminas uma instrução?",
+      "opcoes": [":", ".", ";", "}"],
+      "correta": 2,
+      "dificuldade": "FACIL"
+    },
+    {
+      "pergunta": "Qual é o valor binário de 5?",
+      "opcoes": ["100", "101", "111", "011"],
+      "correta": 1,
+      "dificuldade": "FACIL"
+    },
+    {
+      "pergunta": "Qual é o resultado de (true && false)?",
+      "opcoes": ["true", "false", "null", "erro"],
+      "correta": 1,
+      "dificuldade": "FACIL"
+    },
+    {
+      "pergunta": "Qual ciclo garante que o código corre pelo menos uma vez?",
+      "opcoes": ["for", "while", "do-while", "foreach"],
+      "correta": 2,
+      "dificuldade": "FACIL"
+    },
+    {
+      "pergunta": "Qual palavra-chave define uma constante em Java?",
+      "opcoes": ["const", "final", "static", "fixed"],
+      "correta": 1,
+      "dificuldade": "FACIL"
+    },
+    {
+      "pergunta": "O que indica a palavra 'extends'?",
+      "opcoes": ["Interface", "Polimorfismo", "Herança", "Encapsulamento"],
+      "correta": 2,
+      "dificuldade": "FACIL"
+    },
+    {
+      "pergunta": "Onde são guardados os objetos em Java (memória)?",
+      "opcoes": ["Stack", "Heap", "Cache", "Register"],
+      "correta": 1,
+      "dificuldade": "FACIL"
+    },
+    {
+      "pergunta": "Qual destes nomes de variável é INVÁLIDO?",
+      "opcoes": ["minhaVariavel", "_valor", "2way", "$dinheiro"],
+      "correta": 2,
+      "dificuldade": "FACIL"
+    },
+    {
+      "pergunta": "O símbolo '!' em Java significa:",
+      "opcoes": ["OU (OR)", "E (AND)", "DIFERENTE", "NÃO (NOT)"],
+      "correta": 3,
+      "dificuldade": "FACIL"
+    },
+    {
+      "pergunta": "Qual o tamanho em bits de um 'int'?",
+      "opcoes": ["8", "16", "32", "64"],
+      "correta": 2,
+      "dificuldade": "FACIL"
+    },
+    {
+      "pergunta": "Como se escreve um comentário de uma linha?",
+      "opcoes": ["/* ... */", "// ...", "# ...", ""],
+      "correta": 1,
+      "dificuldade": "FACIL"
+    },
+    {
+      "pergunta": "Qual é a extensão de um ficheiro Java compilado (bytecode)?",
+      "opcoes": [".java", ".exe", ".class", ".jar"],
+      "correta": 2,
+      "dificuldade": "FACIL"
+    },
+    {
+      "pergunta": "Qual estrutura de dados segue a regra LIFO (Last-In, First-Out)?",
+      "opcoes": ["Fila (Queue)", "Lista Ligada", "Pilha (Stack)", "Árvore"],
+      "correta": 2,
+      "dificuldade": "MEDIO"
+    },
+    {
+      "pergunta": "Num array de tamanho 10, qual é o índice do último elemento?",
+      "opcoes": ["10", "9", "0", "11"],
+      "correta": 1,
+      "dificuldade": "MEDIO"
+    },
+    {
+      "pergunta": "Para percorrer um Grafo em largura (BFS), que estrutura auxiliar usamos?",
+      "opcoes": ["Pilha", "Fila", "Matriz", "Árvore"],
+      "correta": 1,
+      "dificuldade": "MEDIO"
+    },
+    {
+      "pergunta": "Qual destas estruturas garante acesso direto (rápido) por índice?",
+      "opcoes": ["LinkedList", "Array", "Stack", "Queue"],
+      "correta": 1,
+      "dificuldade": "MEDIO"
+    },
+    {
+      "pergunta": "O que acontece numa Hash Table quando duas chaves geram o mesmo índice?",
+      "opcoes": ["Erro de Compilação", "Overflow", "Colisão", "Deadlock"],
+      "correta": 2,
+      "dificuldade": "MEDIO"
+    },
+    {
+      "pergunta": "Qual a operação para remover um elemento de uma Stack?",
+      "opcoes": ["push", "enqueue", "pop", "peek"],
+      "correta": 2,
+      "dificuldade": "MEDIO"
+    },
+    {
+      "pergunta": "Como se chama o nó principal (topo) de uma Árvore?",
+      "opcoes": ["Folha (Leaf)", "Raiz (Root)", "Ramo", "Tronco"],
+      "correta": 1,
+      "dificuldade": "MEDIO"
+    },
+    {
+      "pergunta": "Qual a operação para adicionar um elemento a uma Queue?",
+      "opcoes": ["push", "enqueue", "pop", "dequeue"],
+      "correta": 1,
+      "dificuldade": "MEDIO"
+    },
+    {
+      "pergunta": "Uma Interface em Java pode guardar estado (variáveis de instância)?",
+      "opcoes": ["Sim", "Não", "Só se forem privadas", "Depende da versão"],
+      "correta": 1,
+      "dificuldade": "MEDIO"
+    },
+    {
+      "pergunta": "O que é essencial para parar uma função recursiva?",
+      "opcoes": ["Loop for", "Caso Base", "Return null", "Break"],
+      "correta": 1,
+      "dificuldade": "MEDIO"
+    },
+    {
+      "pergunta": "O que faz o Garbage Collector?",
+      "opcoes": ["Compila o código", "Gere memória e elimina objetos não usados", "Otimiza loops", "Gere threads"],
+      "correta": 1,
+      "dificuldade": "MEDIO"
+    },
+    {
+      "pergunta": "Qual a complexidade de inserir no INÍCIO de uma LinkedList?",
+      "opcoes": ["O(1)", "O(n)", "O(log n)", "O(n^2)"],
+      "correta": 0,
+      "dificuldade": "MEDIO"
+    },
+    {
+      "pergunta": "Para implementar a função 'Undo' (Desfazer), usamos qual estrutura?",
+      "opcoes": ["Queue", "Tree", "Stack", "Graph"],
+      "correta": 2,
+      "dificuldade": "MEDIO"
+    },
+    {
+      "pergunta": "O que acontece se não houver 'break' num switch case?",
+      "opcoes": ["Erro", "Sai do switch", "Executa o próximo case (Fall-through)", "Loop infinito"],
+      "correta": 2,
+      "dificuldade": "MEDIO"
+    },
+    {
+      "pergunta": "O que significa 'NullPointerException'?",
+      "opcoes": ["Variável não inicializada", "Apontador para nulo", "Erro de sintaxe", "Tentar usar um objeto que é null"],
+      "correta": 3,
+      "dificuldade": "MEDIO"
+    },
+    {
+      "pergunta": "Qual a complexidade temporal de acesso num Array vs LinkedList?",
+      "opcoes": ["O(1) vs O(n)", "O(n) vs O(1)", "O(n) vs O(n)", "O(1) vs O(1)"],
+      "correta": 0,
+      "dificuldade": "DIFICIL"
+    },
+    {
+      "pergunta": "Qual é a pior complexidade (Worst Case) do Bubble Sort?",
+      "opcoes": ["O(n)", "O(n log n)", "O(n^2)", "O(1)"],
+      "correta": 2,
+      "dificuldade": "DIFICIL"
+    },
+    {
+      "pergunta": "Num grafo denso (muitas arestas), qual a melhor representação?",
+      "opcoes": ["Lista de Adjacência", "Matriz de Adjacência", "Pilha Dupla", "Árvore Binária"],
+      "correta": 1,
+      "dificuldade": "DIFICIL"
+    },
+    {
+      "pergunta": "Qual a complexidade da pesquisa binária (Binary Search)?",
+      "opcoes": ["O(n)", "O(1)", "O(log n)", "O(n^2)"],
+      "correta": 2,
+      "dificuldade": "DIFICIL"
+    },
+    {
+      "pergunta": "O que é um Grafo Conexo?",
+      "opcoes": ["Não tem ciclos", "Todos os vértices têm grau 2", "Existe caminho entre quaisquer dois vértices", "Tem pesos negativos"],
+      "correta": 2,
+      "dificuldade": "DIFICIL"
+    },
+    {
+      "pergunta": "Qual a complexidade de pesquisa numa Árvore Binária (BST) equilibrada?",
+      "opcoes": ["O(n)", "O(log n)", "O(1)", "O(n^2)"],
+      "correta": 1,
+      "dificuldade": "DIFICIL"
+    },
+    {
+      "pergunta": "Num Max-Heap, onde está sempre o maior elemento?",
+      "opcoes": ["Na Raiz", "Na última folha", "No meio", "Aleatório"],
+      "correta": 0,
+      "dificuldade": "DIFICIL"
+    },
+    {
+      "pergunta": "Qual algoritmo de travessia de Grafos usa uma Stack (Pilha)?",
+      "opcoes": ["BFS (Largura)", "DFS (Profundidade)", "Dijkstra", "Prim"],
+      "correta": 1,
+      "dificuldade": "DIFICIL"
+    },
+    {
+      "pergunta": "O que é o 'Load Factor' numa Hash Table?",
+      "opcoes": ["Tempo de CPU", "Memória usada", "Relação Elementos / Capacidade", "Número de colisões"],
+      "correta": 2,
+      "dificuldade": "DIFICIL"
+    },
+    {
+      "pergunta": "Qual destes algoritmos de ordenação é considerado 'Estável'?",
+      "opcoes": ["QuickSort", "HeapSort", "MergeSort", "SelectionSort"],
+      "correta": 2,
+      "dificuldade": "DIFICIL"
+    },
+    {
+      "pergunta": "Qual a complexidade de espaço (memória auxiliar) do Merge Sort?",
+      "opcoes": ["O(1)", "O(n)", "O(log n)", "O(n^2)"],
+      "correta": 1,
+      "dificuldade": "DIFICIL"
+    },
+    {
+      "pergunta": "Para encontrar o caminho mais curto num grafo com pesos, usamos:",
+      "opcoes": ["BFS", "DFS", "Dijkstra", "Kruskal"],
+      "correta": 2,
+      "dificuldade": "DIFICIL"
+    },
+    {
+      "pergunta": "Qual é a altura máxima de uma Árvore Binária Completa com N nós?",
+      "opcoes": ["N", "log N", "N/2", "N^2"],
+      "correta": 1,
+      "dificuldade": "DIFICIL"
+    },
+    {
+      "pergunta": "Por que usamos números primos no tamanho de Hash Tables?",
+      "opcoes": ["Poupar memória", "Cálculo mais rápido", "Reduzir colisões", "É regra do Java"],
+      "correta": 2,
+      "dificuldade": "DIFICIL"
+    },
+    {
+      "pergunta": "Qual destes algoritmos NÃO é baseado em comparação?",
+      "opcoes": ["Merge Sort", "Quick Sort", "Radix Sort", "Bubble Sort"],
+      "correta": 2,
+      "dificuldade": "DIFICIL"
+    }
+  ]
+}

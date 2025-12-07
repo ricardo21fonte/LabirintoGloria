@@ -12,7 +12,6 @@ import Lists.ArrayUnorderedList;
 
 public class MapLoader {
 
-    @SuppressWarnings("unchecked")
     public LabyrinthGraph<Divisao> loadMap(String filePath) {
         System.out.println("DEBUG: A iniciar MapLoader para: " + filePath);
         LabyrinthGraph<Divisao> graph = new LabyrinthGraph<>();

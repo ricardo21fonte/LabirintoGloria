@@ -5,6 +5,7 @@ import enums.TipoDivisao;
 public class Divisao {
     private String nome;
     private TipoDivisao tipo;
+    private int idDesbloqueio;
     
     // Podes adicionar: private String desafio; (para enigmas)
 
@@ -15,6 +16,14 @@ public class Divisao {
 
     public String getNome() { return nome; }
     public TipoDivisao getTipo() { return tipo; }
+
+    public int getIdDesbloqueio() {
+        return idDesbloqueio;
+    }
+
+    public void setIdDesbloqueio(int idDesbloqueio) {
+        this.idDesbloqueio = idDesbloqueio;
+    }
 
     // --- CRUCIAL PARA O GRAFO FUNCIONAR ---
     @Override

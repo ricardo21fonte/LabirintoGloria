@@ -43,12 +43,30 @@ public class Main {
         ArrayUnorderedList<Enigma> todosEnigmas = enigmaLoader.loadEnigmas("enigmas.json");
 
         // B. Mapa
-        MapLoader mapLoader = new MapLoader();
-        // Certifica-te que mapa.json está na raiz do projeto
-        LabyrinthGraph<Divisao> labirintoGraph = mapLoader.loadMap("mapa.json");
+        System.out.println("\n--- MAPA DO JOGO ---");
+        System.out.println("1. Carregar 'mapa.json'");
+        System.out.println("2. Gerar Mapa Aleatório");
+        System.out.print("Opção: ");
+        
+        int opMapa = lerInteiro();
+        LabyrinthGraph<Divisao> labirintoGraph = null;
+
+        if (opMapa == 2) {
+    System.out.println("Tamanho do Labirinto?");
+    System.out.println("1 - Pequeno (Rápido)");
+    System.out.println("2 - Médio");
+    System.out.println("3 - Grande (Aventura Longa)");
+    System.out.print("Opção: ");
+    
+    int tamanho = lerInteiro();
+    io.MapGenerator gerador = new io.MapGenerator();
+    
+    // Agora passamos 1, 2 ou 3
+    labirintoGraph = gerador.gerarMapaAleatorio(tamanho);
+}
 
         if (labirintoGraph == null || labirintoGraph.size() == 0) {
-            System.out.println("❌ ERRO CRÍTICO: Mapa não carregado.");
+            System.out.println("❌ Erro ao obter mapa.");
             return;
         }
 
@@ -101,20 +119,30 @@ public class Main {
         if (numJogadores < 1) numJogadores = 1;
         
         LinkedQueue<Player> filaDeTurnos = new LinkedQueue<>();
-        Iterator<Divisao> itSpawns = entradas.iterator();
+
+        // --- ALTERAÇÃO: Passar as entradas para um Array auxiliar para escolher ao calhas ---
+        int totalEntradas = entradas.size();
+        Divisao[] arrayEntradas = new Divisao[totalEntradas];
+        Iterator<Divisao> it = entradas.iterator();
+        int index = 0;
+        while(it.hasNext()) {
+            arrayEntradas[index] = it.next();
+            index++;
+        }
+        // ---------------------------------------------------------------------------------
 
         for (int i = 1; i <= numJogadores; i++) {
             System.out.print("Nome do Jogador " + i + ": ");
             String nome = scanner.nextLine();
             
-            // Atribuir Spawn (Circular)
-            if (!itSpawns.hasNext()) itSpawns = entradas.iterator();
-            Divisao spawn = itSpawns.next();
+            // --- ALTERAÇÃO: Escolher um índice aleatório ---
+            int indiceSorteado = (int) (Math.random() * totalEntradas);
+            Divisao spawn = arrayEntradas[indiceSorteado];
             
             Player p = new Player(nome, spawn);
             motorJogo.adicionarJogador(p);
             filaDeTurnos.enqueue(p);
-            System.out.println("   -> " + nome + " começa em: " + spawn.getNome());
+            System.out.println("   🎲 Sorteio: " + nome + " caiu em " + spawn.getNome());
         }
 
         System.out.println("\n⚔️ QUE COMECE A CORRIDA! ⚔️");
@@ -161,9 +189,9 @@ public class Main {
                 ArrayUnorderedList<Divisao> vizinhos = labirintoGraph.getVizinhos(atual.getLocalAtual());
                 Divisao[] opcoes = new Divisao[10];
                 int count = 0;
-                Iterator<Divisao> it = vizinhos.iterator();
-                while (it.hasNext()) {
-                    Divisao v = it.next();
+                Iterator<Divisao> itVizinhos = vizinhos.iterator(); // Nome novo
+                while (itVizinhos.hasNext()) {
+                Divisao v = itVizinhos.next();
                     opcoes[count] = v;
                     System.out.println("   [" + (count + 1) + "] Ir para: " + v.getNome() + " (" + v.getTipo() + ")");
                     count++;
@@ -230,7 +258,7 @@ public class Main {
                         
                         // Exportar JSON
                         GameExporter exporter = new GameExporter();
-                        exporter.exportarRelatorio(atual);
+                        //exporter.exportarRelatorio(atual);
                         
                         jogoAcorrer = false;
                         turnoQueimado = true; // Para sair do while interno

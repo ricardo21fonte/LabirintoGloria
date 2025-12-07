@@ -269,6 +269,277 @@
       "opcoes": ["Merge Sort", "Quick Sort", "Radix Sort", "Bubble Sort"],
       "correta": 2,
       "dificuldade": "DIFICIL"
+    },
+    {
+      "pergunta": "Qual é o operador para calcular o resto da divisão?",
+      "opcoes": ["/", "REST", "%", "#"],
+      "correta": 2,
+      "dificuldade": "FACIL"
+    },
+    {
+      "pergunta": "O que imprime 'System.out.println(1 + \"2\")'?",
+      "opcoes": ["3", "12", "Erro", "NaN"],
+      "correta": 1,
+      "dificuldade": "FACIL"
+    },
+    {
+      "pergunta": "Qual é o valor padrão (default) de um inteiro em Java?",
+      "opcoes": ["1", "null", "0", "-1"],
+      "correta": 2,
+      "dificuldade": "FACIL"
+    },
+    {
+      "pergunta": "O que significa a sigla HTML?",
+      "opcoes": ["HyperText Markup Language", "HighTech Modern Language", "HyperText Machine Learning", "Home Tool Markup Language"],
+      "correta": 0,
+      "dificuldade": "FACIL"
+    },
+    {
+      "pergunta": "Qual destas NÃO é uma linguagem de programação?",
+      "opcoes": ["Python", "Java", "HTML", "C++"],
+      "correta": 2,
+      "dificuldade": "FACIL"
+    },
+    {
+      "pergunta": "Quantos bytes tem 1 Kilobyte (KB)?",
+      "opcoes": ["1000", "1024", "8", "512"],
+      "correta": 1,
+      "dificuldade": "FACIL"
+    },
+    {
+      "pergunta": "Qual método é chamado automaticamente ao criar um objeto?",
+      "opcoes": ["main", "start", "init", "Construtor"],
+      "correta": 3,
+      "dificuldade": "FACIL"
+    },
+    {
+      "pergunta": "O que faz o comando 'git init'?",
+      "opcoes": ["Envia código", "Apaga ficheiros", "Inicia um repositório", "Cria um commit"],
+      "correta": 2,
+      "dificuldade": "FACIL"
+    },
+    {
+      "pergunta": "Qual é a negação de (A OU B)?",
+      "opcoes": ["A E B", "NÃO A E NÃO B", "NÃO A OU NÃO B", "A OU NÃO B"],
+      "correta": 1,
+      "dificuldade": "FACIL"
+    },
+    {
+      "pergunta": "Qual é o índice do primeiro elemento de um array?",
+      "opcoes": ["1", "0", "-1", "Depende do tamanho"],
+      "correta": 1,
+      "dificuldade": "FACIL"
+    },
+    {
+      "pergunta": "O que é um 'loop infinito'?",
+      "opcoes": ["Um erro de sintaxe", "Um ciclo que nunca para", "Uma variável muito grande", "Um tipo de grafo"],
+      "correta": 1,
+      "dificuldade": "FACIL"
+    },
+    {
+      "pergunta": "Qual destes tipos guarda números decimais?",
+      "opcoes": ["int", "boolean", "double", "char"],
+      "correta": 2,
+      "dificuldade": "FACIL"
+    },
+    {
+      "pergunta": "Como se chama a 'receita' para criar objetos?",
+      "opcoes": ["Classe", "Método", "Variável", "Pacote"],
+      "correta": 0,
+      "dificuldade": "FACIL"
+    },
+    {
+      "pergunta": "O que significa 'GUI'?",
+      "opcoes": ["Global User Interface", "Graphical User Interface", "General Unit Integer", "Game User Input"],
+      "correta": 1,
+      "dificuldade": "FACIL"
+    },
+    {
+      "pergunta": "Se x=5 e y=2, quanto é x/y em divisão inteira?",
+      "opcoes": ["2.5", "2", "3", "Erro"],
+      "correta": 1,
+      "dificuldade": "FACIL"
+    },
+    {
+      "pergunta": "O que é Polimorfismo?",
+      "opcoes": ["Muitas formas para o mesmo método", "Esconder dados", "Herança múltipla", "Criar interfaces"],
+      "correta": 0,
+      "dificuldade": "MEDIO"
+    },
+    {
+      "pergunta": "Qual a principal diferença entre Array e ArrayList?",
+      "opcoes": ["O Array é mais lento", "O ArrayList é dinâmico (muda de tamanho)", "O Array aceita genéricos", "Não há diferença"],
+      "correta": 1,
+      "dificuldade": "MEDIO"
+    },
+    {
+      "pergunta": "Para que serve a palavra 'super'?",
+      "opcoes": ["Declarar constante", "Aceder à superclasse (pai)", "Criar super objeto", "Aumentar memória"],
+      "correta": 1,
+      "dificuldade": "MEDIO"
+    },
+    {
+      "pergunta": "O que é uma 'Queue' (Fila)?",
+      "opcoes": ["LIFO (Last-In, First-Out)", "FIFO (First-In, First-Out)", "Acesso Aleatório", "Árvore Binária"],
+      "correta": 1,
+      "dificuldade": "MEDIO"
+    },
+    {
+      "pergunta": "Qual a complexidade de inserir no final de uma ArrayList (sem resize)?",
+      "opcoes": ["O(n)", "O(log n)", "O(1)", "O(n^2)"],
+      "correta": 2,
+      "dificuldade": "MEDIO"
+    },
+    {
+      "pergunta": "O que é o encapsulamento?",
+      "opcoes": ["Esconder detalhes internos (private)", "Herança de classes", "Sobrecarga de métodos", "Uso de interfaces"],
+      "correta": 0,
+      "dificuldade": "MEDIO"
+    },
+    {
+      "pergunta": "Qual exceção ocorre se acederes a um índice negativo num array?",
+      "opcoes": ["NullPointerException", "IndexOutOfBoundsException", "ClassCastException", "IOException"],
+      "correta": 1,
+      "dificuldade": "MEDIO"
+    },
+    {
+      "pergunta": "O que faz o comando 'this'?",
+      "opcoes": ["Refere-se à classe pai", "Refere-se ao objeto atual", "Cria um novo objeto", "Apaga a variável"],
+      "correta": 1,
+      "dificuldade": "MEDIO"
+    },
+    {
+      "pergunta": "Qual destes NÃO pode ser instanciado?",
+      "opcoes": ["Classe Publica", "Classe Abstrata", "Classe Final", "Classe Estática"],
+      "correta": 1,
+      "dificuldade": "MEDIO"
+    },
+    {
+      "pergunta": "Numa lista duplamente ligada, cada nó tem referências para:",
+      "opcoes": ["Apenas o próximo", "O anterior e o próximo", "O índice e o valor", "A raiz e a folha"],
+      "correta": 1,
+      "dificuldade": "MEDIO"
+    },
+    {
+      "pergunta": "Qual a vantagem de uma Hash Table (Mapa)?",
+      "opcoes": ["Ordenação automática", "Acesso muito rápido (médio O(1))", "Não ocupa memória", "Permite chaves duplicadas"],
+      "correta": 1,
+      "dificuldade": "MEDIO"
+    },
+    {
+      "pergunta": "O que é um 'Deadlock'?",
+      "opcoes": ["Erro de memória", "Dois processos bloqueados à espera um do outro", "Um loop infinito", "Um ponteiro nulo"],
+      "correta": 1,
+      "dificuldade": "MEDIO"
+    },
+    {
+      "pergunta": "Qual estrutura é usada para implementar Recursividade no sistema?",
+      "opcoes": ["Queue", "Heap", "Stack", "Graph"],
+      "correta": 2,
+      "dificuldade": "MEDIO"
+    },
+    {
+      "pergunta": "O que significa FIFO?",
+      "opcoes": ["Fast In Fast Out", "First In First Out", "First Integer First Object", "File Input File Output"],
+      "correta": 1,
+      "dificuldade": "MEDIO"
+    },
+    {
+      "pergunta": "Qual destas ordenações é a mais lenta (O(n^2))?",
+      "opcoes": ["Merge Sort", "Quick Sort", "Bubble Sort", "Heap Sort"],
+      "correta": 2,
+      "dificuldade": "MEDIO"
+    },
+    {
+      "pergunta": "O que distingue uma Árvore AVL de uma BST normal?",
+      "opcoes": ["Aceita duplicados", "É sempre balanceada", "Tem 3 filhos", "Não usa recursividade"],
+      "correta": 1,
+      "dificuldade": "DIFICIL"
+    },
+    {
+      "pergunta": "Qual a complexidade do algoritmo de Dijkstra (com Priority Queue)?",
+      "opcoes": ["O(V + E)", "O(V^2)", "O(E + V log V)", "O(E log V)"],
+      "correta": 3,
+      "dificuldade": "DIFICIL"
+    },
+    {
+      "pergunta": "O que é uma colisão em Hashing?",
+      "opcoes": ["Hash Table cheia", "Duas chaves diferentes dão o mesmo hash", "Erro de sintaxe", "Acesso a índice negativo"],
+      "correta": 1,
+      "dificuldade": "DIFICIL"
+    },
+    {
+      "pergunta": "Qual destas estruturas NÃO é linear?",
+      "opcoes": ["Stack", "Queue", "LinkedList", "Graph"],
+      "correta": 3,
+      "dificuldade": "DIFICIL"
+    },
+    {
+      "pergunta": "Numa travessia 'In-Order' de uma BST, os valores saem:",
+      "opcoes": ["Aleatórios", "Ordenados crescentemente", "Invertidos", "Pela ordem de inserção"],
+      "correta": 1,
+      "dificuldade": "DIFICIL"
+    },
+    {
+      "pergunta": "O problema do Caixeiro Viajante (TSP) é de que classe?",
+      "opcoes": ["P", "NP-Hard", "Linear", "Logarítmico"],
+      "correta": 1,
+      "dificuldade": "DIFICIL"
+    },
+    {
+      "pergunta": "Qual a altura máxima de uma Red-Black Tree com N nós?",
+      "opcoes": ["N", "2 * log(N+1)", "N/2", "sqrt(N)"],
+      "correta": 1,
+      "dificuldade": "DIFICIL"
+    },
+    {
+      "pergunta": "O que faz o algoritmo de Kruskal?",
+      "opcoes": ["Caminho mais curto", "Ordenação topológica", "Árvore de extensão mínima (MST)", "Fluxo máximo"],
+      "correta": 2,
+      "dificuldade": "DIFICIL"
+    },
+    {
+      "pergunta": "Qual estrutura é melhor para implementar 'Autocomplete'?",
+      "opcoes": ["LinkedList", "Hash Map", "Trie (Prefix Tree)", "Stack"],
+      "correta": 2,
+      "dificuldade": "DIFICIL"
+    },
+    {
+      "pergunta": "Em Java, 'String' é imutável. O que isso significa?",
+      "opcoes": ["Não pode ser apagada", "O valor em memória não muda após criação", "É uma primitiva", "Não tem métodos"],
+      "correta": 1,
+      "dificuldade": "DIFICIL"
+    },
+    {
+      "pergunta": "Qual a complexidade espacial de uma Matriz de Adjacência?",
+      "opcoes": ["O(V)", "O(E)", "O(V^2)", "O(V + E)"],
+      "correta": 2,
+      "dificuldade": "DIFICIL"
+    },
+    {
+      "pergunta": "Se uma função chama a si mesma duas vezes (ex: Fibonacci), a complexidade é:",
+      "opcoes": ["O(n)", "O(n^2)", "O(2^n)", "O(log n)"],
+      "correta": 2,
+      "dificuldade": "DIFICIL"
+    },
+    {
+      "pergunta": "Qual a diferença entre 'Processo' e 'Thread'?",
+      "opcoes": ["Não há diferença", "Threads partilham memória, Processos não", "Processos são mais leves", "Threads não correm em paralelo"],
+      "correta": 1,
+      "dificuldade": "DIFICIL"
+    },
+    {
+      "pergunta": "O que é 'Memoization' em Programação Dinâmica?",
+      "opcoes": ["Apagar memória", "Guardar resultados para não recalcular", "Usar recursividade", "Aumentar a stack"],
+      "correta": 1,
+      "dificuldade": "DIFICIL"
+    },
+    {
+      "pergunta": "Qual destes é um Grafo Bipartido?",
+      "opcoes": ["Todos os vértices ligados", "Vértices divididos em 2 conjuntos sem ligações internas", "Grafo com 2 ciclos", "Árvore Binária"],
+      "correta": 1,
+      "dificuldade": "DIFICIL"
     }
   ]
+
 }

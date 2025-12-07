@@ -11,7 +11,6 @@ import Lists.ArrayUnorderedList; // A tua lista
 
 public class EnigmaLoader {
 
-    @SuppressWarnings("unchecked")
     public ArrayUnorderedList<Enigma> loadEnigmas(String filePath) {
         System.out.println("DEBUG: A carregar enigmas de " + filePath);
         ArrayUnorderedList<Enigma> listaEnigmas = new ArrayUnorderedList<>();

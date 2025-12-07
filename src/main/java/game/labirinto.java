@@ -4,6 +4,7 @@ import Lists.ArrayUnorderedList; // A tua lista para guardar os jogadores
 import enums.TipoDivisao;
 import enums.CorredorEvent;
 import enums.Dificuldade;
+import java.util.Iterator;
 
 public class labirinto {
 
@@ -18,6 +19,7 @@ public class labirinto {
 
     public labirinto() {
         this.jogadores = new ArrayUnorderedList<>();
+        this.enigmasDisponiveis = new ArrayUnorderedList<>();
         this.jogoTerminado = false;
     }
 
@@ -26,26 +28,7 @@ public class labirinto {
         this.enigmasDisponiveis = enigmas;
     }
 
-    // --- NOVO: Método para obter um enigma (pela dificuldade ou o primeiro que aparecer) ---
-    public Enigma obterEnigma(Dificuldade difAlvo) {
-        if (enigmasDisponiveis.isEmpty()) return null;
-
-        // Tenta encontrar um enigma da dificuldade pedida
-        java.util.Iterator<Enigma> it = enigmasDisponiveis.iterator();
-        while (it.hasNext()) {
-            Enigma e = it.next();
-            if (e.getDificuldade() == difAlvo) {
-                // Remover da lista para não repetir (regra do enunciado)
-                enigmasDisponiveis.remove(e); 
-                return e;
-            }
-        }
-        
-        // Se não houver dessa dificuldade, devolve o primeiro que houver (fallback)
-        Enigma e = enigmasDisponiveis.first();
-        enigmasDisponiveis.removeFirst();
-        return e;
-    }
+    // --- NOVO: Método para obter um enigma (pela dificuldade ou o primeiro que aparecer) --
 
     // --- CONFIGURAÇÃO ---
     public void setMapa(LabyrinthGraph<Divisao> mapa) {
@@ -54,6 +37,51 @@ public class labirinto {
 
     public void adicionarJogador(Player jogador) {
         jogadores.addToRear(jogador);
+    }
+
+    public Enigma obterEnigma(Dificuldade difAlvo) {
+        if (enigmasDisponiveis.isEmpty()) return null;
+
+        // 1. Filtrar: Criar lista temporária só com os enigmas da dificuldade certa
+        ArrayUnorderedList<Enigma> candidatos = new ArrayUnorderedList<>();
+        Iterator<Enigma> it = enigmasDisponiveis.iterator();
+        
+        while (it.hasNext()) {
+            Enigma e = it.next();
+            if (e.getDificuldade() == difAlvo) {
+                candidatos.addToRear(e);
+            }
+        }
+
+        if (candidatos.isEmpty()) {
+            System.out.println("(Não há mais enigmas desta dificuldade!)");
+            return null;
+        }
+
+        // 2. Sorteio: Escolher um índice aleatório
+        int totalCandidatos = candidatos.size();
+        int indiceSorteado = (int) (Math.random() * totalCandidatos);
+
+        // 3. Buscar: Encontrar o objeto nesse índice (percorrendo a lista de candidatos)
+        Enigma enigmaEscolhido = null;
+        Iterator<Enigma> itCandidatos = candidatos.iterator();
+        int contador = 0;
+        
+        while (itCandidatos.hasNext()) {
+            Enigma e = itCandidatos.next();
+            if (contador == indiceSorteado) {
+                enigmaEscolhido = e;
+                break;
+            }
+            contador++;
+        }
+
+        // 4. Remover: Apagar da lista PRINCIPAL para nunca mais sair
+        if (enigmaEscolhido != null) {
+            enigmasDisponiveis.remove(enigmaEscolhido);
+        }
+
+        return enigmaEscolhido;
     }
 
     // --- LÓGICA DO JOGO (Onde a magia acontece) ---

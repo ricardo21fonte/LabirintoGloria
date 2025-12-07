@@ -10,7 +10,8 @@ public class CorredorEvent {
         EXTRA_TURN,     // Ganhar jogada extra 
         SWAP_POSITION,  // Trocar com outro jogador 
         MOVE_BACK,      // Recuar casas 
-        BLOCK_TURN      // Ficar impedido de jogar 
+        BLOCK_TURN , 
+        LOCKED    // Ficar impedido de jogar 
     }
 
     private Type type;

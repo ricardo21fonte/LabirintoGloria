@@ -4,6 +4,7 @@ import Lists.UnorderedLinkedList;
 import Stacks.LinkedStack;
 import Exceptions.EmptyCollectionException;
 import enums.TipoDivisao;
+import Lists.ArrayUnorderedList;
 
 public class Player {
     private String nome;
@@ -19,6 +20,7 @@ public class Player {
     // tamanho mínimo da stack até onde é permitido recuar
     private int limiteRecuoMinSize;
 
+    private ArrayUnorderedList<Integer> trancasDesbloqueadas;
     // =========================
     //       CONSTRUTOR
     // =========================
@@ -33,6 +35,7 @@ public class Player {
         caminho.push(inicio);
 
         this.limiteRecuoMinSize = 1;
+        this.trancasDesbloqueadas = new ArrayUnorderedList<>();
 
         historico.addToRear("Inicio: " + inicio.getNome());
     }
@@ -135,6 +138,24 @@ public class Player {
 
     public int getLimiteRecuoMinSize() { return limiteRecuoMinSize; }
     public void setLimiteRecuoMinSize(int limiteRecuoMinSize) { this.limiteRecuoMinSize = limiteRecuoMinSize; }
+
+    public void desbloquearTranca(int id) {
+        if (!podePassarTranca(id)) {
+            trancasDesbloqueadas.addToRear(id);
+            System.out.println(nome + " desbloqueou a tranca #" + id + " (só para este jogador).");
+        }
+    }
+
+    public boolean podePassarTranca(int id) {
+        java.util.Iterator<Integer> it = trancasDesbloqueadas.iterator();
+        while (it.hasNext()) {
+            int valor = it.next();
+            if (valor == id) return true;
+        }
+        return false;
+    }
+
+
 
     // =========================
     //     MÉTODOS EXTRA

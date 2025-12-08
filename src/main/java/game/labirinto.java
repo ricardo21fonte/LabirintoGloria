@@ -108,10 +108,12 @@ public class labirinto {
         EventoCorredor eventoCorredor = mapa.getCorredorEvento(origem, destino);
         CorredorEvento tipoEvento = eventoCorredor.getTipo();
 
-        if (tipoEvento != CorredorEvento.NONE) {
+        if (tipoEvento != CorredorEvento.NONE &&
+                tipoEvento != CorredorEvento.LOCKED) {
             System.out.println("⚠️ EVENTO NO CORREDOR: " + tipoEvento +
                     " (valor = " + eventoCorredor.getValor() + ")");
         }
+
 
         switch (tipoEvento) {
             case MOVE_BACK:

@@ -10,6 +10,9 @@ public class Alavanca {
     // posição 1 → alavanca 2
     // posição 2 → alavanca 3
     private AlavancaEnum[] efeitos;
+    // para não repetir o puzzle depois de resolvido
+    private boolean resolvida;
+
 
     public Alavanca() {
         efeitos = new AlavancaEnum[NUM_ALAVANCAS];
@@ -32,9 +35,7 @@ public class Alavanca {
         }
     }
 
-    /**
-     
-@param escolha 1, 2 ou 3*/
+    /** @param escolha 1, 2 ou 3*/
   public AlavancaEnum ativar(int escolha) {
       if (escolha < 1 || escolha > NUM_ALAVANCAS) {
           return AlavancaEnum.NADA;}
@@ -42,5 +43,13 @@ public class Alavanca {
 
     public int getNumAlavancas() {
         return NUM_ALAVANCAS;
+    }
+
+    public boolean isResolvida() {
+        return resolvida;
+    }
+
+    public void marcarResolvida() {
+        this.resolvida = true;
     }
 }

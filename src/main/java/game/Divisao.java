@@ -25,6 +25,18 @@ public class Divisao {
     public String getNome() { return nome; }
     public TipoDivisao getTipo() { return tipo; }
 
+    @Override
+    public String toString() {
+        return nome + " [" + tipo + "]";
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (obj == null || getClass() != obj.getClass()) return false;
+        Divisao outra = (Divisao) obj;
+        return this.nome.equals(outra.nome);
+    }
 
 
 }

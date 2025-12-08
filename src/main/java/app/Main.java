@@ -287,37 +287,53 @@ public class Main {
                 // --- MOVIMENTO ---
                 if (podeEntrar) {
                     EventoCorredor evento = labirintoGraph.getCorredorEvento(atual.getLocalAtual(), destino);
-                    
+
+                    // 1) Verificar se é um portão trancado
                     if (evento.getTipo() == CorredorEvento.LOCKED) {
-                        System.out.println("🔒 Portão Trancado (Chave #" + evento.getValor() + " necessária).");
-                        if (atual instanceof Bot) turnoQueimado = true; // Bot desiste deste turno
-                    } else {
-                        motorJogo.realizarJogada(atual, destino);
+                        int idTranca = evento.getValor();
 
-                        if (evento.getTipo() == CorredorEvento.BLOCK_TURN ||
-                            evento.getTipo() == CorredorEvento.MOVE_BACK) {
-                            System.out.println("⛔ Armadilha ativada! Turno encerrado.");
-                            turnoQueimado = true;
-                        }
-                        
-                        movimentos--; 
-                        // SE A SALA DE DESTINO FOR DE ALAVANCA, CHAMAMOS O PUZZLE
-                        if (!turnoQueimado && destino.getTipo() == TipoDivisao.SALA_ALAVANCA) {
-                            boolean acabouTurno = resolverSalaAlavanca(atual, destino, labirintoGraph);
-                            if (acabouTurno) {
-                                turnoQueimado = true;
+                        // ESTE É O PONTO CRÍTICO: ver se ESTE jogador já abriu essa tranca
+                        if (!atual.podePassarTranca(idTranca)) {
+                            System.out.println("🔒 Portão trancado (Tranca #" + idTranca + ").");
+                            System.out.println("   Ativa primeiro a Sala de Controlo #" + idTranca + " com este jogador.");
+                            // não entra, não gasta movimento
+                            if (atual instanceof Bot) {
+                                turnoQueimado = true; // se quiseres castigar o bot, opcional
                             }
+                            continue;  // volta ao while(movimentos>0) sem andar
+                        } else {
+                            System.out.println("🔓 Tranca #" + idTranca + " já foi desbloqueada para "
+                                    + atual.getNome() + ". Passas.");
                         }
+                    }
 
-                        if (atual.getLocalAtual().getTipo() == TipoDivisao.SALA_CENTRAL) {
-                            System.out.println("\n🎉🎉 VENCEDOR: " + atual.getNome() + "! 🎉🎉");
-                            GameExporter exporter = new GameExporter();
-                            
-                            jogoAcorrer = false;
+                    // 2) Se chegou aqui, ou não era LOCKED, ou está desbloqueada para este jogador
+                    motorJogo.realizarJogada(atual, destino);
+
+                    if (evento.getTipo() == CorredorEvento.BLOCK_TURN ||
+                            evento.getTipo() == CorredorEvento.MOVE_BACK) {
+                        System.out.println("⛔ Armadilha ativada! Turno encerrado.");
+                        turnoQueimado = true;
+                    }
+
+                    movimentos--;
+
+                    // SE A SALA DE DESTINO FOR DE ALAVANCA, CHAMAMOS O PUZZLE
+                    if (!turnoQueimado && destino.getTipo() == TipoDivisao.SALA_ALAVANCA) {
+                        boolean acabouTurno = resolverSalaAlavanca(atual, destino, labirintoGraph);
+                        if (acabouTurno) {
                             turnoQueimado = true;
                         }
                     }
+
+                    if (atual.getLocalAtual().getTipo() == TipoDivisao.SALA_CENTRAL) {
+                        System.out.println("\n🎉🎉 VENCEDOR: " + atual.getNome() + "! 🎉🎉");
+                        GameExporter exporter = new GameExporter();
+                        jogoAcorrer = false;
+                        turnoQueimado = true;
+                    }
                 }
+
             } 
 
             if (jogoAcorrer) {
@@ -399,7 +415,10 @@ public class Main {
 
         System.out.println("\nEsta sala tem 3 alavancas.");
         System.out.println("Uma abre um mecanismo, outra penaliza, outra não faz nada.");
-
+        System.out.println("[1] Alavanca 1");
+        System.out.println("[2] Alavanca 2");
+        System.out.println("[3] Alavanca 3");
+        System.out.print("Escolhe 1, 2 ou 3: ");
         int escolha;
 
         if (jogador instanceof Bot) {
@@ -409,10 +428,6 @@ public class Main {
         } else {
             // Humano: perguntar
             do {
-                System.out.println("[1] Alavanca 1");
-                System.out.println("[2] Alavanca 2");
-                System.out.println("[3] Alavanca 3");
-                System.out.print("Escolhe 1, 2 ou 3: ");
                 escolha = lerInteiro();
             } while (escolha < 1 || escolha > 3);
         }
@@ -421,8 +436,15 @@ public class Main {
 
         switch (resultado) {
             case ABRIR_PORTA:
-                System.out.println("A alavanca certa! O mecanismo é ativado e a passagem foi desbloqueada.");
-                // Se quiseres ligar a trancas por idDesbloqueio, fazes aqui.
+                // ID da tranca que esta sala controla
+                int idTranca = sala.getIdDesbloqueio();
+                if (idTranca > 0) {
+                    jogador.desbloquearTranca(idTranca);
+                    System.out.println("A alavanca certa! A tranca #" + idTranca
+                            + " foi desbloqueada para o jogador " + jogador.getNome() + ".");
+                } else {
+                    System.out.println("A alavanca certa! Ouves mecanismos ao longe...");
+                }
                 return false; // turno continua
 
             case PENALIZAR:
@@ -435,6 +457,7 @@ public class Main {
                 System.out.println("Nada acontece. Alavanca inútil.");
                 return false; // turno continua
         }
+
     }
 
 

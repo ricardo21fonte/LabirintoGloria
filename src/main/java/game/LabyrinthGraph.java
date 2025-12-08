@@ -12,22 +12,17 @@ public class LabyrinthGraph<T> extends GraphList<T> {
     // Índice = origem, lista tem pares <destino, evento>
     private ArrayUnorderedList<MapaNode<Integer, EventoCorredor>>[] edgeEvents;
 
-    @SuppressWarnings("unchecked")
     public LabyrinthGraph() {
         super();
-        this.edgeEvents = (ArrayUnorderedList<MapaNode<Integer, EventoCorredor>>[])
-                new ArrayUnorderedList[DEFAULT_CAPACITY];
+        this.edgeEvents = (ArrayUnorderedList<MapaNode<Integer, EventoCorredor>>[]) new ArrayUnorderedList[DEFAULT_CAPACITY];
     }
 
     @Override
-    @SuppressWarnings("unchecked")
     protected void expandCapacity() {
         // Deixa o GraphList aumentar vertices / adjLists
         super.expandCapacity();
 
-        ArrayUnorderedList<MapaNode<Integer, EventoCorredor>>[] largerEdgeEvents =
-                (ArrayUnorderedList<MapaNode<Integer, EventoCorredor>>[])
-                        new ArrayUnorderedList[vertices.length];
+        ArrayUnorderedList<MapaNode<Integer, EventoCorredor>>[] largerEdgeEvents = (ArrayUnorderedList<MapaNode<Integer, EventoCorredor>>[]) new ArrayUnorderedList[vertices.length];
 
         // copiar existentes
         for (int i = 0; i < edgeEvents.length; i++) {

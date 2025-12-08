@@ -21,6 +21,15 @@ public class EventoCorredor {
         return valor;
     }
 
+    // ➜ ADICIONAR ISTO:
+    public void setTipo(CorredorEvento tipo) {
+        this.tipo = tipo;
+    }
+
+    public void setValor(int valor) {
+        this.valor = valor;
+    }
+
     @Override
     public String toString() {
         if (tipo == CorredorEvento.NONE) return "Corredor Seguro";

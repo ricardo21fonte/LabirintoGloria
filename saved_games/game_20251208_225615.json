@@ -1,0 +1,73 @@
+{
+  "vencedor": "1",
+  "dataHora": "2025-12-08T22:56:15.111611700",
+  "duracao": 6,
+  "mapaNome": "Mapa do Jogo",
+  "dificuldade": "FACIL",
+  "totalEnigmasResolvidos": 5,
+  "totalObstaculos": 0,
+  "jogadores": [
+    {
+      "nome": "1",
+      "tipo": "Humano",
+      "localAtual": "Câmara do Tesouro",
+      "turnosJogados": 6,
+      "vencedor": true,
+      "percurso": ["Corredor Vazio", "Laboratório de Alquimia", "Sala de Controlo", "Corredor Vazio", "Laboratório de Alquimia", "Sala de Controlo", "Corredor Vazio", "Sala dos Espelhos", "Corredor Vazio", "Laboratório de Alquimia", "Sala de Controlo", "Sala dos Espelhos", "Bunker Secreto", "Câmara do Tesouro"],
+      "obstaculos": [],
+      "enigmas": [
+        {
+          "sala": "Corredor Vazio",
+          "pergunta": "O que significa CPU?",
+          "resposta": "1",
+          "resolvido": true,
+          "efeito": "EXTRA_TURN"
+        },
+        {
+          "sala": "Corredor Vazio",
+          "pergunta": "Qual método é chamado automaticamente ao criar um objeto?",
+          "resposta": "1",
+          "resolvido": false,
+          "efeito": "BACK:1"
+        },
+        {
+          "sala": "Corredor Vazio",
+          "pergunta": "Qual destas NÃO é uma linguagem de programação?",
+          "resposta": "3",
+          "resolvido": true,
+          "efeito": "EXTRA_TURN"
+        },
+        {
+          "sala": "Corredor Vazio",
+          "pergunta": "Qual é a extensão de um ficheiro Java compilado (bytecode)?",
+          "resposta": "4",
+          "resolvido": false,
+          "efeito": "BACK:1"
+        },
+        {
+          "sala": "Corredor Vazio",
+          "pergunta": "Se x=5 e y=2, quanto é x/y em divisão inteira?",
+          "resposta": "2",
+          "resolvido": true,
+          "efeito": "EXTRA_TURN"
+        },
+        {
+          "sala": "Corredor Vazio",
+          "pergunta": "Quanto é 10 + 5 * 2?",
+          "resposta": "2",
+          "resolvido": true,
+          "efeito": "EXTRA_TURN"
+        },
+        {
+          "sala": "Corredor Vazio",
+          "pergunta": "O que é um 'loop infinito'?",
+          "resposta": "2",
+          "resolvido": true,
+          "efeito": "EXTRA_TURN"
+        }
+      ],
+      "efeitosAplicados": [],
+      "totalEnigmasResolvidos": 5
+    }
+  ]
+}

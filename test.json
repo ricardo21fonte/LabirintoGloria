@@ -1,0 +1,63 @@
+{
+  "nome": "O Grande Labirinto 33 (8 Entradas)",
+  "salas": [
+    { "codigo": "T1", "tipo": "SALA_CENTRAL", "nome": "Câmara do Tesouro" },
+
+    { "codigo": "S1", "tipo": "ENTRADA", "nome": "Portão Norte A" },
+    { "codigo": "S2", "tipo": "ENTRADA", "nome": "Portão Norte B" },
+    { "codigo": "S3", "tipo": "ENTRADA", "nome": "Portão Sul A" },
+    { "codigo": "S4", "tipo": "ENTRADA", "nome": "Portão Sul B" },
+    { "codigo": "S5", "tipo": "ENTRADA", "nome": "Portão Este A" },
+    { "codigo": "S6", "tipo": "ENTRADA", "nome": "Portão Este B" },
+    { "codigo": "S7", "tipo": "ENTRADA", "nome": "Portão Oeste A" },
+    { "codigo": "S8", "tipo": "ENTRADA", "nome": "Portão Oeste B" },
+
+    { "codigo": "N1", "tipo": "SALA_NORMAL", "nome": "Pátio de Pedra" },
+    { "codigo": "N2", "tipo": "SALA_NORMAL", "nome": "Corredor Vazio" },
+    { "codigo": "N3", "tipo": "SALA_NORMAL", "nome": "Salão de Festas" },
+    { "codigo": "N4", "tipo": "SALA_NORMAL", "nome": "Cozinha Abandonada" },
+
+    { "codigo": "E1", "tipo": "SALA_ENIGMA", "nome": "Biblioteca Mágica" },
+    { "codigo": "E2", "tipo": "SALA_ENIGMA", "nome": "Laboratório de Alquimia" },
+    { "codigo": "E3", "tipo": "SALA_ENIGMA", "nome": "Observatório" },
+    { "codigo": "E4", "tipo": "SALA_ENIGMA", "nome": "Cripta dos Sábios" },
+    { "codigo": "E5", "tipo": "SALA_ENIGMA", "nome": "Sala dos Espelhos" },
+
+    { "codigo": "A1", "tipo": "SALA_ALAVANCA", "nome": "Sala das Máquinas" },
+    { "codigo": "A2", "tipo": "SALA_ALAVANCA", "nome": "Sala de Controlo" },
+    { "codigo": "A3", "tipo": "SALA_ALAVANCA", "nome": "Arsenal" },
+    { "codigo": "A4", "tipo": "SALA_ALAVANCA", "nome": "Sala do Trono" },
+    { "codigo": "A5", "tipo": "SALA_ALAVANCA", "nome": "Bunker Secreto" }
+  ],
+  "ligacoes": [
+    
+    { "origem": "S1", "destino": "N1", "evento": "NONE", "valor": 0 },
+    { "origem": "S2", "destino": "N1", "evento": "NONE", "valor": 0 },
+    { "origem": "S3", "destino": "N2", "evento": "NONE", "valor": 0 },
+    { "origem": "S4", "destino": "N2", "evento": "NONE", "valor": 0 },
+    { "origem": "S5", "destino": "N3", "evento": "NONE", "valor": 0 },
+    { "origem": "S6", "destino": "N3", "evento": "NONE", "valor": 0 },
+    { "origem": "S7", "destino": "N4", "evento": "NONE", "valor": 0 },
+    { "origem": "S8", "destino": "N4", "evento": "NONE", "valor": 0 },
+
+    { "origem": "N1", "destino": "E1", "evento": "NONE", "valor": 0 },
+    { "origem": "N2", "destino": "E2", "evento": "NONE", "valor": 0 },
+    { "origem": "N3", "destino": "E3", "evento": "NONE", "valor": 0 },
+    { "origem": "N4", "destino": "E4", "evento": "NONE", "valor": 0 },
+    
+    { "origem": "E1", "destino": "A1", "evento": "NONE", "valor": 0 },
+    { "origem": "E2", "destino": "A2", "evento": "MOVE_BACK", "valor": 1 },
+    { "origem": "E3", "destino": "A3", "evento": "NONE", "valor": 0 },
+    { "origem": "E4", "destino": "A4", "evento": "NONE", "valor": 0 },
+
+    { "origem": "A1", "destino": "T1", "evento": "NONE", "valor": 0 },
+    { "origem": "A2", "destino": "T1", "evento": "NONE", "valor": 0 },
+    { "origem": "A3", "destino": "T1", "evento": "MOVE_BACK", "valor": 2 },
+    { "origem": "A4", "destino": "T1", "evento": "NONE", "valor": 0 },
+
+    { "origem": "N1", "destino": "E5", "evento": "NONE", "valor": 0 },
+    { "origem": "N2", "destino": "E5", "evento": "NONE", "valor": 0 },
+    { "origem": "E5", "destino": "A5", "evento": "NONE", "valor": 0 },
+    { "origem": "A5", "destino": "T1", "evento": "BLOCK_TURN", "valor": 1 }
+  ]
+}

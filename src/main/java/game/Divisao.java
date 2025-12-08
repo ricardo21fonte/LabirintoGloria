@@ -24,4 +24,7 @@ public class Divisao {
 
     public String getNome() { return nome; }
     public TipoDivisao getTipo() { return tipo; }
+
+
+
 }

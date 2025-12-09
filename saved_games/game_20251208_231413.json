@@ -1,0 +1,59 @@
+{
+  "vencedor": "1",
+  "dataHora": "2025-12-08T23:14:13.263602300",
+  "duracao": 5,
+  "mapaNome": "Mapa do Jogo",
+  "dificuldade": "FACIL",
+  "totalEnigmasResolvidos": 3,
+  "totalObstaculos": 0,
+  "jogadores": [
+    {
+      "nome": "1",
+      "tipo": "Humano",
+      "localAtual": "Câmara do Tesouro",
+      "turnosJogados": 5,
+      "vencedor": true,
+      "percurso": ["Corredor Vazio", "Corredor Vazio", "Corredor Vazio", "Laboratório de Alquimia", "Sala de Controlo", "Laboratório de Alquimia", "Sala de Controlo", "Sala dos Espelhos", "Bunker Secreto", "Câmara do Tesouro"],
+      "obstaculos": [],
+      "enigmas": [
+        {
+          "sala": "Corredor Vazio",
+          "pergunta": "Qual é a extensão de um ficheiro Java compilado (bytecode)?",
+          "resposta": "1",
+          "resolvido": false,
+          "efeito": "BACK:1"
+        },
+        {
+          "sala": "Corredor Vazio",
+          "pergunta": "O que indica a palavra 'extends'?",
+          "resposta": "2",
+          "resolvido": false,
+          "efeito": "BACK:1"
+        },
+        {
+          "sala": "Corredor Vazio",
+          "pergunta": "Qual é o resultado de (true && false)?",
+          "resposta": "2",
+          "resolvido": true,
+          "efeito": "EXTRA_TURN"
+        },
+        {
+          "sala": "Corredor Vazio",
+          "pergunta": "O que significa CPU?",
+          "resposta": "1",
+          "resolvido": true,
+          "efeito": "EXTRA_TURN"
+        },
+        {
+          "sala": "Corredor Vazio",
+          "pergunta": "O que significa a sigla HTML?",
+          "resposta": "1",
+          "resolvido": true,
+          "efeito": "EXTRA_TURN"
+        }
+      ],
+      "efeitosAplicados": [],
+      "totalEnigmasResolvidos": 3
+    }
+  ]
+}

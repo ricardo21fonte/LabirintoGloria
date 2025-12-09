@@ -1,16 +1,20 @@
 package io;
 
-import game.LabyrinthGraph;
-import game.Divisao;
-import game.EventoCorredor; // A tua classe
-import enums.TipoDivisao;
-import enums.CorredorEvento; // O teu Enum
-import Lists.ArrayUnorderedList; 
-import Queue.LinkedQueue;
 import java.util.Iterator;
+
+import Lists.ArrayUnorderedList;
+import Queue.LinkedQueue; // A tua classe
+import enums.CorredorEvento;
+import enums.TipoDivisao; // O teu Enum
+import game.Divisao;
+import game.EventoCorredor;
+import game.LabyrinthGraph;
 
 public class MapGenerator {
 
+
+    private int proximaTrancaId;
+    private int maxTrancas;
     // =========================================================================
     // 1. MODO AUTOMÁTICO
     // =========================================================================
@@ -28,15 +32,21 @@ public class MapGenerator {
     // =========================================================================
     public LabyrinthGraph<Divisao> gerarMapaTotalmenteCustomizado(int numEntradas, int numEnigmas, int numNormais, int numTrancas) {
         System.out.println("🏗️ A gerar Grafo Orgânico (Labirinto Real)...");
-        
+
+        this.proximaTrancaId = 1;
+        this.maxTrancas = numTrancas;
+
         LabyrinthGraph<Divisao> grafo = new LabyrinthGraph<>();
         
         // --- A. O CENTRO ---
         Divisao tesouro = new Divisao("Câmara do Tesouro", TipoDivisao.SALA_CENTRAL);
         grafo.addVertex(tesouro);
 
-        // --- B. OS GUARDIÕES (Portas Trancadas) ---
+        // --- B. OS GUARDIÕES (sem trancas obrigatórias à volta do Tesouro) ---
         ArrayUnorderedList<Divisao> salasConectadas = new ArrayUnorderedList<>();
+
+        // Podes continuar a usar numTrancas, ou então escolher um nº fixo de ante-câmaras.
+        // Aqui mantenho a tua ideia original:
         int qtdGuardioes = (numTrancas > 0) ? numTrancas : 1;
 
         for (int i = 1; i <= qtdGuardioes; i++) {
@@ -44,15 +54,11 @@ public class MapGenerator {
             grafo.addVertex(guardiao);
             salasConectadas.addToRear(guardiao);
 
-            // Ligar ao Tesouro (Aqui usamos os teus nomes!)
-            EventoCorredor evento = new EventoCorredor(CorredorEvento.NONE, 0);
-            
-            if (i <= numTrancas) {
-                evento = new EventoCorredor(CorredorEvento.LOCKED, i); 
-                System.out.println("   🔒 Tranca #" + i + " criada.");
-            }
+            // AGORA: o evento desta ligação é sorteado como qualquer outro corredor
+            EventoCorredor evento = sortearEvento();
             grafo.addCorridor(guardiao, tesouro, evento);
         }
+
 
         // --- C. O SACO DE SALAS ---
         ArrayUnorderedList<Divisao> sacoDeSalas = new ArrayUnorderedList<>();
@@ -136,7 +142,7 @@ public class MapGenerator {
             int i2 = (int)(Math.random() * arr.length);
 
             if (i1 != i2) {
-                grafo.addCorridor(arr[i1], arr[i2], new EventoCorredor(CorredorEvento.NONE, 0));
+                grafo.addCorridor(arr[i1], arr[i2], sortearEvento());
             }
         }
     }
@@ -144,8 +150,23 @@ public class MapGenerator {
     // Aqui usamos o TEU Enum (CorredorEvento)
     private EventoCorredor sortearEvento() {
         double r = Math.random();
-        if (r > 0.92) return new EventoCorredor(CorredorEvento.BLOCK_TURN, 0);
-        if (r > 0.85) return new EventoCorredor(CorredorEvento.MOVE_BACK, 2);
+        // 1) Chance de criar uma TRANCA nova (LOCKED) se ainda não gastámos todas
+        if (proximaTrancaId <= maxTrancas && r > 0.92) {
+            EventoCorredor e = new EventoCorredor(CorredorEvento.LOCKED, proximaTrancaId);
+            System.out.println("   🔒 Tranca #" + proximaTrancaId + " criada algures no labirinto.");
+            proximaTrancaId++;
+            return e;
+        }
+
+        // 2) Outros eventos de corredor
+        if (r > 0.85) {
+            return new EventoCorredor(CorredorEvento.MOVE_BACK, 2);
+        }
+        if (r > 0.80) {
+            return new EventoCorredor(CorredorEvento.BLOCK_TURN, 1);
+        }
+
+        // 3) Corredor normal
         return new EventoCorredor(CorredorEvento.NONE, 0);
     }
 

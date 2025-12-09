@@ -402,11 +402,14 @@ public class GameEngine {
     }
 
     private Divisao chooseDestinationHuman(ArrayUnorderedList<Divisao> neighbors) {
-        Divisao[] options = new Divisao[10];
+        if (neighbors == null || neighbors.size() == 0) return null;
+
+        int total = neighbors.size();
+        Divisao[] options = new Divisao[total];
         int count = 0;
 
         Iterator<Divisao> it = neighbors.iterator();
-        while (it.hasNext()) {
+        while (it.hasNext() && count < total) {
             Divisao neighbor = it.next();
             options[count] = neighbor;
             System.out.println("   [" + (count + 1) + "] Ir para: " + neighbor.getNome() + " (" + neighbor.getTipo() + ")");
@@ -711,6 +714,105 @@ if (player instanceof Bot) {
 
     private void printGameEnd() {
         System.out.println("Obrigado por jogar!");
+    }
+
+    // ========== EFEITOS ESPECIAIS ==========
+
+    /**
+     * Aplica um efeito especial de um enigma (EXTRA_TURN, BLOCK, BACK, SWAP).
+     * Retorna o número de movimentos extra ganhos (ou 0 se não houver).
+     */
+    private int aplicarEfeitoEnigma(String efeito, Player player, LinkedQueue<Player> turnQueue) {
+        if (efeito == null || efeito.equals("NONE")) return 0;
+
+        System.out.println("EFEITO ATIVADO: " + efeito);
+
+        if (efeito.equals("EXTRA_TURN")) {
+            System.out.println("BÓNUS IMEDIATO! Ganhaste +1 movimento agora!");
+            return 1;
+        }
+        else if (efeito.equals("BLOCK")) {
+            System.out.println("CASTIGO! Ficas bloqueado no próximo turno.");
+            player.bloquear(1);
+        }
+        else if (efeito.startsWith("BACK:")) {
+            try {
+                int casas = Integer.parseInt(efeito.split(":")[1]);
+                System.out.println("RECUAR! Voltas " + casas + " casas.");
+                player.recuar(casas);
+            } catch (Exception e) {}
+        }
+        else if (efeito.equals("SWAP")) {
+            System.out.println("TROCA! Trocaste de lugar com o próximo jogador.");
+            try {
+                Player outro = turnQueue.dequeue();
+                if (outro != player) {
+                    Divisao posAtual = player.getLocalAtual();
+                    Divisao posOutro = outro.getLocalAtual();
+
+                    player.setLocalAtual(posOutro);
+                    outro.setLocalAtual(posAtual);
+                    System.out.println("   -> Trocaste com " + outro.getNome());
+                }
+                turnQueue.enqueue(outro);
+            } catch(Exception e) {}
+        }
+
+        return 0;
+    }
+
+    /**
+     * Trata a interação com uma sala de alavanca.
+     * Retorna true se o turno deve acabar.
+     */
+    private boolean resolverSalaAlavanca(Player jogador, Divisao sala, LabyrinthGraph<Divisao> mapa) {
+        if (sala.getAlavanca() == null) {
+            sala.setAlavanca(new Alavanca());
+        }
+
+        Alavanca alavanca = sala.getAlavanca();
+
+        System.out.println("\nEsta sala tem 3 alavancas.");
+        System.out.println("Uma abre um mecanismo, outra penaliza, outra não faz nada.");
+        System.out.println("[1] Alavanca 1");
+        System.out.println("[2] Alavanca 2");
+        System.out.println("[3] Alavanca 3");
+        System.out.print("Escolhe 1, 2 ou 3: ");
+
+        int escolha;
+        if (jogador instanceof Bot) {
+            escolha = 1 + (int)(Math.random() * alavanca.getNumAlavancas());
+            System.out.println("O bot escolhe a alavanca " + escolha);
+        } else {
+            do {
+                escolha = readInteger();
+            } while (escolha < 1 || escolha > 3);
+        }
+
+        AlavancaEnum resultado = alavanca.ativar(escolha);
+
+        switch (resultado) {
+            case ABRIR_PORTA:
+                int idTranca = sala.getIdDesbloqueio();
+                if (idTranca > 0) {
+                    jogador.desbloquearTranca(idTranca);
+                    System.out.println("A alavanca certa! A tranca #" + idTranca
+                            + " foi desbloqueada para o jogador " + jogador.getNome() + ".");
+                } else {
+                    System.out.println("A alavanca certa! Ouves mecanismos ao longe...");
+                }
+                return false;
+
+            case PENALIZAR:
+                System.out.println("Era uma armadilha! Recuas 2 casas.");
+                jogador.recuar(2);
+                return true;
+
+            case NADA:
+            default:
+                System.out.println("Nada acontece. Alavanca inútil.");
+                return false;
+        }
     }
 
     /**

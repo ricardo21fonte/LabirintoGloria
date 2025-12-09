@@ -1,0 +1,24 @@
+{
+  "vencedor": "1",
+  "dataHora": "2025-12-09T00:46:26.177050500",
+  "duracao": 3,
+  "mapaNome": "Mapa do Jogo",
+  "dificuldade": "FACIL",
+  "totalEnigmasResolvidos": 0,
+  "totalObstaculos": 1,
+  "jogadores": [
+    {
+      "nome": "1",
+      "tipo": "Humano",
+      "localAtual": "Câmara do Tesouro",
+      "turnosJogados": 3,
+      "vencedor": true,
+      "percurso": ["Ante-Câmara 2", "Ante-Câmara 2", "Câmara do Tesouro"],
+      "obstaculos": ["Armadilha em Ante-Câmara 2"],
+      "enigmas": [
+      ],
+      "efeitosAplicados": [],
+      "totalEnigmasResolvidos": 0
+    }
+  ]
+}

@@ -1,0 +1,24 @@
+{
+  "vencedor": "Bot_1",
+  "dataHora": "2025-12-09T15:14:13.568207800",
+  "duracao": 4,
+  "mapaNome": "Mapa do Jogo",
+  "dificuldade": "FACIL",
+  "totalEnigmasResolvidos": 0,
+  "totalObstaculos": 2,
+  "jogadores": [
+    {
+      "nome": "Bot_1",
+      "tipo": "Bot",
+      "localAtual": "Câmara do Tesouro",
+      "turnosJogados": 4,
+      "vencedor": true,
+      "percurso": ["Corredor 15", "Corredor 19", "Corredor 18", "Ante-Câmara 1", "Câmara do Tesouro"],
+      "obstaculos": ["Armadilha em Ante-Câmara 1", "Armadilha em Câmara do Tesouro"],
+      "enigmas": [
+      ],
+      "efeitosAplicados": [],
+      "totalEnigmasResolvidos": 0
+    }
+  ]
+}

@@ -1,19 +1,19 @@
 {
-  "vencedor": "1",
-  "dataHora": "2025-12-08T22:51:21.042283100",
-  "duracao": 2,
+  "vencedor": "Bot_1",
+  "dataHora": "2025-12-09T16:01:09.323923900",
+  "duracao": 3,
   "mapaNome": "Mapa do Jogo",
   "dificuldade": "FACIL",
   "totalEnigmasResolvidos": 0,
   "totalObstaculos": 0,
   "jogadores": [
     {
-      "nome": "1",
-      "tipo": "Humano",
+      "nome": "Bot_1",
+      "tipo": "Bot",
       "localAtual": "Câmara do Tesouro",
-      "turnosJogados": 2,
+      "turnosJogados": 3,
       "vencedor": true,
-      "percurso": ["Câmara do Tesouro"],
+      "percurso": ["Corredor 10", "Corredor 11", "Corredor 6", "Ante-Câmara 2", "Câmara do Tesouro"],
       "obstaculos": [],
       "enigmas": [
       ],

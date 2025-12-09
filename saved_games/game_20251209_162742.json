@@ -1,0 +1,45 @@
+{
+  "vencedor": "Bot_1",
+  "dataHora": "2025-12-09T16:27:42.128044700",
+  "duracao": 7,
+  "mapaNome": "Mapa do Jogo",
+  "dificuldade": "FACIL",
+  "totalEnigmasResolvidos": 0,
+  "totalObstaculos": 3,
+  "jogadores": [
+    {
+      "nome": "Bot_1",
+      "tipo": "Bot",
+      "localAtual": "Câmara do Tesouro",
+      "turnosJogados": 7,
+      "vencedor": true,
+      "percurso": ["Sala Misteriosa 1", "Corredor 8", "Corredor 16", "Sala Misteriosa 1", "Corredor 8", "Corredor 16", "Corredor 16", "Corredor 7", "Ante-Câmara 1", "Corredor 16", "Corredor 7", "Ante-Câmara 1", "Câmara do Tesouro"],
+      "obstaculos": ["Armadilha em Corredor 16", "Armadilha em Ante-Câmara 1", "Armadilha em Câmara do Tesouro"],
+      "enigmas": [
+        {
+          "sala": "Portão 3",
+          "pergunta": "Qual é o índice do primeiro elemento de um array?",
+          "resposta": "2",
+          "resolvido": false,
+          "efeito": "BACK:1"
+        },
+        {
+          "sala": "Portão 3",
+          "pergunta": "Qual é a extensão de um ficheiro Java compilado (bytecode)?",
+          "resposta": "1",
+          "resolvido": true,
+          "efeito": "EXTRA_TURN"
+        },
+        {
+          "sala": "Portão 3",
+          "pergunta": "Quantos bytes tem 1 Kilobyte (KB)?",
+          "resposta": "1",
+          "resolvido": true,
+          "efeito": "EXTRA_TURN"
+        }
+      ],
+      "efeitosAplicados": [],
+      "totalEnigmasResolvidos": 2
+    }
+  ]
+}

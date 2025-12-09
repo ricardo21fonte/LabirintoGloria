@@ -1,0 +1,39 @@
+{
+  "vencedor": "Bot_1",
+  "dataHora": "2025-12-09T17:11:31.648595200",
+  "duracao": 5,
+  "mapaNome": "ze2",
+  "dificuldade": "FACIL",
+  "totalEnigmasResolvidos": 1,
+  "totalEnigmasTentados": 2,
+  "totalObstaculos": 1,
+  "jogadores": [
+    {
+      "nome": "Bot_1",
+      "tipo": "Bot",
+      "localAtual": "Câmara do Tesouro",
+      "turnosJogados": 5,
+      "vencedor": true,
+      "percurso": ["Sala Misteriosa 3", "Corredor 9", "Corredor 2", "Corredor 10", "Corredor 9", "Corredor 2", "Corredor 10", "Corredor 16", "Corredor 14", "Ante-Câmara 1", "Câmara do Tesouro"],
+      "obstaculos": ["Armadilha em Corredor 10"],
+      "enigmas": [
+        {
+          "sala": "Portão 3",
+          "pergunta": "Qual palavra-chave define uma constante em Java?",
+          "resposta": "Errado",
+          "resolvido": false,
+          "efeito": "BACK:1"
+        },
+        {
+          "sala": "Portão 3",
+          "pergunta": "Qual destes nomes de variável é INVÁLIDO?",
+          "resposta": "Correto",
+          "resolvido": true,
+          "efeito": "EXTRA_TURN"
+        }
+      ],
+      "efeitosAplicados": [],
+      "totalEnigmasResolvidos": 1
+    }
+  ]
+}

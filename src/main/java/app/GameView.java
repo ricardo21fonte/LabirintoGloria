@@ -138,7 +138,7 @@ public class GameView {
 
     public void pedirHumanoLancaDados() {
         System.out.println("🎲 Pressiona ENTER para lançar o dado...");
-        lerString(); // consome o enter
+        lerString(); 
     }
 
     public void mostrarResultadoDados(boolean isBot, int valor) {
@@ -187,10 +187,6 @@ public class GameView {
     public int pedirEscolhaMovimento() {
         System.out.print("Escolha: ");
         return lerInteiro();
-    }
-
-    public void mostrarBotPensar(String nome, String dif) {
-        System.out.println("🤖 O Bot " + nome + " (" + dif + ") está a pensar...");
     }
 
     public void mostrarBotDecisao(String destino) {

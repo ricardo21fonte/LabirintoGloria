@@ -1,0 +1,32 @@
+{
+  "vencedor": "Bot_1",
+  "dataHora": "2025-12-09T17:03:55.907694700",
+  "duracao": 9,
+  "mapaNome": "Mapa do Jogo",
+  "dificuldade": "FACIL",
+  "totalEnigmasResolvidos": 1,
+  "totalEnigmasTentados": 1,
+  "totalObstaculos": 5,
+  "jogadores": [
+    {
+      "nome": "Bot_1",
+      "tipo": "Bot",
+      "localAtual": "Câmara do Tesouro",
+      "turnosJogados": 9,
+      "vencedor": true,
+      "percurso": ["Corredor 6", "Corredor 6", "Sala Misteriosa 5", "Corredor 2", "Corredor 9", "Corredor 8", "Corredor 2", "Corredor 9", "Corredor 8", "Ante-Câmara 1", "Câmara do Tesouro", "Corredor 8", "Ante-Câmara 1", "Câmara do Tesouro"],
+      "obstaculos": ["Armadilha em Corredor 6", "Armadilha em Sala Misteriosa 5", "Armadilha em Corredor 2", "Armadilha em Corredor 8", "Armadilha em Câmara do Tesouro"],
+      "enigmas": [
+        {
+          "sala": "Corredor 6",
+          "pergunta": "Quantos bytes tem 1 Kilobyte (KB)?",
+          "resposta": "Correto",
+          "resolvido": true,
+          "efeito": "EXTRA_TURN"
+        }
+      ],
+      "efeitosAplicados": [],
+      "totalEnigmasResolvidos": 1
+    }
+  ]
+}

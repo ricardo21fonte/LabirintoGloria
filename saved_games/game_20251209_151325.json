@@ -1,0 +1,44 @@
+{
+  "vencedor": "1",
+  "dataHora": "2025-12-09T15:13:25.010469200",
+  "duracao": 1,
+  "mapaNome": "Mapa do Jogo",
+  "dificuldade": "FACIL",
+  "totalEnigmasResolvidos": 0,
+  "totalObstaculos": 0,
+  "jogadores": [
+    {
+      "nome": "1",
+      "tipo": "Humano",
+      "localAtual": "Câmara do Tesouro",
+      "turnosJogados": 1,
+      "vencedor": true,
+      "percurso": ["Cozinha Abandonada", "Cripta dos Sábios", "Sala do Trono", "Câmara do Tesouro"],
+      "obstaculos": [],
+      "enigmas": [
+        {
+          "sala": "Cozinha Abandonada",
+          "pergunta": "Qual destas NÃO é uma linguagem de programação?",
+          "resposta": "3",
+          "resolvido": true,
+          "efeito": "EXTRA_TURN"
+        }
+      ],
+      "efeitosAplicados": [],
+      "totalEnigmasResolvidos": 1
+    },
+    {
+      "nome": "Bot_1",
+      "tipo": "Bot",
+      "localAtual": "",
+      "turnosJogados": 0,
+      "vencedor": false,
+      "percurso": [],
+      "obstaculos": [],
+      "enigmas": [
+      ],
+      "efeitosAplicados": [],
+      "totalEnigmasResolvidos": 0
+    }
+  ]
+}

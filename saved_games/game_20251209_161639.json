@@ -1,0 +1,38 @@
+{
+  "vencedor": "Bot_1",
+  "dataHora": "2025-12-09T16:16:39.308198300",
+  "duracao": 4,
+  "mapaNome": "Mapa do Jogo",
+  "dificuldade": "FACIL",
+  "totalEnigmasResolvidos": 0,
+  "totalObstaculos": 2,
+  "jogadores": [
+    {
+      "nome": "Bot_1",
+      "tipo": "Bot",
+      "localAtual": "Câmara do Tesouro",
+      "turnosJogados": 4,
+      "vencedor": true,
+      "percurso": ["Sala Misteriosa 3", "Corredor 9", "Corredor 13", "Sala Misteriosa 3", "Corredor 9", "Corredor 13", "Ante-Câmara 1", "Ante-Câmara 1", "Câmara do Tesouro"],
+      "obstaculos": ["Armadilha em Corredor 9", "Armadilha em Corredor 13"],
+      "enigmas": [
+        {
+          "sala": "Portão 2",
+          "pergunta": "Qual é o valor binário de 5?",
+          "resposta": "1",
+          "resolvido": true,
+          "efeito": "EXTRA_TURN"
+        },
+        {
+          "sala": "Portão 2",
+          "pergunta": "Quantos bytes tem 1 Kilobyte (KB)?",
+          "resposta": "1",
+          "resolvido": true,
+          "efeito": "EXTRA_TURN"
+        }
+      ],
+      "efeitosAplicados": [],
+      "totalEnigmasResolvidos": 2
+    }
+  ]
+}

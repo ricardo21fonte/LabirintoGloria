@@ -1,0 +1,102 @@
+{
+  "vencedor": "Bot_1",
+  "dataHora": "2025-12-09T17:15:55.921299",
+  "duracao": 8,
+  "mapaNome": "ze3",
+  "dificuldade": "FACIL",
+  "totalEnigmasResolvidos": 7,
+  "totalEnigmasTentados": 11,
+  "totalObstaculos": 3,
+  "jogadores": [
+    {
+      "nome": "Bot_1",
+      "tipo": "Bot",
+      "localAtual": "Câmara do Tesouro",
+      "turnosJogados": 8,
+      "vencedor": true,
+      "percurso": ["Corredor 16", "Corredor 16", "Corredor 8", "Corredor 8", "Sala Misteriosa 3", "Sala Misteriosa 3", "Sala Misteriosa 5", "Corredor 8", "Corredor 8", "Sala Misteriosa 3", "Sala Misteriosa 5", "Ante-Câmara 1", "Corredor 8", "Sala Misteriosa 3", "Sala Misteriosa 5", "Ante-Câmara 1", "Câmara do Tesouro"],
+      "obstaculos": ["Armadilha em Corredor 16", "Armadilha em Sala Misteriosa 5", "Armadilha em Ante-Câmara 1"],
+      "enigmas": [
+        {
+          "sala": "Corredor 8",
+          "pergunta": "Qual é o operador para calcular o resto da divisão?",
+          "resposta": "Errado",
+          "resolvido": false,
+          "efeito": "BACK:1"
+        },
+        {
+          "sala": "Corredor 8",
+          "pergunta": "Qual é a extensão de um ficheiro Java compilado (bytecode)?",
+          "resposta": "Correto",
+          "resolvido": true,
+          "efeito": "EXTRA_TURN"
+        },
+        {
+          "sala": "Sala Misteriosa 3",
+          "pergunta": "O que faz o comando 'git init'?",
+          "resposta": "Errado",
+          "resolvido": false,
+          "efeito": "BACK:1"
+        },
+        {
+          "sala": "Corredor 8",
+          "pergunta": "Qual é o resultado de (true && false)?",
+          "resposta": "Correto",
+          "resolvido": true,
+          "efeito": "EXTRA_TURN"
+        },
+        {
+          "sala": "Sala Misteriosa 3",
+          "pergunta": "O que imprime 'System.out.println(1 + \"2\")'?",
+          "resposta": "Correto",
+          "resolvido": true,
+          "efeito": "EXTRA_TURN"
+        },
+        {
+          "sala": "Corredor 8",
+          "pergunta": "Qual é o índice do primeiro elemento de um array?",
+          "resposta": "Errado",
+          "resolvido": false,
+          "efeito": "BACK:1"
+        },
+        {
+          "sala": "Corredor 8",
+          "pergunta": "Qual método é chamado automaticamente ao criar um objeto?",
+          "resposta": "Correto",
+          "resolvido": true,
+          "efeito": "EXTRA_TURN"
+        },
+        {
+          "sala": "Sala Misteriosa 3",
+          "pergunta": "Qual é o valor binário de 5?",
+          "resposta": "Correto",
+          "resolvido": true,
+          "efeito": "EXTRA_TURN"
+        },
+        {
+          "sala": "Corredor 8",
+          "pergunta": "Se x=5 e y=2, quanto é x/y em divisão inteira?",
+          "resposta": "Errado",
+          "resolvido": false,
+          "efeito": "BACK:1"
+        },
+        {
+          "sala": "Corredor 8",
+          "pergunta": "Qual palavra-chave define uma constante em Java?",
+          "resposta": "Correto",
+          "resolvido": true,
+          "efeito": "EXTRA_TURN"
+        },
+        {
+          "sala": "Sala Misteriosa 3",
+          "pergunta": "O que é um 'loop infinito'?",
+          "resposta": "Correto",
+          "resolvido": true,
+          "efeito": "EXTRA_TURN"
+        }
+      ],
+      "efeitosAplicados": [],
+      "totalEnigmasResolvidos": 7
+    }
+  ]
+}

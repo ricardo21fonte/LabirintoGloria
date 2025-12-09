@@ -22,20 +22,25 @@ import io.GameReport;
 
 public class GameEngine {
 
-    // --- AGORA USAMOS A VIEW PARA FALAR COM O UTILIZADOR ---
     private GameView view;
-    
     private LabyrinthGraph<Divisao> labyrinthGraph;
     private String vencedor;
     private int turnoCount;
-    private long startTime;
     private ArrayUnorderedList<GameReport.PlayerReport> playerReports;
+    
+    // VARIÁVEIS FUNDIDAS
     private int totalEnigmasResolvidos;
+    private int totalEnigmasTentados; 
     private int totalObstaculos;
+    private String nomeDoMapaEscolhido = "Mapa do Jogo";
 
     public GameEngine(LabyrinthGraph<Divisao> labyrinthGraph) {
         this.labyrinthGraph = labyrinthGraph;
-        this.view = new GameView(); // Inicializa a View
+        this.view = new GameView(); 
+    }
+    
+    public void setNomeDoMapa(String nome) {
+        this.nomeDoMapaEscolhido = nome;
     }
 
     public void start() {
@@ -55,7 +60,6 @@ public class GameEngine {
 
         LinkedQueue<Player> turnQueue = new LinkedQueue<>();
 
-        // Setup Jogadores
         int numHumans = setupHumanPlayers(labyrinthGame, entrances, turnQueue);
         setupBots(labyrinthGame, entrances, turnQueue, numHumans);
 
@@ -67,15 +71,15 @@ public class GameEngine {
         view.mostrarInicioJogo();
         view.esperarEnter();
 
-        // Inicializar Estado
         vencedor = null;
         turnoCount = 0;
-        startTime = System.currentTimeMillis();
         playerReports = new ArrayUnorderedList<>();
+        
+        // RESETAR CONTADORES
         totalEnigmasResolvidos = 0;
+        totalEnigmasTentados = 0; 
         totalObstaculos = 0;
         
-        // Criar relatórios iniciais
         LinkedQueue<Player> tempQueue = new LinkedQueue<>();
         while (!turnQueue.isEmpty()) {
             try {
@@ -90,12 +94,12 @@ public class GameEngine {
         }
 
         runGameLoop(labyrinthGame, turnQueue, difficulty);
-
         view.fechar();
     }
 
-    // ========== SETUP ==========
-
+    // ... (Métodos de Setup mantêm-se iguais - loadEnigmas, setupDifficulty, etc) ...
+    // Podes manter o que tinhas antes nestes métodos auxiliares de setup.
+    
     private ArrayUnorderedList<Enigma> loadEnigmas() {
         EnigmaLoader enigmaLoader = new EnigmaLoader();
         return enigmaLoader.loadEnigmas("enigmas.json");
@@ -107,7 +111,6 @@ public class GameEngine {
             option = view.pedirDificuldade();
             if (option < 1 || option > 3) view.mostrarErroOpcaoInvalida(1, 3);
         } while (option < 1 || option > 3);
-
         if (option == 1) return Dificuldade.FACIL;
         if (option == 2) return Dificuldade.MEDIO;
         return Dificuldade.DIFICIL;
@@ -131,12 +134,10 @@ public class GameEngine {
             Divisao division = (Divisao) obj;
             if (division.getTipo() == TipoDivisao.ENTRADA) entrances.addToRear(division);
         }
-
         if (entrances.isEmpty()) {
             view.mostrarErroSemEntradas();
             return new Divisao[0];
         }
-
         Divisao[] arrayEntrances = new Divisao[entrances.size()];
         Iterator<Divisao> it = entrances.iterator();
         int idx = 0;
@@ -158,7 +159,6 @@ public class GameEngine {
                 name = view.pedirNomeJogador(i);
                 if (name.isEmpty()) System.out.println("Nome inválido.");
             } while (name.isEmpty());
-
             int rnd = (int) (Math.random() * entrances.length);
             Divisao spawn = entrances[rnd];
             Player player = new Player(name, spawn);
@@ -175,7 +175,6 @@ public class GameEngine {
             view.mostrarAvisoJogoCheio();
             return;
         }
-
         int numBots;
         do {
             numBots = view.pedirQuantidadeBots(maxBots);
@@ -185,13 +184,11 @@ public class GameEngine {
         for (int i = 1; i <= numBots; i++) {
             int rnd = (int) (Math.random() * entrances.length);
             Divisao spawn = entrances[rnd];
-            
             int opt = -1;
             do {
                 opt = view.pedirDificuldadeBot(i);
                 if(opt < 1 || opt > 3) view.mostrarErroOpcaoInvalida(1, 3);
             } while(opt < 1 || opt > 3);
-
             Dificuldade dif = (opt == 2) ? Dificuldade.MEDIO : (opt == 3) ? Dificuldade.DIFICIL : Dificuldade.FACIL;
             Bot bot = new Bot("Bot_" + i, spawn, dif, labyrinthGraph);
             labyrinthGame.adicionarJogador(bot);
@@ -200,11 +197,8 @@ public class GameEngine {
         }
     }
 
-    // ========== GAME LOOP ==========
-
     private void runGameLoop(labirinto labyrinthGame, LinkedQueue<Player> turnQueue, Dificuldade difficulty) {
         boolean gameRunning = true;
-
         while (gameRunning && !turnQueue.isEmpty()) {
             Player currentPlayer;
             try { currentPlayer = turnQueue.dequeue(); } catch (Exception e) { break; }
@@ -221,7 +215,6 @@ public class GameEngine {
             }
 
             int movements = rollDiceAndGetMovements(currentPlayer);
-
             if (currentPlayer.getJogadasExtra() > 0) {
                 int extra = currentPlayer.getJogadasExtra();
                 movements += extra;
@@ -236,14 +229,13 @@ public class GameEngine {
 
                 ArrayUnorderedList<Divisao> neighbors = labyrinthGraph.getVizinhos(currentPlayer.getLocalAtual());
                 Divisao destination = chooseDestination(currentPlayer, neighbors);
-
                 if (destination == null) break;
 
                 boolean canEnter = true;
                 if (destination.getTipo() == TipoDivisao.SALA_ENIGMA) {
                     Enigma enigma = labyrinthGame.obterEnigma(difficulty);
+                    // A LÓGICA DE CONTAGEM ESTÁ AQUI EM BAIXO
                     boolean solved = presentAndSolveEnigma(currentPlayer, enigma);
-
                     if (solved) {
                         int bonus = applyEffect(enigma.getEfeitoSucesso(), currentPlayer, turnQueue);
                         if (bonus > 0) {
@@ -259,7 +251,6 @@ public class GameEngine {
 
                 if (canEnter) {
                     Divisao salaOrigem = currentPlayer.getLocalAtual();
-
                     if (!checkCorridorEvent(currentPlayer, destination)) {
                         GameReport.PlayerReport pReport = getPlayerReport(currentPlayer.getNome());
                         if (pReport != null) {
@@ -307,7 +298,6 @@ public class GameEngine {
                     }
                 }
             }
-
             if (gameRunning) {
                 view.mostrarFimTurno(currentPlayer.getNome());
                 turnQueue.enqueue(currentPlayer);
@@ -317,8 +307,67 @@ public class GameEngine {
         view.mostrarFimJogo();
     }
 
-    // ========== UTILS & VIEW CALLS ==========
+    // === MÉTODOS DE LÓGICA E CONTAGEM ===
 
+    private boolean presentAndSolveEnigma(Player player, Enigma enigma) {
+        if (enigma == null) return true;
+        
+        totalEnigmasTentados++; // CONTA A TENTATIVA
+
+        view.mostrarEnigmaNaPorta();
+        view.mostrarPergunta(enigma.getPergunta());
+        boolean correct = false;
+        String answerStr = "Bot";
+        if (player instanceof Bot) {
+            Bot bot = (Bot) player;
+            view.mostrarBotAnalisaEnigma(bot.getNome(), bot.getInteligencia().toString());
+            correct = bot.tentarResolverEnigma(enigma);
+            answerStr = correct ? "Correto" : "Errado";
+        } else {
+            String[] options = enigma.getOpcoes();
+            view.mostrarOpcoesEnigma(options);
+            int answer;
+            do {
+                answer = view.pedirRespostaEnigma();
+                if (answer < 1 || answer > options.length) view.mostrarErroOpcaoInvalida(1, options.length);
+            } while (answer < 1 || answer > options.length);
+            correct = enigma.verificarResposta(answer);
+            answerStr = String.valueOf(answer);
+        }
+        view.mostrarResultadoEnigma(correct);
+        
+        if (correct) totalEnigmasResolvidos++; // CONTA O SUCESSO
+
+        GameReport.PlayerReport pReport = getPlayerReport(player.getNome());
+        if (pReport != null) {
+            GameReport.EnigmaEvent event = new GameReport.EnigmaEvent(
+                enigma.getPergunta(), answerStr, correct,
+                correct ? enigma.getEfeitoSucesso() : enigma.getEfeitoFalha(),
+                player.getLocalAtual().getNome()
+            );
+            pReport.adicionarEnigma(event);
+        }
+        return correct;
+    }
+
+    private GameReport createGameReport(Player vencedorPlayer, Dificuldade difficulty) {
+        GameReport report = new GameReport();
+        report.setVencedor(vencedor);
+        report.setDuracao(turnoCount);
+        report.setDificuldade(difficulty.toString());
+        report.setMapaNome(nomeDoMapaEscolhido);
+        
+        // Grava as contagens
+        report.setTotalEnigmasResolvidos(totalEnigmasResolvidos);
+        report.setTotalEnigmasTentados(totalEnigmasTentados);
+        report.setTotalObstaculos(totalObstaculos);
+        
+        report.setListaJogadores(playerReports);
+        return report;
+    }
+
+    // ... Restantes métodos auxiliares (getReport, rollDice, chooseDest, checkEvent, trap, effect, lever) mantêm-se iguais
+    // Copia do ficheiro anterior ou mantém os que tens, não mudaram.
     private GameReport.PlayerReport getPlayerReport(String nome) {
         Iterator<GameReport.PlayerReport> it = playerReports.iterator();
         while (it.hasNext()) {
@@ -356,11 +405,9 @@ public class GameEngine {
 
     private Divisao chooseDestinationHuman(ArrayUnorderedList<Divisao> neighbors) {
         if (neighbors == null || neighbors.size() == 0) return null;
-
         int total = neighbors.size();
         Divisao[] options = new Divisao[total];
         int count = 0;
-
         Iterator<Divisao> it = neighbors.iterator();
         while (it.hasNext() && count < total) {
             Divisao v = it.next();
@@ -369,7 +416,6 @@ public class GameEngine {
             count++;
         }
         view.mostrarOpcaoParar();
-
         int choice;
         while (true) {
             choice = view.pedirEscolhaMovimento();
@@ -378,8 +424,6 @@ public class GameEngine {
             view.mostrarErroOpcaoInvalida(0, count);
         }
     }
-
-    // ========== EVENTS LOGIC ==========
 
     private boolean checkCorridorEvent(Player player, Divisao destination) {
         EventoCorredor event = labyrinthGraph.getCorredorEvento(player.getLocalAtual(), destination);
@@ -406,57 +450,12 @@ public class GameEngine {
         return false;
     }
 
-    // ========== ENIGMAS & LEVERS ==========
-
-    private boolean presentAndSolveEnigma(Player player, Enigma enigma) {
-        if (enigma == null) return true;
-        view.mostrarEnigmaNaPorta();
-        view.mostrarPergunta(enigma.getPergunta());
-
-        boolean correct = false;
-        int answerGiven = -1;
-
-        if (player instanceof Bot) {
-            Bot bot = (Bot) player;
-            view.mostrarBotAnalisaEnigma(bot.getNome(), bot.getInteligencia().toString());
-            correct = bot.tentarResolverEnigma(enigma);
-            answerGiven = correct ? 1 : 2; 
-        } else {
-            String[] options = enigma.getOpcoes();
-            view.mostrarOpcoesEnigma(options);
-            int answer;
-            do {
-                answer = view.pedirRespostaEnigma();
-                if (answer < 1 || answer > options.length) view.mostrarErroOpcaoInvalida(1, options.length);
-            } while (answer < 1 || answer > options.length);
-            correct = enigma.verificarResposta(answer);
-            answerGiven = answer;
-        }
-
-        view.mostrarResultadoEnigma(correct);
-
-        GameReport.PlayerReport pReport = getPlayerReport(player.getNome());
-        if (pReport != null) {
-            String answerStr = answerGiven >= 0 ? String.valueOf(answerGiven) : "Bot";
-            GameReport.EnigmaEvent event = new GameReport.EnigmaEvent(
-                enigma.getPergunta(), answerStr, correct,
-                correct ? enigma.getEfeitoSucesso() : enigma.getEfeitoFalha(),
-                player.getLocalAtual().getNome()
-            );
-            pReport.adicionarEnigma(event);
-        }
-        return correct;
-    }
-
     private int applyEffect(String effect, Player player, LinkedQueue<Player> turnQueue) {
         if (effect == null || effect.equals("NONE")) return 0;
         view.mostrarEfeito(effect);
-
-        if (effect.equals("EXTRA_TURN")) {
-            return 1;
-        } else if (effect.equals("BLOCK")) {
-            player.bloquear(1);
-        } else if (effect.startsWith("BACK:")) {
+        if (effect.equals("EXTRA_TURN")) return 1;
+        else if (effect.equals("BLOCK")) player.bloquear(1);
+        else if (effect.startsWith("BACK:")) {
             try {
                 int steps = Integer.parseInt(effect.split(":")[1]);
                 player.recuar(steps);
@@ -481,7 +480,6 @@ public class GameEngine {
         Alavanca lever = room.getAlavanca();
         view.mostrarSalaAlavanca();
         view.mostrarOpcoesAlavanca();
-
         int choice;
         if (player instanceof Bot) {
             choice = 1 + (int)(Math.random() * lever.getNumAlavancas());
@@ -492,12 +490,9 @@ public class GameEngine {
                 if(choice < 1 || choice > 3) view.mostrarErroOpcaoInvalida(1, 3);
             } while(choice < 1 || choice > 3);
         }
-
         AlavancaEnum result = lever.ativar(choice);
         int lockId = room.getIdDesbloqueio();
-        
         view.mostrarResultadoAlavanca(result, lockId, player.getNome());
-
         if (result == AlavancaEnum.ABRIR_PORTA && lockId > 0) {
             player.desbloquearTranca(lockId);
             return false;
@@ -507,8 +502,6 @@ public class GameEngine {
         }
         return false;
     }
-
-    // ========== HELPERS ==========
 
     private void pauseForBot(Player player) {
         if (player instanceof Bot) {
@@ -522,17 +515,5 @@ public class GameEngine {
         } else {
             try { Thread.sleep(1000); } catch (InterruptedException e) {}
         }
-    }
-
-    private GameReport createGameReport(Player vencedorPlayer, Dificuldade difficulty) {
-        GameReport report = new GameReport();
-        report.setVencedor(vencedor);
-        report.setDuracao(turnoCount);
-        report.setDificuldade(difficulty.toString());
-        report.setMapaNome("Mapa do Jogo");
-        report.setTotalEnigmasResolvidos(totalEnigmasResolvidos);
-        report.setTotalObstaculos(totalObstaculos);
-        report.setListaJogadores(playerReports);
-        return report;
     }
 }

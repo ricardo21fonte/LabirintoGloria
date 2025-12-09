@@ -38,7 +38,16 @@ public class GameExporter {
 
         try {
             String timestamp = report.getDataHora().format(FORMATTER);
-            String filename = SAVED_GAMES_DIR + File.separator + "game_" + timestamp + ".json";
+            // =================================================================
+            // AQUI ESTÁ A MUDANÇA PARA O NOME DO FICHEIRO
+            // =================================================================
+            // 1. Vai buscar o nome do mapa (ex: "ze2")
+            // 2. Limpa caracteres estranhos para não dar erro no Windows
+            String nomeMapaLimpo = report.getMapaNome().replaceAll("[^a-zA-Z0-9.-]", "_");
+            
+            // 3. Monta o nome: relatorio_ze2_20251209... .json
+            String filename = SAVED_GAMES_DIR + File.separator + "relatorio_" + nomeMapaLimpo + "_" + timestamp + ".json";
+            // =================================================================
 
             String jsonContent = generateJSON(report);
 
@@ -46,7 +55,7 @@ public class GameExporter {
             writer.write(jsonContent);
             writer.close();
 
-            System.out.println("Jogo guardado com sucesso: " + filename);
+            System.out.println("💾 Relatório guardado com sucesso: " + filename);
         } catch (IOException e) {
             System.out.println("Erro ao guardar jogo: " + e.getMessage());
         }
@@ -62,9 +71,16 @@ public class GameExporter {
         json.append("  \"vencedor\": \"").append(escapeJson(report.getVencedor())).append("\",\n");
         json.append("  \"dataHora\": \"").append(report.getDataHora().toString()).append("\",\n");
         json.append("  \"duracao\": ").append(report.getDuracao()).append(",\n");
+        
+        // Aqui usamos o nome do mapa que vem do report
         json.append("  \"mapaNome\": \"").append(escapeJson(report.getMapaNome())).append("\",\n");
+        
         json.append("  \"dificuldade\": \"").append(report.getDificuldade()).append("\",\n");
         json.append("  \"totalEnigmasResolvidos\": ").append(report.getTotalEnigmasResolvidos()).append(",\n");
+        
+        // --- ESCREVER TENTADOS ---
+        json.append("  \"totalEnigmasTentados\": ").append(report.getTotalEnigmasTentados()).append(",\n");
+        
         json.append("  \"totalObstaculos\": ").append(report.getTotalObstaculos()).append(",\n");
         json.append("  \"jogadores\": [\n");
 

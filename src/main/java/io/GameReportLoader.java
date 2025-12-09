@@ -7,7 +7,7 @@ import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
-import Lists.ArrayUnorderedList; // A TUA LISTA
+import Lists.ArrayUnorderedList; 
 
 public class GameReportLoader {
     private static final String SAVED_GAMES_DIR = "saved_games";
@@ -16,13 +16,10 @@ public class GameReportLoader {
     public ArrayUnorderedList<String> listarRelatorios() {
         ArrayUnorderedList<String> relatorios = new ArrayUnorderedList<>();
         File dir = new File(SAVED_GAMES_DIR);
-
         if (!dir.exists()) return relatorios;
 
-        File[] files = dir.listFiles((d, name) -> name.startsWith("game_") && name.endsWith(".json"));
-
+        File[] files = dir.listFiles((d, name) -> (name.startsWith("game_") || name.startsWith("relatorio_")) && name.endsWith(".json"));
         if (files != null) {
-            // Nota: Removi o sort para simplificar e não depender de Java Collections
             for (File file : files) {
                 relatorios.addToRear(file.getName());
             }
@@ -30,15 +27,13 @@ public class GameReportLoader {
         return relatorios;
     }
 
-    // O resto do ficheiro mantém a lógica mas deve mudar onde usa ArrayList
-    // Vou pôr aqui o parseJogadoresArray e parseStringArray que são os mais importantes
-
     public GameReport carregarRelatorio(String filename) {
         try {
             String filepath = SAVED_GAMES_DIR + File.separator + filename;
             String content = new String(Files.readAllBytes(Paths.get(filepath)));
             return parseJSON(content);
         } catch (IOException e) {
+            System.out.println("Erro ao ler ficheiro: " + e.getMessage());
             return null;
         }
     }
@@ -47,48 +42,145 @@ public class GameReportLoader {
         GameReport report = new GameReport();
         try {
             report.setVencedor(extractJsonString(json, "vencedor"));
+            
             String dataHoraStr = extractJsonString(json, "dataHora");
             if (!dataHoraStr.isEmpty()) {
-                report.setDataHora(LocalDateTime.parse(dataHoraStr, FORMATTER));
+                try { report.setDataHora(LocalDateTime.parse(dataHoraStr)); } catch (Exception e) {}
             }
+            
             report.setDuracao(extractJsonInt(json, "duracao"));
             report.setMapaNome(extractJsonString(json, "mapaNome"));
             report.setDificuldade(extractJsonString(json, "dificuldade"));
+            
+            // --- AQUI ESTAVAM OS ERROS DE LEITURA ---
             report.setTotalEnigmasResolvidos(extractJsonInt(json, "totalEnigmasResolvidos"));
+            report.setTotalEnigmasTentados(extractJsonInt(json, "totalEnigmasTentados"));
             report.setTotalObstaculos(extractJsonInt(json, "totalObstaculos"));
 
-            // Parse da lista de jogadores
             ArrayUnorderedList<GameReport.PlayerReport> jogadores = parseJogadoresArray(json);
             report.setListaJogadores(jogadores);
 
             return report;
         } catch (Exception e) {
-            System.out.println("Erro JSON: " + e.getMessage());
+            System.out.println("Erro no parsing do JSON: " + e.getMessage());
             return null;
         }
     }
 
-    // Métodos auxiliares de parsing (String, Int) mantêm-se iguais ao teu original...
-    // ...
+    // --- MÉTODOS DE PARSING ---
 
     private ArrayUnorderedList<GameReport.PlayerReport> parseJogadoresArray(String json) {
         ArrayUnorderedList<GameReport.PlayerReport> jogadores = new ArrayUnorderedList<>();
-        // ... (lógica de split string mantém-se igual) ...
-        // Quando criares um jogador, adiciona:
-        // jogadores.addToRear(player);
-        // Vou assumir que consegues adaptar a lógica de string split existente
-        // apenas mudando ArrayList para ArrayUnorderedList e .add() para .addToRear()
+        int arrayStart = json.indexOf("\"jogadores\":");
+        if (arrayStart == -1) return jogadores;
+        int arrayBegin = json.indexOf("[", arrayStart);
+        if (arrayBegin == -1) return jogadores;
+        int arrayEnd = findMatchingBracket(json, arrayBegin);
+        if (arrayEnd == -1) return jogadores;
+
+        String arrayContent = json.substring(arrayBegin + 1, arrayEnd);
+        int objectCount = 0;
+        int objectStart = -1;
+        for (int i = 0; i < arrayContent.length(); i++) {
+            char c = arrayContent.charAt(i);
+            if (c == '{') {
+                if (objectCount == 0) objectStart = i;
+                objectCount++;
+            } else if (c == '}') {
+                objectCount--;
+                if (objectCount == 0 && objectStart != -1) {
+                    String objectJson = arrayContent.substring(objectStart, i + 1);
+                    GameReport.PlayerReport player = parsePlayerObject(objectJson);
+                    if (player != null) jogadores.addToRear(player);
+                    objectStart = -1;
+                }
+            }
+        }
         return jogadores;
     }
     
-    // --- MÉTODOS DE EXTRAÇÃO DE STRINGS MANTÊM-SE ---
-    // Copia os teus métodos extractJsonString e extractJsonInt para aqui.
-    
-    private String unescapeJson(String text) {
-        if (text == null) return "";
-        return text.replace("\\\\", "\\").replace("\\\"", "\"");
+    private GameReport.PlayerReport parsePlayerObject(String objectJson) {
+        try {
+            String nome = extractJsonString(objectJson, "nome");
+            String tipo = extractJsonString(objectJson, "tipo");
+            GameReport.PlayerReport player = new GameReport.PlayerReport(nome, tipo);
+            player.setLocalAtual(extractJsonString(objectJson, "localAtual"));
+            player.setTurnosJogados(extractJsonInt(objectJson, "turnosJogados"));
+            player.setVencedor(extractJsonBoolean(objectJson, "vencedor"));
+
+            parseStringArray(objectJson, "percurso", player.getPercurso());
+            parseStringArray(objectJson, "obstaculos", player.getObstaculos());
+            parseStringArray(objectJson, "efeitosAplicados", player.getEfeitosAplicados());
+            parseEnigmasArray(objectJson, player.getEnigmas());
+            return player;
+        } catch (Exception e) { return null; }
     }
-    
+
+    private void parseStringArray(String json, String key, ArrayUnorderedList<String> listDestino) {
+        int keyPos = json.indexOf("\"" + key + "\":");
+        if (keyPos == -1) return;
+        int arrayBegin = json.indexOf("[", keyPos);
+        if (arrayBegin == -1) return;
+        int arrayEnd = findMatchingBracket(json, arrayBegin);
+        if (arrayEnd == -1) return;
+
+        String arrayContent = json.substring(arrayBegin + 1, arrayEnd);
+        String[] parts = arrayContent.split("\"");
+        for (int i = 0; i < parts.length; i++) {
+            String part = parts[i].trim();
+            if (!part.equals(",") && !part.isEmpty()) listDestino.addToRear(unescapeJson(part));
+        }
+    }
+
+    private void parseEnigmasArray(String json, ArrayUnorderedList<GameReport.EnigmaEvent> listDestino) {
+        int keyPos = json.indexOf("\"enigmas\":");
+        if (keyPos == -1) return;
+        int arrayBegin = json.indexOf("[", keyPos);
+        if (arrayBegin == -1) return;
+        int arrayEnd = findMatchingBracket(json, arrayBegin);
+        if (arrayEnd == -1) return;
+
+        String arrayContent = json.substring(arrayBegin + 1, arrayEnd);
+        int objectCount = 0;
+        int objectStart = -1;
+        for (int i = 0; i < arrayContent.length(); i++) {
+            char c = arrayContent.charAt(i);
+            if (c == '{') {
+                if (objectCount == 0) objectStart = i;
+                objectCount++;
+            } else if (c == '}') {
+                objectCount--;
+                if (objectCount == 0 && objectStart != -1) {
+                    String objJson = arrayContent.substring(objectStart, i + 1);
+                    GameReport.EnigmaEvent evt = new GameReport.EnigmaEvent(
+                        extractJsonString(objJson, "pergunta"),
+                        extractJsonString(objJson, "resposta"),
+                        extractJsonBoolean(objJson, "resolvido"),
+                        extractJsonString(objJson, "efeito"),
+                        extractJsonString(objJson, "sala")
+                    );
+                    listDestino.addToRear(evt);
+                    objectStart = -1;
+                }
+            }
+        }
+    }
+
+    // --- HELPERS DE TEXTO ---
+
+    private int findMatchingBracket(String text, int startPos) {
+        int count = 0;
+        for (int i = startPos; i < text.length(); i++) {
+            char c = text.charAt(i);
+            if (c == '[') count++;
+            else if (c == ']') {
+                count--;
+                if (count == 0) return i;
+            }
+        }
+        return -1;
+    }
+
     private String extractJsonString(String json, String key) {
         String searchKey = "\"" + key + "\":";
         int startIdx = json.indexOf(searchKey);
@@ -96,12 +188,64 @@ public class GameReportLoader {
         int valueStart = json.indexOf("\"", startIdx + searchKey.length());
         if (valueStart == -1) return "";
         int valueEnd = json.indexOf("\"", valueStart + 1);
-        if (valueEnd == -1) return "";
+        while (valueEnd < json.length()) {
+            if (json.charAt(valueEnd) == '"' && json.charAt(valueEnd - 1) != '\\') break;
+            valueEnd++;
+        }
+        if (valueEnd >= json.length()) return "";
         return unescapeJson(json.substring(valueStart + 1, valueEnd));
     }
 
+    // --- A CORREÇÃO CRÍTICA PARA LER NÚMEROS CORRETAMENTE ---
     private int extractJsonInt(String json, String key) {
-        // ... (igual ao teu original) ...
-        return 0; // placeholder
+        String searchKey = "\"" + key + "\":";
+        int startIdx = json.indexOf(searchKey);
+        if (startIdx == -1) return 0;
+        
+        // Começa a procurar depois dos dois pontos
+        int i = startIdx + searchKey.length();
+        
+        // 1. Avançar espaços em branco até encontrar o primeiro dígito ou sinal '-'
+        while (i < json.length()) {
+            char c = json.charAt(i);
+            if (Character.isDigit(c) || c == '-') {
+                break;
+            }
+            i++;
+        }
+        
+        int startNum = i;
+        
+        // 2. Ler até deixar de ser dígito
+        while (i < json.length()) {
+            char c = json.charAt(i);
+            if (!Character.isDigit(c) && c != '-') {
+                break;
+            }
+            i++;
+        }
+        
+        int endNum = i;
+        
+        try { 
+            String numStr = json.substring(startNum, endNum);
+            return Integer.parseInt(numStr); 
+        } catch (Exception e) { 
+            return 0; 
+        }
+    }
+
+    private boolean extractJsonBoolean(String json, String key) {
+        String searchKey = "\"" + key + "\":";
+        int startIdx = json.indexOf(searchKey);
+        if (startIdx == -1) return false;
+        int valStart = startIdx + searchKey.length();
+        String sub = json.substring(valStart, Math.min(valStart + 10, json.length()));
+        return sub.contains("true");
+    }
+
+    private String unescapeJson(String text) {
+        if (text == null) return "";
+        return text.replace("\\\\", "\\").replace("\\\"", "\"").replace("\\n", "\n");
     }
 }

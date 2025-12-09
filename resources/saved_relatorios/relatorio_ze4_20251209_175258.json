@@ -1,0 +1,25 @@
+{
+  "vencedor": "Bot_1",
+  "dataHora": "2025-12-09T17:52:58.102112300",
+  "duracao": 1,
+  "mapaNome": "ze4",
+  "dificuldade": "FACIL",
+  "totalEnigmasResolvidos": 0,
+  "totalEnigmasTentados": 0,
+  "totalObstaculos": 0,
+  "jogadores": [
+    {
+      "nome": "Bot_1",
+      "tipo": "Bot",
+      "localAtual": "Câmara do Tesouro",
+      "turnosJogados": 1,
+      "vencedor": true,
+      "percurso": ["Corredor 12", "Ante-Câmara 1", "Câmara do Tesouro"],
+      "obstaculos": [],
+      "enigmas": [
+      ],
+      "efeitosAplicados": [],
+      "totalEnigmasResolvidos": 0
+    }
+  ]
+}

@@ -13,14 +13,13 @@ import io.MapLoader;
 public class Menu {
     private Scanner scanner;
     
-    // VARIÁVEL PARA GUARDAR O NOME DO MAPA PARA O RELATÓRIO
+    // Variável para guardar o nome do mapa (para o relatório)
     private String nomeMapaAtual = "Mapa_Desconhecido"; 
 
     public Menu() {
         this.scanner = new Scanner(System.in);
     }
     
-    // GETTER PARA O MAIN USAR
     public String getNomeMapaAtual() {
         return nomeMapaAtual;
     }
@@ -57,9 +56,20 @@ public class Menu {
 
         String ficheiro = "";
         int op = lerInteiro();
-        if (op == 1) { ficheiro = "mapa_Oinicio.json"; nomeMapaAtual = "O_Inicio"; }
-        else if (op == 2) { ficheiro = "mapa_medio.json"; nomeMapaAtual = "A_Masmorra"; }
-        else if (op == 3) { ficheiro = "mapa_dificil.json"; nomeMapaAtual = "O_Pesadelo"; }
+        
+        // --- CAMINHOS ATUALIZADOS PARA resources/mapas_originais/ ---
+        if (op == 1) { 
+            ficheiro = "resources/mapas_originais/mapa_Oinicio.json"; 
+            nomeMapaAtual = "O_Inicio"; 
+        }
+        else if (op == 2) { 
+            ficheiro = "resources/mapas_originais/mapa_medio.json"; 
+            nomeMapaAtual = "A_Masmorra"; 
+        }
+        else if (op == 3) { 
+            ficheiro = "resources/mapas_originais/mapa_dificil.json"; 
+            nomeMapaAtual = "O_Pesadelo"; 
+        }
         else return apresentarMenuPrincipal();
 
         return carregarFicheiro(ficheiro);
@@ -67,21 +77,21 @@ public class Menu {
 
     private LabyrinthGraph<Divisao> menuMapasJogador() {
         System.out.println("\n MAPAS DO JOGADOR ");
-        System.out.println("Escreva o nome do ficheiro JSON (ex: 'meu_mapa.json'):");
+        System.out.println("Escreva o nome do ficheiro JSON (ex: 'ze3.json'):");
         System.out.print("> ");
         String nome = lerString();
         
-        // Define o nome do mapa baseado no ficheiro carregado
+        // Define o nome do mapa (sem a extensão .json)
         nomeMapaAtual = nome.replace(".json", "");
         
-        return carregarFicheiro(nome);
+        // --- CAMINHO ATUALIZADO: Agora procura em resources/saved_games/ ---
+        return carregarFicheiro("resources/saved_games/" + nome);
     }
 
     private LabyrinthGraph<Divisao> menuGerarAleatorio() {
         io.MapGenerator gerador = new io.MapGenerator();
         LabyrinthGraph<Divisao> mapaGerado = null;
         
-        // Nome padrão caso não gravem
         nomeMapaAtual = "Aleatorio_" + System.currentTimeMillis();
 
         System.out.println("\n Criação de um novo mapa!");
@@ -119,12 +129,14 @@ public class Menu {
             
             int escolhaGravar = lerInteiro();
             if (escolhaGravar == 1) {
-                System.out.print("Nome do ficheiro (ex: meu_mapa_fixe.json): ");
+                System.out.print("Nome do ficheiro (ex: ze3.json): ");
                 String nomeFicheiro = lerString();
                 if (!nomeFicheiro.endsWith(".json")) nomeFicheiro += ".json";
                 
                 io.MapExporter exporter = new io.MapExporter();
-                exporter.exportarMapa(mapaGerado, "Mapa Custom " + java.time.LocalDateTime.now(), nomeFicheiro);
+                
+                // --- CAMINHO ATUALIZADO: Grava na pasta resources/saved_games/ ---
+                exporter.exportarMapa(mapaGerado, "Mapa Custom " + java.time.LocalDateTime.now(), "resources/saved_games/" + nomeFicheiro);
                 
                 // Atualiza o nome do mapa se for gravado
                 nomeMapaAtual = nomeFicheiro.replace(".json", "");
@@ -155,7 +167,7 @@ public class Menu {
         catch (Exception e) { return ""; }
     }
 
-    // --- RELATÓRIOS (COM ITERADORES CORRIGIDOS) ---
+    // --- MENU RELATÓRIOS (Sem alterações de lógica, apenas mantendo consistência) ---
 
     private void menuRelatorios() {
         System.out.println("\n========== RELATÓRIOS DE JOGOS ==========");

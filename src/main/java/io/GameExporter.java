@@ -4,28 +4,26 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.time.format.DateTimeFormatter;
-import java.util.Iterator; // Necessário para percorrer as listas
+import java.util.Iterator; 
 
-import Lists.ArrayUnorderedList; // A tua lista customizada
+import Lists.ArrayUnorderedList; 
 
-/**
- * Exports game reports to JSON files in the saved_games/ directory.
- */
 public class GameExporter {
-    private static final String SAVED_GAMES_DIR = "saved_games";
+    
+    // --- MUDANÇA 1: Nova pasta para relatórios ---
+    private static final String RELATORIOS_DIR = "resources/saved_relatorios";
+    
     private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("yyyyMMdd_HHmmss");
 
     public GameExporter() {
-        ensureSavedGamesDirectory();
+        ensureDirectory();
     }
 
-    private void ensureSavedGamesDirectory() {
-        File dir = new File(SAVED_GAMES_DIR);
+    private void ensureDirectory() {
+        File dir = new File(RELATORIOS_DIR);
         if (!dir.exists()) {
             if (dir.mkdirs()) {
-                System.out.println("Pasta 'saved_games' criada com sucesso.");
-            } else {
-                System.out.println("Erro ao criar pasta 'saved_games'.");
+                System.out.println("Pasta 'saved_relatorios' criada.");
             }
         }
     }
@@ -38,16 +36,11 @@ public class GameExporter {
 
         try {
             String timestamp = report.getDataHora().format(FORMATTER);
-            // =================================================================
-            // AQUI ESTÁ A MUDANÇA PARA O NOME DO FICHEIRO
-            // =================================================================
-            // 1. Vai buscar o nome do mapa (ex: "ze2")
-            // 2. Limpa caracteres estranhos para não dar erro no Windows
+            
+            // --- MUDANÇA 2: Usar o nome do mapa no ficheiro ---
             String nomeMapaLimpo = report.getMapaNome().replaceAll("[^a-zA-Z0-9.-]", "_");
             
-            // 3. Monta o nome: relatorio_ze2_20251209... .json
-            String filename = SAVED_GAMES_DIR + File.separator + "relatorio_" + nomeMapaLimpo + "_" + timestamp + ".json";
-            // =================================================================
+            String filename = RELATORIOS_DIR + File.separator + "relatorio_" + nomeMapaLimpo + "_" + timestamp + ".json";
 
             String jsonContent = generateJSON(report);
 
@@ -55,42 +48,34 @@ public class GameExporter {
             writer.write(jsonContent);
             writer.close();
 
-            System.out.println("💾 Relatório guardado com sucesso: " + filename);
+            System.out.println("💾 Relatório guardado: " + filename);
         } catch (IOException e) {
             System.out.println("Erro ao guardar jogo: " + e.getMessage());
         }
     }
 
-    /**
-     * Generates JSON string from GameReport.
-     * Adaptado para usar ArrayUnorderedList e Iterators.
-     */
+    // ... (MANTÉM O RESTO DO MÉTODO generateJSON e escapeJson IGUAIS AO QUE ME MOSTRASTE) ...
+    // O teu método generateJSON já está correto (tem o totalEnigmasTentados).
+    // Só precisas de copiar o resto do ficheiro aqui para baixo.
+    
     private String generateJSON(GameReport report) {
         StringBuilder json = new StringBuilder();
         json.append("{\n");
         json.append("  \"vencedor\": \"").append(escapeJson(report.getVencedor())).append("\",\n");
         json.append("  \"dataHora\": \"").append(report.getDataHora().toString()).append("\",\n");
         json.append("  \"duracao\": ").append(report.getDuracao()).append(",\n");
-        
-        // Aqui usamos o nome do mapa que vem do report
         json.append("  \"mapaNome\": \"").append(escapeJson(report.getMapaNome())).append("\",\n");
-        
         json.append("  \"dificuldade\": \"").append(report.getDificuldade()).append("\",\n");
         json.append("  \"totalEnigmasResolvidos\": ").append(report.getTotalEnigmasResolvidos()).append(",\n");
-        
-        // --- ESCREVER TENTADOS ---
         json.append("  \"totalEnigmasTentados\": ").append(report.getTotalEnigmasTentados()).append(",\n");
-        
         json.append("  \"totalObstaculos\": ").append(report.getTotalObstaculos()).append(",\n");
         json.append("  \"jogadores\": [\n");
 
-        // --- MUDANÇA: Usar Iterator para os jogadores ---
         ArrayUnorderedList<GameReport.PlayerReport> jogadores = report.getListaJogadores();
         Iterator<GameReport.PlayerReport> itJogadores = jogadores.iterator();
         
         while (itJogadores.hasNext()) {
             GameReport.PlayerReport player = itJogadores.next();
-            
             json.append("    {\n");
             json.append("      \"nome\": \"").append(escapeJson(player.getNome())).append("\",\n");
             json.append("      \"tipo\": \"").append(player.getTipo()).append("\",\n");
@@ -98,10 +83,9 @@ public class GameExporter {
             json.append("      \"turnosJogados\": ").append(player.getTurnosJogados()).append(",\n");
             json.append("      \"vencedor\": ").append(player.isVencedor()).append(",\n");
             
-            // Percurso (path)
+            // Percurso
             json.append("      \"percurso\": [");
-            ArrayUnorderedList<String> percurso = player.getPercurso();
-            Iterator<String> itPercurso = percurso.iterator();
+            Iterator<String> itPercurso = player.getPercurso().iterator();
             while (itPercurso.hasNext()) {
                 json.append("\"").append(escapeJson(itPercurso.next())).append("\"");
                 if (itPercurso.hasNext()) json.append(", ");
@@ -110,8 +94,7 @@ public class GameExporter {
             
             // Obstáculos
             json.append("      \"obstaculos\": [");
-            ArrayUnorderedList<String> obstaculos = player.getObstaculos();
-            Iterator<String> itObstaculos = obstaculos.iterator();
+            Iterator<String> itObstaculos = player.getObstaculos().iterator();
             while (itObstaculos.hasNext()) {
                 json.append("\"").append(escapeJson(itObstaculos.next())).append("\"");
                 if (itObstaculos.hasNext()) json.append(", ");
@@ -120,8 +103,7 @@ public class GameExporter {
             
             // Enigmas
             json.append("      \"enigmas\": [\n");
-            ArrayUnorderedList<GameReport.EnigmaEvent> enigmas = player.getEnigmas();
-            Iterator<GameReport.EnigmaEvent> itEnigmas = enigmas.iterator();
+            Iterator<GameReport.EnigmaEvent> itEnigmas = player.getEnigmas().iterator();
             while (itEnigmas.hasNext()) {
                 GameReport.EnigmaEvent enigma = itEnigmas.next();
                 json.append("        {\n");
@@ -136,10 +118,9 @@ public class GameExporter {
             }
             json.append("      ],\n");
             
-            // Efeitos aplicados
+            // Efeitos
             json.append("      \"efeitosAplicados\": [");
-            ArrayUnorderedList<String> efeitos = player.getEfeitosAplicados();
-            Iterator<String> itEfeitos = efeitos.iterator();
+            Iterator<String> itEfeitos = player.getEfeitosAplicados().iterator();
             while (itEfeitos.hasNext()) {
                 json.append("\"").append(escapeJson(itEfeitos.next())).append("\"");
                 if (itEfeitos.hasNext()) json.append(", ");

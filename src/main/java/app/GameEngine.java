@@ -102,7 +102,7 @@ public class GameEngine {
     
     private ArrayUnorderedList<Enigma> loadEnigmas() {
         EnigmaLoader enigmaLoader = new EnigmaLoader();
-        return enigmaLoader.loadEnigmas("enigmas.json");
+        return enigmaLoader.loadEnigmas("resources/enigmas/enigmas.json");
     }
 
     private Dificuldade setupDifficulty() {

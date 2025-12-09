@@ -1,0 +1,45 @@
+{
+  "vencedor": "Bot_1",
+  "dataHora": "2025-12-09T02:57:05.331665100",
+  "duracao": 5,
+  "mapaNome": "Mapa do Jogo",
+  "dificuldade": "FACIL",
+  "totalEnigmasResolvidos": 2,
+  "totalObstaculos": 1,
+  "jogadores": [
+    {
+      "nome": "Bot_1",
+      "tipo": "Bot",
+      "localAtual": "Câmara do Tesouro",
+      "turnosJogados": 5,
+      "vencedor": true,
+      "percurso": ["Corredor 9", "Sala Misteriosa 4", "Ante-Câmara 1", "Câmara do Tesouro", "Corredor 9", "Sala Misteriosa 4", "Ante-Câmara 1", "Câmara do Tesouro"],
+      "obstaculos": ["Armadilha em Câmara do Tesouro"],
+      "enigmas": [
+        {
+          "sala": "Corredor 9",
+          "pergunta": "Se x=5 e y=2, quanto é x/y em divisão inteira?",
+          "resposta": "1",
+          "resolvido": true,
+          "efeito": "EXTRA_TURN"
+        },
+        {
+          "sala": "Corredor 9",
+          "pergunta": "Qual palavra-chave define uma constante em Java?",
+          "resposta": "2",
+          "resolvido": false,
+          "efeito": "BACK:1"
+        },
+        {
+          "sala": "Corredor 9",
+          "pergunta": "Qual destas NÃO é uma linguagem de programação?",
+          "resposta": "1",
+          "resolvido": true,
+          "efeito": "EXTRA_TURN"
+        }
+      ],
+      "efeitosAplicados": [],
+      "totalEnigmasResolvidos": 2
+    }
+  ]
+}

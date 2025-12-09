@@ -1,0 +1,31 @@
+{
+  "vencedor": "Bot_1",
+  "dataHora": "2025-12-09T02:20:17.731572",
+  "duracao": 1,
+  "mapaNome": "Mapa do Jogo",
+  "dificuldade": "FACIL",
+  "totalEnigmasResolvidos": 1,
+  "totalObstaculos": 0,
+  "jogadores": [
+    {
+      "nome": "Bot_1",
+      "tipo": "Bot",
+      "localAtual": "Câmara do Tesouro",
+      "turnosJogados": 1,
+      "vencedor": true,
+      "percurso": ["Corredor 16", "Sala Misteriosa 1", "Corredor 4", "Ante-Câmara 1", "Câmara do Tesouro"],
+      "obstaculos": [],
+      "enigmas": [
+        {
+          "sala": "Corredor 16",
+          "pergunta": "Qual é a extensão de um ficheiro Java compilado (bytecode)?",
+          "resposta": "1",
+          "resolvido": true,
+          "efeito": "EXTRA_TURN"
+        }
+      ],
+      "efeitosAplicados": [],
+      "totalEnigmasResolvidos": 1
+    }
+  ]
+}

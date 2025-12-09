@@ -1,0 +1,38 @@
+{
+  "vencedor": "Bot_1",
+  "dataHora": "2025-12-09T03:10:16.765471300",
+  "duracao": 2,
+  "mapaNome": "Mapa do Jogo",
+  "dificuldade": "FACIL",
+  "totalEnigmasResolvidos": 0,
+  "totalObstaculos": 0,
+  "jogadores": [
+    {
+      "nome": "Bot_1",
+      "tipo": "Bot",
+      "localAtual": "Câmara do Tesouro",
+      "turnosJogados": 2,
+      "vencedor": true,
+      "percurso": ["Corredor 1", "Corredor 4", "Corredor 4", "Sala Misteriosa 4", "Corredor 13", "Ante-Câmara 2", "Câmara do Tesouro"],
+      "obstaculos": [],
+      "enigmas": [
+        {
+          "sala": "Corredor 4",
+          "pergunta": "Qual é o valor padrão (default) de um inteiro em Java?",
+          "resposta": "2",
+          "resolvido": false,
+          "efeito": "BACK:1"
+        },
+        {
+          "sala": "Corredor 4",
+          "pergunta": "Qual é o resultado de (true && false)?",
+          "resposta": "1",
+          "resolvido": true,
+          "efeito": "EXTRA_TURN"
+        }
+      ],
+      "efeitosAplicados": [],
+      "totalEnigmasResolvidos": 1
+    }
+  ]
+}

@@ -1,0 +1,87 @@
+{
+  "vencedor": "Bot_1",
+  "dataHora": "2025-12-09T02:36:33.110401900",
+  "duracao": 14,
+  "mapaNome": "Mapa do Jogo",
+  "dificuldade": "FACIL",
+  "totalEnigmasResolvidos": 1,
+  "totalObstaculos": 0,
+  "jogadores": [
+    {
+      "nome": "Bot_1",
+      "tipo": "Bot",
+      "localAtual": "Câmara do Tesouro",
+      "turnosJogados": 14,
+      "vencedor": true,
+      "percurso": ["Corredor 1", "Corredor 6", "Corredor 6", "Corredor 6", "Corredor 6", "Corredor 6", "Corredor 6", "Corredor 6", "Corredor 1", "Corredor 6", "Corredor 6", "Corredor 6", "Sala Misteriosa 2", "Ante-Câmara 1", "Câmara do Tesouro"],
+      "obstaculos": [],
+      "enigmas": [
+        {
+          "sala": "Corredor 6",
+          "pergunta": "O que significa CPU?",
+          "resposta": "2",
+          "resolvido": false,
+          "efeito": "BACK:1"
+        },
+        {
+          "sala": "Corredor 6",
+          "pergunta": "Quanto é 10 + 5 * 2?",
+          "resposta": "2",
+          "resolvido": false,
+          "efeito": "BACK:1"
+        },
+        {
+          "sala": "Corredor 6",
+          "pergunta": "Qual destes nomes de variável é INVÁLIDO?",
+          "resposta": "2",
+          "resolvido": false,
+          "efeito": "BACK:1"
+        },
+        {
+          "sala": "Corredor 6",
+          "pergunta": "Qual é o índice do primeiro elemento de um array?",
+          "resposta": "2",
+          "resolvido": false,
+          "efeito": "BACK:1"
+        },
+        {
+          "sala": "Corredor 6",
+          "pergunta": "Qual é o resultado de (true && false)?",
+          "resposta": "2",
+          "resolvido": false,
+          "efeito": "BACK:1"
+        },
+        {
+          "sala": "Corredor 6",
+          "pergunta": "Qual o tamanho em bits de um 'int'?",
+          "resposta": "2",
+          "resolvido": false,
+          "efeito": "BACK:1"
+        },
+        {
+          "sala": "Corredor 6",
+          "pergunta": "Onde são guardados os objetos em Java (memória)?",
+          "resposta": "2",
+          "resolvido": false,
+          "efeito": "BACK:1"
+        },
+        {
+          "sala": "Corredor 6",
+          "pergunta": "O que faz o comando 'git init'?",
+          "resposta": "2",
+          "resolvido": false,
+          "efeito": "BACK:1"
+        },
+        {
+          "sala": "Corredor 6",
+          "pergunta": "Qual ciclo garante que o código corre pelo menos uma vez?",
+          "resposta": "1",
+          "resolvido": true,
+          "efeito": "EXTRA_TURN"
+        }
+      ],
+      "efeitosAplicados": [],
+      "totalEnigmasResolvidos": 1
+    }
+  ]
+}

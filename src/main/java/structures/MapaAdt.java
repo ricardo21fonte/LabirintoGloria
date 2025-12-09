@@ -1,7 +1,7 @@
 package structures;
 
-import java.util.Iterator;
-// Importa a sua lista customizada (assumindo o pacote 'Lists' do JAR)
+import java.util.Iterator;//mudar este
+
 import Lists.ArrayUnorderedList; 
 
 /**

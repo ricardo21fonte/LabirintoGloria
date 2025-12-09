@@ -1,10 +1,10 @@
 package structures;
 
-import java.util.Iterator;
-import Lists.UnorderedLinkedList;
+import java.util.Iterator;//mudar este
+
 import Graphs.GraphADT;
-import Graphs.Graph;
 import Lists.ArrayUnorderedList;
+import Lists.UnorderedLinkedList;
 import Queue.LinkedQueue;
 import Stacks.LinkedStack;
 

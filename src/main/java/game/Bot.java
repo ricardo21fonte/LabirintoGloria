@@ -1,10 +1,12 @@
 package game;
 
+import java.util.Iterator;
+
 import Lists.ArrayUnorderedList;
 import Queue.LinkedQueue;
-import enums.TipoDivisao;
+import enums.CorredorEvento;
 import enums.Dificuldade;
-import java.util.Iterator;
+import enums.TipoDivisao;
 
 public class Bot extends Player {
 
@@ -18,51 +20,60 @@ public class Bot extends Player {
     }
 
     // =================================================================
-    // 1. LÓGICA DE MOVIMENTO (TODOS USAM BFS / CAMINHO MAIS CURTO)
+    // 1. CÉREBRO DO BOT (DECISÃO DE MOVIMENTO)
     // =================================================================
     
-    /**
-     * Todos os bots, independentemente da dificuldade, usam o algoritmo
-     * de caminho mais curto (BFS).
-     */
+    // REMOVI O @OVERRIDE AQUI PORQUE O PLAYER NÃO TEM ESTE MÉTODO
     public Divisao escolherMovimento() {
-        System.out.println("🤖 O Bot " + getNome() + " (" + inteligencia + ") está a calcular a rota ideal...");
+        System.out.println("🤖 O Bot " + getNome() + " (" + inteligencia + ") está a pensar...");
 
-        // Todos usam a inteligência máxima para andar
-        Divisao melhorMovimento = movimentoInteligenteBFS();
+        // PRIORIDADE 1: Tentar ir para o Tesouro
+        Divisao passoParaTesouro = bfsParaAlvo(TipoDivisao.SALA_CENTRAL, null);
 
-        // Se o BFS não encontrar caminho (ex: preso), tenta mover aleatoriamente para desbloquear
-        if (melhorMovimento == null) {
-            System.out.println("   (Sem caminho óbvio, a tentar movimento aleatório...)");
-            return movimentoAleatorio();
+        if (passoParaTesouro != null) {
+            System.out.println("   📍 Caminho livre para o Tesouro! A avançar para: " + passoParaTesouro.getNome());
+            return passoParaTesouro;
         }
 
-        System.out.println("   📍 Caminho calculado. Próximo passo: " + melhorMovimento.getNome());
-        return melhorMovimento;
+        // PRIORIDADE 2: Procurar Alavanca Útil
+        System.out.println("   🔒 Caminho para o tesouro bloqueado. A procurar alavancas...");
+        Divisao passoParaAlavanca = buscarAlavancaMaisProxima();
+
+        if (passoParaAlavanca != null) {
+            System.out.println("   🔑 Vou buscar uma chave! A ir para: " + passoParaAlavanca.getNome());
+            return passoParaAlavanca;
+        }
+
+        // PRIORIDADE 3: Movimento Aleatório (Desespero)
+        System.out.println("   (Bot confuso ou preso, a tentar movimento aleatório...)");
+        return movimentoAleatorio();
     }
 
-    /**
-     * Algoritmo BFS para encontrar o PRÓXIMO passo do caminho mais curto até ao Tesouro.
-     */
-    private Divisao movimentoInteligenteBFS() {
+    // =================================================================
+    // 2. ALGORITMOS DE BUSCA (PATHFINDING)
+    // =================================================================
+
+    private Divisao bfsParaAlvo(TipoDivisao tipoAlvo, Divisao divisaoAlvo) {
         LinkedQueue<Divisao> fila = new LinkedQueue<>();
         ArrayUnorderedList<Divisao> visitados = new ArrayUnorderedList<>();
-        // Guardar o caminho para reconstruir (Filho -> Pai)
         ArrayUnorderedList<Parente> arvoreGenealogica = new ArrayUnorderedList<>();
 
-        fila.enqueue(getLocalAtual());
-        visitados.addToRear(getLocalAtual());
-        arvoreGenealogica.addToRear(new Parente(getLocalAtual(), null));
+        Divisao inicio = getLocalAtual();
+        fila.enqueue(inicio);
+        visitados.addToRear(inicio);
+        arvoreGenealogica.addToRear(new Parente(inicio, null));
 
         Divisao alvoEncontrado = null;
 
-        // --- CORE DO BFS ---
         while (!fila.isEmpty()) {
             Divisao atual;
             try { atual = fila.dequeue(); } catch (Exception e) { break; }
 
-            // Se encontrámos o Tesouro, paramos a procura
-            if (atual.getTipo() == TipoDivisao.SALA_CENTRAL) {
+            boolean chegou = false;
+            if (tipoAlvo != null && atual.getTipo() == tipoAlvo) chegou = true;
+            if (divisaoAlvo != null && atual.equals(divisaoAlvo)) chegou = true;
+
+            if (chegou) {
                 alvoEncontrado = atual;
                 break;
             }
@@ -70,91 +81,113 @@ public class Bot extends Player {
             Iterator<Divisao> it = mapaConhecido.getVizinhos(atual).iterator();
             while (it.hasNext()) {
                 Divisao vizinho = it.next();
+
                 if (!contem(visitados, vizinho)) {
-                    visitados.addToRear(vizinho);
-                    fila.enqueue(vizinho);
-                    // Guardamos quem é o "pai" deste vizinho para depois refazer o caminho
-                    arvoreGenealogica.addToRear(new Parente(vizinho, atual));
+                    if (podePassar(atual, vizinho)) {
+                        visitados.addToRear(vizinho);
+                        fila.enqueue(vizinho);
+                        arvoreGenealogica.addToRear(new Parente(vizinho, atual));
+                    }
                 }
             }
         }
 
-        // --- RECONSTRUÇÃO DO CAMINHO (Backtracking) ---
         if (alvoEncontrado != null) {
-            Divisao passo = alvoEncontrado;
-            Divisao anterior = null;
-            
-            // Vamos andar para trás (do Tesouro até ao Bot)
-            // O objetivo é descobrir qual é o PRIMEIRO passo que o Bot deve dar.
-            while (passo != getLocalAtual()) {
-                anterior = passo;
-                passo = obterPai(arvoreGenealogica, passo);
-                
-                // Segurança contra loops
-                if (passo == null) return null; 
-            }
-            return anterior; // Este é o vizinho imediato para onde o Bot deve ir
+            return reconstruirPrimeiroPasso(arvoreGenealogica, alvoEncontrado);
         }
-
-        return null; // Não há caminho possível
+        return null;
     }
 
-    /**
-     * Movimento Aleatório (Apenas usado se o BFS falhar/estiver preso)
-     */
+    private Divisao buscarAlavancaMaisProxima() {
+        LinkedQueue<Divisao> fila = new LinkedQueue<>();
+        ArrayUnorderedList<Divisao> visitados = new ArrayUnorderedList<>();
+        ArrayUnorderedList<Parente> arvoreGenealogica = new ArrayUnorderedList<>();
+
+        Divisao inicio = getLocalAtual();
+        fila.enqueue(inicio);
+        visitados.addToRear(inicio);
+        arvoreGenealogica.addToRear(new Parente(inicio, null));
+
+        Divisao alvoEncontrado = null;
+
+        while (!fila.isEmpty()) {
+            Divisao atual;
+            try { atual = fila.dequeue(); } catch (Exception e) { break; }
+
+            if (atual.getTipo() == TipoDivisao.SALA_ALAVANCA) {
+                int idTranca = atual.getIdDesbloqueio();
+                if (!this.podePassarTranca(idTranca)) {
+                    alvoEncontrado = atual;
+                    break; 
+                }
+            }
+
+            Iterator<Divisao> it = mapaConhecido.getVizinhos(atual).iterator();
+            while (it.hasNext()) {
+                Divisao vizinho = it.next();
+                if (!contem(visitados, vizinho)) {
+                    if (podePassar(atual, vizinho)) {
+                        visitados.addToRear(vizinho);
+                        fila.enqueue(vizinho);
+                        arvoreGenealogica.addToRear(new Parente(vizinho, atual));
+                    }
+                }
+            }
+        }
+
+        if (alvoEncontrado != null) {
+            return reconstruirPrimeiroPasso(arvoreGenealogica, alvoEncontrado);
+        }
+        return null;
+    }
+
+    private boolean podePassar(Divisao origem, Divisao destino) {
+        EventoCorredor evento = mapaConhecido.getCorredorEvento(origem, destino);
+        
+        if (evento.getTipo() == CorredorEvento.LOCKED) {
+            int idChave = evento.getValor();
+            return this.podePassarTranca(idChave);
+        }
+        return true;
+    }
+
+    private Divisao reconstruirPrimeiroPasso(ArrayUnorderedList<Parente> arvore, Divisao destino) {
+        Divisao passo = destino;
+        Divisao anterior = null;
+        
+        while (passo != getLocalAtual()) {
+            anterior = passo;
+            passo = obterPai(arvore, passo);
+            if (passo == null) return null; 
+        }
+        return anterior;
+    }
+
     private Divisao movimentoAleatorio() {
         ArrayUnorderedList<Divisao> vizinhos = mapaConhecido.getVizinhos(getLocalAtual());
         if (vizinhos.isEmpty()) return null;
-
         int index = (int) (Math.random() * vizinhos.size());
         Iterator<Divisao> it = vizinhos.iterator();
-        
         for (int i = 0; i < index; i++) it.next();
         return it.next();
     }
 
     // =================================================================
-    // 2. LÓGICA DE ENIGMAS (AQUI ESTÁ A DIFERENÇA DE DIFICULDADE)
+    // 3. LÓGICA DE ENIGMAS
     // =================================================================
 
-    /**
-     * O Bot tenta resolver um enigma com base na sua "inteligência".
-     * @return true se acertar, false se errar.
-     */
     public boolean tentarResolverEnigma(Enigma enigma) {
         System.out.println("   🤔 O Bot " + getNome() + " (" + inteligencia + ") está a analisar o enigma...");
-        
-        // Definir a probabilidade de acerto com base no nível
         double chanceAcerto = 0.0; 
-
         switch (inteligencia) {
-            case FACIL: 
-                chanceAcerto = 0.25; // 25% chance (Erra a maioria)
-                break;
-            case MEDIO: 
-                chanceAcerto = 0.50; // 50% chance (Moeda ao ar)
-                break;
-            case DIFICIL: 
-                chanceAcerto = 0.75; // 75% chance (Acerta a maioria)
-                break;
+            case FACIL: chanceAcerto = 0.25; break;
+            case MEDIO: chanceAcerto = 0.50; break;
+            case DIFICIL: chanceAcerto = 0.75; break;
         }
-
-        // Gerar número aleatório entre 0.0 e 1.0
-        double sorte = Math.random();
-
-        // Debug para tu veres o que aconteceu (podes remover depois)
-        // System.out.println("   [DEBUG] Sorte: " + String.format("%.2f", sorte) + " vs Chance: " + chanceAcerto);
-
-        if (sorte <= chanceAcerto) {
-            System.out.println("   ✨ SUCESSO! O Bot respondeu corretamente.");
-            return true;
-        } else {
-            System.out.println("   ❌ ERRO! O Bot falhou a resposta.");
-            return false;
-        }
+        return Math.random() <= chanceAcerto;
     }
 
-    // --- Auxiliares do BFS ---
+    // --- Auxiliares ---
     private boolean contem(ArrayUnorderedList<Divisao> lista, Divisao alvo) {
         Iterator<Divisao> it = lista.iterator();
         while (it.hasNext()) if (it.next().equals(alvo)) return true;
@@ -175,6 +208,5 @@ public class Bot extends Player {
         public Parente(Divisao f, Divisao p) { this.filho = f; this.pai = p; }
     }
     
-    // Getter necessário
     public Dificuldade getInteligencia() { return inteligencia; }
 }

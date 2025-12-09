@@ -28,27 +28,22 @@ public class Bot extends Player {
     
     // REMOVI O @OVERRIDE AQUI PORQUE O PLAYER NÃO TEM ESTE MÉTODO
     public Divisao escolherMovimento() {
-        System.out.println("🤖 O Bot " + getNome() + " (" + inteligencia + ") está a pensar...");
 
         // PRIORIDADE 1: Tentar ir para o Tesouro
         Divisao passoParaTesouro = bfsParaAlvo(TipoDivisao.SALA_CENTRAL, null);
 
         if (passoParaTesouro != null) {
-            System.out.println("   📍 Caminho livre para o Tesouro! A avançar para: " + passoParaTesouro.getNome());
             return passoParaTesouro;
         }
 
         // PRIORIDADE 2: Procurar Alavanca Útil
-        System.out.println("   🔒 Caminho para o tesouro bloqueado. A procurar alavancas...");
         Divisao passoParaAlavanca = buscarAlavancaMaisProxima();
 
         if (passoParaAlavanca != null) {
-            System.out.println("   🔑 Vou buscar uma chave! A ir para: " + passoParaAlavanca.getNome());
             return passoParaAlavanca;
         }
 
         // PRIORIDADE 3: Movimento Aleatório (Desespero)
-        System.out.println("   (Bot confuso ou preso, a tentar movimento aleatório...)");
         return movimentoAleatorio();
     }
 
@@ -180,7 +175,6 @@ public class Bot extends Player {
     // =================================================================
 
     public boolean tentarResolverEnigma(Enigma enigma) {
-        System.out.println("   🤔 O Bot " + getNome() + " (" + inteligencia + ") está a analisar o enigma...");
         double chanceAcerto = 0.0; 
         switch (inteligencia) {
             case FACIL: chanceAcerto = 0.25; break;

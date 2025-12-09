@@ -16,124 +16,65 @@ import game.LabyrinthGraph;
 public class MapLoader {
 
     public LabyrinthGraph<Divisao> loadMap(String filePath) {
-        System.out.println("DEBUG: A iniciar MapLoader para: " + filePath);
         LabyrinthGraph<Divisao> graph = new LabyrinthGraph<>();
         JSONParser parser = new JSONParser();
-
-        // Listas auxiliares simples
         ArrayUnorderedList<Divisao> listaSalas = new ArrayUnorderedList<>();
         ArrayUnorderedList<String> listaCodigos = new ArrayUnorderedList<>();
 
-        try {
-            System.out.println("DEBUG: A tentar abrir o ficheiro...");
-            Object obj = parser.parse(new FileReader(filePath));
-            JSONObject jsonObject = (JSONObject) obj;
-
-            System.out.println("DEBUG: JSON lido! Nome do mapa: " + jsonObject.get("nome"));
-
-            // --- 1. LER SALAS ---
-            System.out.println("DEBUG: A ler salas...");
+        // try-with-resources: Garante que o ficheiro fecha sempre
+        try (FileReader reader = new FileReader(filePath)) {
+            JSONObject jsonObject = (JSONObject) parser.parse(reader);
+            
             JSONArray salas = (JSONArray) jsonObject.get("salas");
-
-            if (salas == null) throw new Exception("O array 'salas' não existe no JSON!");
+            if (salas == null) throw new Exception("JSON sem 'salas'!");
 
             for (Object s : salas) {
                 JSONObject salaJSON = (JSONObject) s;
                 String codigo = (String) salaJSON.get("codigo");
-                String nome   = (String) salaJSON.get("nome");
-                String tipoStr = (String) salaJSON.get("tipo");
+                String nome = (String) salaJSON.get("nome");
+                TipoDivisao tipo = TipoDivisao.valueOf((String) salaJSON.get("tipo"));
 
-                System.out.println("   -> A ler sala: " + codigo + " (" + tipoStr + ")");
-
-                // Converter Enum TipoDivisao
-                TipoDivisao tipo;
-                try {
-                    tipo = TipoDivisao.valueOf(tipoStr);
-                } catch (IllegalArgumentException e) {
-                    throw new Exception("Tipo de sala inválido no JSON: " + tipoStr);
+                Divisao d = new Divisao(nome, tipo);
+                if (tipo == TipoDivisao.SALA_ALAVANCA && salaJSON.get("idDesbloqueio") != null) {
+                    d.setIdDesbloqueio(((Long) salaJSON.get("idDesbloqueio")).intValue());
                 }
-
-               Divisao d = new Divisao(nome, tipo);
-                if (tipo == TipoDivisao.SALA_ALAVANCA) {
-                    Object rawId = salaJSON.get("idDesbloqueio");
-                    if (rawId != null) {
-                        int id = ((Long) rawId).intValue();  // JSON-simple devolve Long
-                        d.setIdDesbloqueio(id);
-                        System.out.println("      (Sala de alavanca com idDesbloqueio = " + id + ")");
-                    } else {
-                        System.out.println("      AVISO: Sala de alavanca " + codigo + " sem 'idDesbloqueio' no JSON.");
-                    }
-                }
+                
                 graph.addVertex(d);
-
                 listaSalas.addToRear(d);
                 listaCodigos.addToRear(codigo);
             }
 
-            // --- 2. LER LIGAÇÕES ---
-            System.out.println("DEBUG: A ler ligações...");
             JSONArray ligacoes = (JSONArray) jsonObject.get("ligacoes");
+            if (ligacoes != null) {
+                for (Object l : ligacoes) {
+                    JSONObject lig = (JSONObject) l;
+                    String origem = (String) lig.get("origem");
+                    String destino = (String) lig.get("destino");
+                    String eventoStr = (String) lig.get("evento");
+                    int valor = lig.get("valor") != null ? ((Long) lig.get("valor")).intValue() : 0;
 
-            if (ligacoes == null) throw new Exception("O array 'ligacoes' não existe no JSON!");
+                    Divisao d1 = findDiv(listaSalas, listaCodigos, origem);
+                    Divisao d2 = findDiv(listaSalas, listaCodigos, destino);
 
-            for (Object l : ligacoes) {
-                JSONObject lig = (JSONObject) l;
-                String origem   = (String) lig.get("origem");
-                String destino  = (String) lig.get("destino");
-                String eventoStr = (String) lig.get("evento");
-
-                System.out.println("   -> A ligar " + origem + " a " + destino +
-                        " | evento=" + eventoStr);
-
-                int valor = 0;
-                if (lig.get("valor") != null) {
-                    valor = ((Long) lig.get("valor")).intValue();
-                }
-
-                Divisao divOrigem = findDiv(listaSalas, listaCodigos, origem);
-                Divisao divDestino = findDiv(listaSalas, listaCodigos, destino);
-
-                if (divOrigem != null && divDestino != null) {
-
-                    // Converter string do JSON para o enum CorredorEvento
-                    CorredorEvento tipoEvento;
-                    try {
-                        tipoEvento = CorredorEvento.valueOf(eventoStr);
-                    } catch (IllegalArgumentException e) {
-                        System.out.println("      AVISO: Evento '" + eventoStr +
-                                "' desconhecido. A assumir NONE.");
-                        tipoEvento = CorredorEvento.NONE;
+                    if (d1 != null && d2 != null) {
+                        CorredorEvento tipoEv = CorredorEvento.NONE;
+                        try { tipoEv = CorredorEvento.valueOf(eventoStr); } catch (Exception e) {}
+                        graph.addCorridor(d1, d2, new EventoCorredor(tipoEv, valor));
                     }
-
-                    EventoCorredor evento = new EventoCorredor(tipoEvento, valor);
-                    graph.addCorridor(divOrigem, divDestino, evento);
-
-                } else {
-                    System.out.println("      ERRO: Sala de origem ou destino não encontrada!");
                 }
             }
-
-            System.out.println("DEBUG: Leitura concluída com sucesso!");
-
         } catch (Exception e) {
-            System.out.println("\n🚨 ERRO CRÍTICO NO MAPLOADER 🚨");
-            System.out.println("Mensagem: " + e.getMessage());
-            System.out.println("Causa provável: Nomes errados no JSON ou Enum diferente.");
-            e.printStackTrace();
-            return null;
+            return null; // Retorna null em caso de erro (o Menu trata disto)
         }
         return graph;
     }
 
-    private Divisao findDiv(ArrayUnorderedList<Divisao> salas,
-                            ArrayUnorderedList<String> codigos,
-                            String codigoAlvo) {
-        java.util.Iterator<Divisao> itSalas = salas.iterator();
-        java.util.Iterator<String> itCodigos = codigos.iterator();
+    private Divisao findDiv(ArrayUnorderedList<Divisao> salas, ArrayUnorderedList<String> codigos, String alvo) {
+        var itSalas = salas.iterator();
+        var itCodigos = codigos.iterator();
         while (itSalas.hasNext() && itCodigos.hasNext()) {
             Divisao d = itSalas.next();
-            String c  = itCodigos.next();
-            if (c.equals(codigoAlvo)) return d;
+            if (itCodigos.next().equals(alvo)) return d;
         }
         return null;
     }

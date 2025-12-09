@@ -1,0 +1,53 @@
+{
+  "vencedor": "Bot_1",
+  "dataHora": "2025-12-09T22:35:13.298150200",
+  "duracao": 5,
+  "mapaNome": "O_Inicio",
+  "dificuldade": "FACIL",
+  "totalEnigmasResolvidos": 2,
+  "totalEnigmasTentados": 4,
+  "totalObstaculos": 0,
+  "jogadores": [
+    {
+      "nome": "Bot_1",
+      "tipo": "Bot",
+      "localAtual": "Câmara do Tesouro",
+      "turnosJogados": 5,
+      "vencedor": true,
+      "percurso": ["Pátio de Pedra", "Pátio de Pedra", "Biblioteca Mágica", "Sala das Máquinas", "Pátio de Pedra", "Biblioteca Mágica", "Sala das Máquinas", "Câmara do Tesouro"],
+      "obstaculos": [],
+      "enigmas": [
+        {
+          "sala": "Pátio de Pedra",
+          "pergunta": "O que significa CPU?",
+          "resposta": "Errado",
+          "resolvido": false,
+          "efeito": "BACK:1"
+        },
+        {
+          "sala": "Pátio de Pedra",
+          "pergunta": "Qual o tamanho em bits de um 'int'?",
+          "resposta": "Correto",
+          "resolvido": true,
+          "efeito": "EXTRA_TURN"
+        },
+        {
+          "sala": "Pátio de Pedra",
+          "pergunta": "O que significa 'GUI'?",
+          "resposta": "Errado",
+          "resolvido": false,
+          "efeito": "BACK:1"
+        },
+        {
+          "sala": "Pátio de Pedra",
+          "pergunta": "Qual palavra-chave define uma constante em Java?",
+          "resposta": "Correto",
+          "resolvido": true,
+          "efeito": "EXTRA_TURN"
+        }
+      ],
+      "efeitosAplicados": [],
+      "totalEnigmasResolvidos": 2
+    }
+  ]
+}

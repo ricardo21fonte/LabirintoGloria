@@ -15,7 +15,6 @@ import game.Enigma;
 import game.EventoCorredor;
 import game.LabyrinthGraph;
 import game.Player;
-import game.labirinto;
 import io.EnigmaLoader;
 import io.GameExporter;
 import io.GameReport;
@@ -28,11 +27,14 @@ public class GameEngine {
     private int turnoCount;
     private ArrayUnorderedList<GameReport.PlayerReport> playerReports;
     
-    // VARIÁVEIS FUNDIDAS
+    // --- VARIÁVEIS DE ESTATÍSTICA ---
     private int totalEnigmasResolvidos;
     private int totalEnigmasTentados; 
     private int totalObstaculos;
     private String nomeDoMapaEscolhido = "Mapa do Jogo";
+
+    // --- LISTA DE ENIGMAS (Trazida do antigo labirinto.java) ---
+    private ArrayUnorderedList<Enigma> enigmasDisponiveis;
 
     public GameEngine(LabyrinthGraph<Divisao> labyrinthGraph) {
         this.labyrinthGraph = labyrinthGraph;
@@ -46,22 +48,22 @@ public class GameEngine {
     public void start() {
         view.mostrarMensagemCarregar();
         
+        // 1. Carregar e guardar enigmas localmente
         ArrayUnorderedList<Enigma> allEnigmas = loadEnigmas();
-        labirinto labyrinthGame = new labirinto();
-        labyrinthGame.setMapa(labyrinthGraph);
-
+        
         Dificuldade difficulty = setupDifficulty();
 
-        ArrayUnorderedList<Enigma> filteredEnigmas = filterEnigmasByDifficulty(allEnigmas, difficulty);
-        labyrinthGame.setEnigmas(filteredEnigmas);
+        // 2. Filtrar enigmas para a dificuldade escolhida
+        this.enigmasDisponiveis = filterEnigmasByDifficulty(allEnigmas, difficulty);
 
         Divisao[] entrances = getMapEntrances();
         if (entrances.length == 0) return;
 
         LinkedQueue<Player> turnQueue = new LinkedQueue<>();
 
-        int numHumans = setupHumanPlayers(labyrinthGame, entrances, turnQueue);
-        setupBots(labyrinthGame, entrances, turnQueue, numHumans);
+        // 3. Setup dos jogadores (já não usa labyrinthGame.adicionarJogador)
+        int numHumans = setupHumanPlayers(entrances, turnQueue);
+        setupBots(entrances, turnQueue, numHumans);
 
         if (turnQueue.isEmpty()) {
             view.mostrarSemJogadores();
@@ -71,15 +73,17 @@ public class GameEngine {
         view.mostrarInicioJogo();
         view.esperarEnter();
 
+        // Inicializar Estado
         vencedor = null;
         turnoCount = 0;
         playerReports = new ArrayUnorderedList<>();
         
-        // RESETAR CONTADORES
+        // Resetar contadores
         totalEnigmasResolvidos = 0;
         totalEnigmasTentados = 0; 
         totalObstaculos = 0;
         
+        // Criar relatórios iniciais
         LinkedQueue<Player> tempQueue = new LinkedQueue<>();
         while (!turnQueue.isEmpty()) {
             try {
@@ -93,13 +97,13 @@ public class GameEngine {
             try { turnQueue.enqueue(tempQueue.dequeue()); } catch (Exception e) { break; }
         }
 
-        runGameLoop(labyrinthGame, turnQueue, difficulty);
+        runGameLoop(turnQueue, difficulty);
+
         view.fechar();
     }
 
-    // ... (Métodos de Setup mantêm-se iguais - loadEnigmas, setupDifficulty, etc) ...
-    // Podes manter o que tinhas antes nestes métodos auxiliares de setup.
-    
+    // ========== SETUP ==========
+
     private ArrayUnorderedList<Enigma> loadEnigmas() {
         EnigmaLoader enigmaLoader = new EnigmaLoader();
         return enigmaLoader.loadEnigmas("resources/enigmas/enigmas.json");
@@ -145,7 +149,7 @@ public class GameEngine {
         return arrayEntrances;
     }
 
-    private int setupHumanPlayers(labirinto labyrinthGame, Divisao[] entrances, LinkedQueue<Player> turnQueue) {
+    private int setupHumanPlayers(Divisao[] entrances, LinkedQueue<Player> turnQueue) {
         int numHumans;
         int maxPlayers = 8;
         do {
@@ -162,14 +166,13 @@ public class GameEngine {
             int rnd = (int) (Math.random() * entrances.length);
             Divisao spawn = entrances[rnd];
             Player player = new Player(name, spawn);
-            labyrinthGame.adicionarJogador(player);
             turnQueue.enqueue(player);
             view.mostrarSpawn(spawn.getNome());
         }
         return numHumans;
     }
 
-    private void setupBots(labirinto labyrinthGame, Divisao[] entrances, LinkedQueue<Player> turnQueue, int numHumans) {
+    private void setupBots(Divisao[] entrances, LinkedQueue<Player> turnQueue, int numHumans) {
         int maxBots = 8 - numHumans;
         if (maxBots <= 0) {
             view.mostrarAvisoJogoCheio();
@@ -191,13 +194,14 @@ public class GameEngine {
             } while(opt < 1 || opt > 3);
             Dificuldade dif = (opt == 2) ? Dificuldade.MEDIO : (opt == 3) ? Dificuldade.DIFICIL : Dificuldade.FACIL;
             Bot bot = new Bot("Bot_" + i, spawn, dif, labyrinthGraph);
-            labyrinthGame.adicionarJogador(bot);
             turnQueue.enqueue(bot);
             view.mostrarBotCriado(spawn.getNome());
         }
     }
 
-    private void runGameLoop(labirinto labyrinthGame, LinkedQueue<Player> turnQueue, Dificuldade difficulty) {
+    // ========== GAME LOOP ==========
+
+    private void runGameLoop(LinkedQueue<Player> turnQueue, Dificuldade difficulty) {
         boolean gameRunning = true;
         while (gameRunning && !turnQueue.isEmpty()) {
             Player currentPlayer;
@@ -232,26 +236,28 @@ public class GameEngine {
                 if (destination == null) break;
 
                 boolean canEnter = true;
+                
+                // --- LÓGICA DE ENIGMA INTEGRADA ---
                 if (destination.getTipo() == TipoDivisao.SALA_ENIGMA) {
-                    Enigma enigma = labyrinthGame.obterEnigma(difficulty);
+                    Enigma enigma = obterEnigmaAleatorio(difficulty);
+                    
                     if (enigma == null) {
-                        // Sem enigma -> deixas passar, sem efeitos
-                        view.mostrarMensagemCarregar(); // ou cria uma mensagem tipo "Sem mais enigmas nesta dificuldade"
+                        view.mostrarMensagemCarregar(); 
                         canEnter = true;
                     } else {
                         boolean solved = presentAndSolveEnigma(currentPlayer, enigma);
-
                         if (solved) {
-                        int bonus = applyEffect(enigma.getEfeitoSucesso(), currentPlayer, turnQueue);
-                        if (bonus > 0) {
-                            movements += bonus;
-                            view.mostrarGanhouMovimentos(movements);
+                            int bonus = applyEffect(enigma.getEfeitoSucesso(), currentPlayer, turnQueue);
+                            if (bonus > 0) {
+                                movements += bonus;
+                                view.mostrarGanhouMovimentos(movements);
+                            }
+                        } else {
+                            canEnter = false;
+                            turnEnded = true;
+                            applyEffect(enigma.getEfeitoFalha(), currentPlayer, turnQueue);
                         }
-                    } else {
-                        canEnter = false;
-                        turnEnded = true;
-                        applyEffect(enigma.getEfeitoFalha(), currentPlayer, turnQueue);
-                    }}
+                    }
                 }
 
                 if (canEnter) {
@@ -265,7 +271,8 @@ public class GameEngine {
                         continue;
                     }
 
-                    labyrinthGame.realizarJogada(currentPlayer, destination);
+                    // --- MOVIMENTO REAL DO JOGADOR (Única vez que mexe!) ---
+                    currentPlayer.moverPara(destination);
                     
                     GameReport.PlayerReport pReport = getPlayerReport(currentPlayer.getNome());
                     if (pReport != null) pReport.adicionarPercurso(destination.getNome());
@@ -313,11 +320,47 @@ public class GameEngine {
     }
 
     // === MÉTODOS DE LÓGICA E CONTAGEM ===
+    
+    // Método trazido do labirinto.java para escolher enigmas
+    private Enigma obterEnigmaAleatorio(Dificuldade difAlvo) {
+        if (enigmasDisponiveis == null || enigmasDisponiveis.isEmpty()) return null;
+
+        ArrayUnorderedList<Enigma> candidatos = new ArrayUnorderedList<>();
+        Iterator<Enigma> it = enigmasDisponiveis.iterator();
+        while (it.hasNext()) {
+            Enigma e = it.next();
+            if (e.getDificuldade() == difAlvo) {
+                candidatos.addToRear(e);
+            }
+        }
+
+        if (candidatos.isEmpty()) return null;
+
+        int totalCandidatos = candidatos.size();
+        int indiceSorteado = (int) (Math.random() * totalCandidatos);
+
+        Enigma enigmaEscolhido = null;
+        Iterator<Enigma> itCandidatos = candidatos.iterator();
+        int idx = 0;
+        while (itCandidatos.hasNext()) {
+            Enigma e = itCandidatos.next();
+            if (idx == indiceSorteado) {
+                enigmaEscolhido = e;
+                break;
+            }
+            idx++;
+        }
+
+        if (enigmaEscolhido != null) {
+            enigmasDisponiveis.remove(enigmaEscolhido);
+        }
+        return enigmaEscolhido;
+    }
 
     private boolean presentAndSolveEnigma(Player player, Enigma enigma) {
         if (enigma == null) return true;
         
-        totalEnigmasTentados++; // CONTA A TENTATIVA
+        totalEnigmasTentados++; 
 
         view.mostrarEnigmaNaPorta();
         view.mostrarPergunta(enigma.getPergunta());
@@ -341,7 +384,7 @@ public class GameEngine {
         }
         view.mostrarResultadoEnigma(correct);
         
-        if (correct) totalEnigmasResolvidos++; // CONTA O SUCESSO
+        if (correct) totalEnigmasResolvidos++; 
 
         GameReport.PlayerReport pReport = getPlayerReport(player.getNome());
         if (pReport != null) {
@@ -355,24 +398,73 @@ public class GameEngine {
         return correct;
     }
 
+    private int applyEffect(String effect, Player player, LinkedQueue<Player> turnQueue) {
+        if (effect == null || effect.equals("NONE")) return 0;
+        view.mostrarEfeito(effect);
+        if (effect.equals("EXTRA_TURN")) return 1;
+        else if (effect.equals("BLOCK")) player.bloquear(1);
+        else if (effect.startsWith("BACK:")) {
+            try {
+                int steps = Integer.parseInt(effect.split(":")[1]);
+                player.recuar(steps);
+            } catch (Exception e) {}
+        } else if (effect.equals("SWAP")) {
+            try {
+                Player other = turnQueue.dequeue();
+                if (other != player) {
+                    Divisao pos1 = player.getLocalAtual();
+                    Divisao pos2 = other.getLocalAtual();
+                    player.setLocalAtual(pos2);
+                    other.setLocalAtual(pos1);
+                }
+                turnQueue.enqueue(other);
+            } catch (Exception e) {}
+        }
+        return 0;
+    }
+
+    private boolean solveLeverRoom(Player player, Divisao room) {
+        if (room.getAlavanca() == null) room.setAlavanca(new Alavanca());
+        Alavanca lever = room.getAlavanca();
+        view.mostrarSalaAlavanca();
+        view.mostrarOpcoesAlavanca();
+        int choice;
+        if (player instanceof Bot) {
+            Bot bot = (Bot) player;
+            choice = bot.escolherAlavanca(room, lever.getNumAlavancas()); // Inteligência do Bot
+            view.mostrarBotEscolheAlavanca(choice);
+        } else {
+            do {
+                choice = view.pedirAlavanca();
+                if(choice < 1 || choice > 3) view.mostrarErroOpcaoInvalida(1, 3);
+            } while(choice < 1 || choice > 3);
+        }
+        AlavancaEnum result = lever.ativar(choice);
+        int lockId = room.getIdDesbloqueio();
+        view.mostrarResultadoAlavanca(result, lockId, player.getNome());
+        if (result == AlavancaEnum.ABRIR_PORTA && lockId > 0) {
+            player.desbloquearTranca(lockId);
+            return false;
+        } else if (result == AlavancaEnum.PENALIZAR) {
+            player.recuar(2);
+            return true;
+        }
+        return false;
+    }
+
     private GameReport createGameReport(Player vencedorPlayer, Dificuldade difficulty) {
         GameReport report = new GameReport();
         report.setVencedor(vencedor);
         report.setDuracao(turnoCount);
         report.setDificuldade(difficulty.toString());
         report.setMapaNome(nomeDoMapaEscolhido);
-        
-        // Grava as contagens
         report.setTotalEnigmasResolvidos(totalEnigmasResolvidos);
         report.setTotalEnigmasTentados(totalEnigmasTentados);
         report.setTotalObstaculos(totalObstaculos);
-        
         report.setListaJogadores(playerReports);
         return report;
     }
 
-    // ... Restantes métodos auxiliares (getReport, rollDice, chooseDest, checkEvent, trap, effect, lever) mantêm-se iguais
-    // Copia do ficheiro anterior ou mantém os que tens, não mudaram.
     private GameReport.PlayerReport getPlayerReport(String nome) {
         Iterator<GameReport.PlayerReport> it = playerReports.iterator();
         while (it.hasNext()) {
@@ -451,66 +543,6 @@ public class GameEngine {
             view.mostrarArmadilhaAtivada();
             labyrinthGraph.relocalizarArmadilha(origem, destination);
             return true;
-        }
-        return false;
-    }
-
-    private int applyEffect(String effect, Player player, LinkedQueue<Player> turnQueue) {
-        if (effect == null || effect.equals("NONE")) return 0;
-        view.mostrarEfeito(effect);
-        if (effect.equals("EXTRA_TURN")) return 1;
-        else if (effect.equals("BLOCK")) player.bloquear(1);
-        else if (effect.startsWith("BACK:")) {
-            try {
-                int steps = Integer.parseInt(effect.split(":")[1]);
-                player.recuar(steps);
-            } catch (Exception e) {}
-        } else if (effect.equals("SWAP")) {
-            try {
-                Player other = turnQueue.dequeue();
-                if (other != player) {
-                    Divisao pos1 = player.getLocalAtual();
-                    Divisao pos2 = other.getLocalAtual();
-                    player.setLocalAtual(pos2);
-                    other.setLocalAtual(pos1);
-                }
-                turnQueue.enqueue(other);
-            } catch (Exception e) {}
-        }
-        return 0;
-    }
-
-    private boolean solveLeverRoom(Player player, Divisao room) {
-        if (room.getAlavanca() == null) room.setAlavanca(new Alavanca());
-        Alavanca lever = room.getAlavanca();
-        view.mostrarSalaAlavanca();
-        view.mostrarOpcoesAlavanca();
-
-        int choice;
-        if (player instanceof Bot) {
-            Bot bot = (Bot) player;  // <-- crias um OBJETO bot
-            choice = bot.escolherAlavanca(room, lever.getNumAlavancas());
-            view.mostrarBotEscolheAlavanca(choice);
-        } else {
-            do {
-                choice = view.pedirAlavanca();
-                if(choice < 1 || choice > 3) view.mostrarErroOpcaoInvalida(1, 3);
-            } while(choice < 1 || choice > 3);
-        }
-
-        AlavancaEnum result = lever.ativar(choice);
-        int lockId = room.getIdDesbloqueio();
-
-        view.mostrarResultadoAlavanca(result, lockId, player.getNome());
-
-        if (result == AlavancaEnum.ABRIR_PORTA && lockId > 0) {
-            player.desbloquearTranca(lockId);
-            // se não marcasses na própria Alavanca, podias fazer aqui:
-            // lever.marcarResolvida();
-            return false; // turno continua
-        } else if (result == AlavancaEnum.PENALIZAR) {
-            player.recuar(2);
-            return true;  // termina o turno
         }
         return false;
     }

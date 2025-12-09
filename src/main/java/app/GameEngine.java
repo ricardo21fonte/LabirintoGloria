@@ -36,13 +36,13 @@ public class GameEngine {
     // --- LISTAS DE DADOS ---
     private ArrayUnorderedList<Enigma> enigmasDisponiveis;
     
-    // NOVO: Lista para visualização do estado global
+    // Lista para visualização do estado global
     private ArrayUnorderedList<Player> todosJogadores;
 
     public GameEngine(LabyrinthGraph<Divisao> labyrinthGraph) {
         this.labyrinthGraph = labyrinthGraph;
         this.view = new GameView(); 
-        this.todosJogadores = new ArrayUnorderedList<>(); // Inicializar
+        this.todosJogadores = new ArrayUnorderedList<>(); 
     }
     
     public void setNomeDoMapa(String nome) {
@@ -52,8 +52,11 @@ public class GameEngine {
     public void start() {
         view.mostrarMensagemCarregar();
         
+        // 1. Carregar recursos
         ArrayUnorderedList<Enigma> allEnigmas = loadEnigmas();
         Dificuldade difficulty = setupDifficulty();
+        
+        // 2. Filtrar enigmas iniciais
         this.enigmasDisponiveis = filterEnigmasByDifficulty(allEnigmas, difficulty);
 
         Divisao[] entrances = getMapEntrances();
@@ -61,7 +64,7 @@ public class GameEngine {
 
         LinkedQueue<Player> turnQueue = new LinkedQueue<>();
 
-        // Setup dos jogadores
+        // 3. Setup Jogadores (Adiciona à fila de turnos e à lista global)
         int numHumans = setupHumanPlayers(entrances, turnQueue);
         setupBots(entrances, turnQueue, numHumans);
 
@@ -73,10 +76,10 @@ public class GameEngine {
         view.mostrarInicioJogo();
         view.esperarEnter();
 
+        // 4. Inicializar Variáveis de Jogo
         vencedor = null;
         turnoCount = 0;
         playerReports = new ArrayUnorderedList<>();
-        
         totalEnigmasResolvidos = 0;
         totalEnigmasTentados = 0; 
         totalObstaculos = 0;
@@ -95,6 +98,7 @@ public class GameEngine {
             try { turnQueue.enqueue(tempQueue.dequeue()); } catch (Exception e) { break; }
         }
 
+        // 5. Iniciar Loop
         runGameLoop(turnQueue, difficulty);
         view.fechar();
     }
@@ -165,7 +169,7 @@ public class GameEngine {
             Player player = new Player(name, spawn);
             
             turnQueue.enqueue(player);
-            todosJogadores.addToRear(player); // <--- Adiciona à lista global
+            todosJogadores.addToRear(player); 
             
             view.mostrarSpawn(spawn.getNome());
         }
@@ -196,7 +200,7 @@ public class GameEngine {
             Bot bot = new Bot("Bot_" + i, spawn, dif, labyrinthGraph);
             
             turnQueue.enqueue(bot);
-            todosJogadores.addToRear(bot); // <--- Adiciona à lista global
+            todosJogadores.addToRear(bot);
             
             view.mostrarBotCriado(spawn.getNome());
         }
@@ -212,7 +216,7 @@ public class GameEngine {
             
             turnoCount++;
             
-            // NOVO: MOSTRAR ESTADO GERAL ANTES DO TURNO
+            // 1. Mostrar onde estão todos (MERGED: Funcionalidade do teu código)
             mostrarEstadoGlobal(currentPlayer);
             
             view.mostrarInicioTurno(currentPlayer.getNome(), currentPlayer.getLocalAtual().getNome());
@@ -245,13 +249,18 @@ public class GameEngine {
                 boolean canEnter = true;
                 
                 if (destination.getTipo() == TipoDivisao.SALA_ENIGMA) {
-                    Enigma enigma = obterEnigmaAleatorio(difficulty);
+                    
+                    // MERGED: Lógica inteligente de obter enigma (com recarregamento)
+                    Enigma enigma = obterEnigmaOuRecarregar(difficulty);
+                    
                     if (enigma == null) {
+                        // Se mesmo recarregando não houver, deixa passar
                         view.mostrarMensagemCarregar(); 
                         canEnter = true;
                     } else {
                         boolean solved = presentAndSolveEnigma(currentPlayer, enigma);
                         if (solved) {
+                            // MERGED: Aplica efeitos e recebe bónus de movimento se houver
                             int bonus = applyEffect(enigma.getEfeitoSucesso(), currentPlayer, turnQueue);
                             if (bonus > 0) {
                                 movements += bonus;
@@ -276,6 +285,7 @@ public class GameEngine {
                         continue;
                     }
 
+                    // MERGED: Movimento direto sem classe labirinto.java
                     currentPlayer.moverPara(destination);
                     
                     GameReport.PlayerReport pReport = getPlayerReport(currentPlayer.getNome());
@@ -323,28 +333,47 @@ public class GameEngine {
         view.mostrarFimJogo();
     }
 
-    // === NOVO MÉTODO PARA VISUALIZAÇÃO GLOBAL ===
+    // === MÉTODOS DE LÓGICA E CONTAGEM ===
+    
     private void mostrarEstadoGlobal(Player jogadorAtivo) {
-        view.mostrarCabecalhoEstado();
+        // (Opcional) Podes criar um método na View para o cabeçalho
+        System.out.println("\n--- 🌍 ESTADO ATUAL ---");
         Iterator<Player> it = todosJogadores.iterator();
         while (it.hasNext()) {
             Player p = it.next();
             boolean isAtivo = p.equals(jogadorAtivo);
-            view.mostrarLocalizacaoJogador(p.getNome(), p.getLocalAtual().getNome(), isAtivo);
+            String prefixo = isAtivo ? " 👉 " : "    ";
+            System.out.println(prefixo + p.getNome() + " \t-> " + p.getLocalAtual().getNome());
         }
     }
-
-    // === MÉTODOS DE LÓGICA E CONTAGEM (Inalterados) ===
     
-    private Enigma obterEnigmaAleatorio(Dificuldade difAlvo) {
+    // MERGED: Lógica do amigo para recarregar enigmas se acabarem
+    private Enigma obterEnigmaOuRecarregar(Dificuldade difAlvo) {
+        Enigma enigma = obterEnigmaDaLista(difAlvo);
+
+        if (enigma == null) {
+            // Recarregar do ficheiro
+            ArrayUnorderedList<Enigma> todos = loadEnigmas();
+            // Filtrar novamente
+            this.enigmasDisponiveis = filterEnigmasByDifficulty(todos, difAlvo);
+            // Tentar buscar outra vez
+            enigma = obterEnigmaDaLista(difAlvo);
+        }
+        return enigma;
+    }
+
+    private Enigma obterEnigmaDaLista(Dificuldade difAlvo) {
         if (enigmasDisponiveis == null || enigmasDisponiveis.isEmpty()) return null;
+
         ArrayUnorderedList<Enigma> candidatos = new ArrayUnorderedList<>();
         Iterator<Enigma> it = enigmasDisponiveis.iterator();
         while (it.hasNext()) {
             Enigma e = it.next();
             if (e.getDificuldade() == difAlvo) candidatos.addToRear(e);
         }
+
         if (candidatos.isEmpty()) return null;
+
         int totalCandidatos = candidatos.size();
         int indiceSorteado = (int) (Math.random() * totalCandidatos);
         Enigma enigmaEscolhido = null;
@@ -399,18 +428,37 @@ public class GameEngine {
         return correct;
     }
 
+    // MERGED: Suporta TODOS os efeitos (Teus + Amigo)
     private int applyEffect(String effect, Player player, LinkedQueue<Player> turnQueue) {
         if (effect == null || effect.equals("NONE")) return 0;
         view.mostrarEfeito(effect);
+        
+        // Efeitos Básicos
         if (effect.equals("EXTRA_TURN")) return 1;
-        else if (effect.equals("BLOCK")) player.bloquear(1);
+        else if (effect.equals("BLOCK")) { player.bloquear(1); return 0; }
+        
+        // Efeitos Avançados (Amigo)
+        else if (effect.equals("BONUS_DICE")) {
+             // Rola um dado extra e soma ao movimento
+             return (int) (Math.random() * 6) + 1;
+        }
+        else if (effect.equals("BLOCK_EXTRA")) {
+             player.bloquear(2); // Penalidade maior
+             return 0;
+        }
+        else if (effect.startsWith("BONUS_MOVE:")) {
+            try {
+                return Integer.parseInt(effect.split(":")[1]);
+            } catch (Exception e) { return 0; }
+        }
+        
+        // Efeitos de Movimento
         else if (effect.startsWith("BACK:")) {
             try {
                 int steps = Integer.parseInt(effect.split(":")[1]);
                 player.recuar(steps);
             } catch (Exception e) {}
         } else if (effect.equals("SWAP")) {
-            // Nova lógica para SWAP que atualiza lista global também se necessário
             try {
                 Player other = turnQueue.dequeue();
                 if (other != player) {
@@ -454,6 +502,9 @@ public class GameEngine {
         return false;
     }
 
+    // ... Restantes métodos iguais (createGameReport, getPlayerReport, rollDice, chooseDestination, checkEvent...)
+    // Copia os métodos finais do teu código anterior, eles não mudaram.
+    
     private GameReport createGameReport(Player vencedorPlayer, Dificuldade difficulty) {
         GameReport report = new GameReport();
         report.setVencedor(vencedor);

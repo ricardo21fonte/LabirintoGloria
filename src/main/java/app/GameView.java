@@ -240,7 +240,57 @@ public class GameView {
     }
 
     public void mostrarEfeito(String efeito) {
-        System.out.println("🔮 EFEITO ATIVADO: " + efeito);
+        if (efeito == null || efeito.equals("NONE")) {
+            return; // nada a mostrar
+        }
+
+        System.out.print("🔮 Efeito do enigma: ");
+
+        // SUCESSO FÁCIL / MÉDIO → BONUS_MOVE:x  (x casas a avançar)
+        if (efeito.startsWith("BONUS_MOVE:")) {
+            String[] partes = efeito.split(":"); // ["BONUS_MOVE", "1"] ou ["BONUS_MOVE", "2"]
+            try {
+                int casas = Integer.parseInt(partes[1]);
+                if (casas == 1) {
+                    System.out.println("avanças 1 casa!");
+                } else {
+                    System.out.println("avanças " + casas + " casas!");
+                }
+            } catch (NumberFormatException e) {
+                System.out.println("bónus de movimento (valor inválido no efeito: " + efeito + ")");
+            }
+            return;
+        }
+
+        // SUCESSO DIFÍCIL → BONUS_DICE
+        if (efeito.equals("BONUS_DICE")) {
+            System.out.println("lanças um dado e avanças o valor obtido!");
+            return;
+        }
+
+        // FALHA DIFÍCIL → BLOCK_EXTRA
+        if (efeito.equals("BLOCK_EXTRA")) {
+            System.out.println("ficas bloqueado por mais 1 turno!");
+            return;
+        }
+
+        // FALHAS FÁCIL / MÉDIO → BACK:x  (x casas para trás)
+        if (efeito.startsWith("BACK:")) {
+            String[] partes = efeito.split(":"); // ["BACK", "1"] ou ["BACK", "2"]
+            try {
+                int casas = Integer.parseInt(partes[1]);
+                if (casas == 1) {
+                    System.out.println("recuas 1 casa.");
+                } else {
+                    System.out.println("recuas " + casas + " casas.");
+                }
+            } catch (NumberFormatException e) {
+                System.out.println("recuas algumas casas (valor inválido no efeito: " + efeito + ")");
+            }
+
+        }
+
+
     }
 
     public void mostrarGanhouMovimentos(int n) {

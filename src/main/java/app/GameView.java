@@ -289,4 +289,16 @@ public class GameView {
                 break;
         }
     }
+    // =======================================================
+    // ESTADO GLOBAL (VISUALIZAÇÃO EXTRA)
+    // =======================================================
+
+    public void mostrarCabecalhoEstado() {
+        System.out.println("\n--- 🌍 ESTADO ATUAL DO JOGO ---");
+    }
+
+    public void mostrarLocalizacaoJogador(String nome, String sala, boolean isAtivo) {
+        String prefixo = isAtivo ? " 👉 " : "    "; // Seta aponta para quem vai jogar
+        System.out.println(prefixo + "👤 " + nome + " \t-> 📍 " + sala);
+    }
 }

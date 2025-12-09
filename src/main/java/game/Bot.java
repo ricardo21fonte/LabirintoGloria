@@ -28,16 +28,17 @@ public class Bot extends Player {
     
     // REMOVI O @OVERRIDE AQUI PORQUE O PLAYER NÃO TEM ESTE MÉTODO
     public Divisao escolherMovimento() {
-
         // PRIORIDADE 1: Tentar ir para o Tesouro
-        Divisao passoParaTesouro = bfsParaAlvo(TipoDivisao.SALA_CENTRAL, null);
+        // (Procura SALA_CENTRAL, false para alavancas uteis pq não é alavanca)
+        Divisao passoParaTesouro = executarBFS(TipoDivisao.SALA_CENTRAL, false);
 
         if (passoParaTesouro != null) {
             return passoParaTesouro;
         }
 
         // PRIORIDADE 2: Procurar Alavanca Útil
-        Divisao passoParaAlavanca = buscarAlavancaMaisProxima();
+        // (Procura SALA_ALAVANCA, true para verificar se é útil)
+        Divisao passoParaAlavanca = executarBFS(TipoDivisao.SALA_ALAVANCA, true);
 
         if (passoParaAlavanca != null) {
             return passoParaAlavanca;
@@ -51,7 +52,7 @@ public class Bot extends Player {
     // 2. ALGORITMOS DE BUSCA (PATHFINDING)
     // =================================================================
 
-    private Divisao bfsParaAlvo(TipoDivisao tipoAlvo, Divisao divisaoAlvo) {
+    private Divisao executarBFS(TipoDivisao tipoAlvo, boolean apenasAlavancasUteis) {
         LinkedQueue<Divisao> fila = new LinkedQueue<>();
         ArrayUnorderedList<Divisao> visitados = new ArrayUnorderedList<>();
         ArrayUnorderedList<Parente> arvoreGenealogica = new ArrayUnorderedList<>();
@@ -67,62 +68,29 @@ public class Bot extends Player {
             Divisao atual;
             try { atual = fila.dequeue(); } catch (Exception e) { break; }
 
-            boolean chegou = false;
-            if (tipoAlvo != null && atual.getTipo() == tipoAlvo) chegou = true;
-            if (divisaoAlvo != null && atual.equals(divisaoAlvo)) chegou = true;
-
-            if (chegou) {
-                alvoEncontrado = atual;
-                break;
-            }
-
-            Iterator<Divisao> it = mapaConhecido.getVizinhos(atual).iterator();
-            while (it.hasNext()) {
-                Divisao vizinho = it.next();
-
-                if (!contem(visitados, vizinho)) {
-                    if (podePassar(atual, vizinho)) {
-                        visitados.addToRear(vizinho);
-                        fila.enqueue(vizinho);
-                        arvoreGenealogica.addToRear(new Parente(vizinho, atual));
+            // --- LÓGICA DE DECISÃO (A única parte que mudava) ---
+            if (atual.getTipo() == tipoAlvo) {
+                boolean encontrou = true;
+                
+                // Se estamos à procura de alavancas, verificar se é útil
+                if (apenasAlavancasUteis && tipoAlvo == TipoDivisao.SALA_ALAVANCA) {
+                    // Se já tivermos a chave para esta tranca, a alavanca não é útil (encontrou = false)
+                    if (this.podePassarTranca(atual.getIdDesbloqueio())) {
+                        encontrou = false; 
                     }
                 }
-            }
-        }
 
-        if (alvoEncontrado != null) {
-            return reconstruirPrimeiroPasso(arvoreGenealogica, alvoEncontrado);
-        }
-        return null;
-    }
-
-    private Divisao buscarAlavancaMaisProxima() {
-        LinkedQueue<Divisao> fila = new LinkedQueue<>();
-        ArrayUnorderedList<Divisao> visitados = new ArrayUnorderedList<>();
-        ArrayUnorderedList<Parente> arvoreGenealogica = new ArrayUnorderedList<>();
-
-        Divisao inicio = getLocalAtual();
-        fila.enqueue(inicio);
-        visitados.addToRear(inicio);
-        arvoreGenealogica.addToRear(new Parente(inicio, null));
-
-        Divisao alvoEncontrado = null;
-
-        while (!fila.isEmpty()) {
-            Divisao atual;
-            try { atual = fila.dequeue(); } catch (Exception e) { break; }
-
-            if (atual.getTipo() == TipoDivisao.SALA_ALAVANCA) {
-                int idTranca = atual.getIdDesbloqueio();
-                if (!this.podePassarTranca(idTranca)) {
+                if (encontrou) {
                     alvoEncontrado = atual;
-                    break; 
+                    break;
                 }
             }
+            // ----------------------------------------------------
 
             Iterator<Divisao> it = mapaConhecido.getVizinhos(atual).iterator();
             while (it.hasNext()) {
                 Divisao vizinho = it.next();
+
                 if (!contem(visitados, vizinho)) {
                     if (podePassar(atual, vizinho)) {
                         visitados.addToRear(vizinho);

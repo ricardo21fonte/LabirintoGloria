@@ -33,12 +33,16 @@ public class GameEngine {
     private int totalObstaculos;
     private String nomeDoMapaEscolhido = "Mapa do Jogo";
 
-    // --- LISTA DE ENIGMAS (Trazida do antigo labirinto.java) ---
+    // --- LISTAS DE DADOS ---
     private ArrayUnorderedList<Enigma> enigmasDisponiveis;
+    
+    // NOVO: Lista para visualização do estado global
+    private ArrayUnorderedList<Player> todosJogadores;
 
     public GameEngine(LabyrinthGraph<Divisao> labyrinthGraph) {
         this.labyrinthGraph = labyrinthGraph;
         this.view = new GameView(); 
+        this.todosJogadores = new ArrayUnorderedList<>(); // Inicializar
     }
     
     public void setNomeDoMapa(String nome) {
@@ -48,12 +52,8 @@ public class GameEngine {
     public void start() {
         view.mostrarMensagemCarregar();
         
-        // 1. Carregar e guardar enigmas localmente
         ArrayUnorderedList<Enigma> allEnigmas = loadEnigmas();
-        
         Dificuldade difficulty = setupDifficulty();
-
-        // 2. Filtrar enigmas para a dificuldade escolhida
         this.enigmasDisponiveis = filterEnigmasByDifficulty(allEnigmas, difficulty);
 
         Divisao[] entrances = getMapEntrances();
@@ -61,7 +61,7 @@ public class GameEngine {
 
         LinkedQueue<Player> turnQueue = new LinkedQueue<>();
 
-        // 3. Setup dos jogadores (já não usa labyrinthGame.adicionarJogador)
+        // Setup dos jogadores
         int numHumans = setupHumanPlayers(entrances, turnQueue);
         setupBots(entrances, turnQueue, numHumans);
 
@@ -73,12 +73,10 @@ public class GameEngine {
         view.mostrarInicioJogo();
         view.esperarEnter();
 
-        // Inicializar Estado
         vencedor = null;
         turnoCount = 0;
         playerReports = new ArrayUnorderedList<>();
         
-        // Resetar contadores
         totalEnigmasResolvidos = 0;
         totalEnigmasTentados = 0; 
         totalObstaculos = 0;
@@ -98,7 +96,6 @@ public class GameEngine {
         }
 
         runGameLoop(turnQueue, difficulty);
-
         view.fechar();
     }
 
@@ -166,7 +163,10 @@ public class GameEngine {
             int rnd = (int) (Math.random() * entrances.length);
             Divisao spawn = entrances[rnd];
             Player player = new Player(name, spawn);
+            
             turnQueue.enqueue(player);
+            todosJogadores.addToRear(player); // <--- Adiciona à lista global
+            
             view.mostrarSpawn(spawn.getNome());
         }
         return numHumans;
@@ -194,7 +194,10 @@ public class GameEngine {
             } while(opt < 1 || opt > 3);
             Dificuldade dif = (opt == 2) ? Dificuldade.MEDIO : (opt == 3) ? Dificuldade.DIFICIL : Dificuldade.FACIL;
             Bot bot = new Bot("Bot_" + i, spawn, dif, labyrinthGraph);
+            
             turnQueue.enqueue(bot);
+            todosJogadores.addToRear(bot); // <--- Adiciona à lista global
+            
             view.mostrarBotCriado(spawn.getNome());
         }
     }
@@ -208,6 +211,10 @@ public class GameEngine {
             try { currentPlayer = turnQueue.dequeue(); } catch (Exception e) { break; }
             
             turnoCount++;
+            
+            // NOVO: MOSTRAR ESTADO GERAL ANTES DO TURNO
+            mostrarEstadoGlobal(currentPlayer);
+            
             view.mostrarInicioTurno(currentPlayer.getNome(), currentPlayer.getLocalAtual().getNome());
 
             if (currentPlayer.isBloqueado()) {
@@ -237,10 +244,8 @@ public class GameEngine {
 
                 boolean canEnter = true;
                 
-                // --- LÓGICA DE ENIGMA INTEGRADA ---
                 if (destination.getTipo() == TipoDivisao.SALA_ENIGMA) {
                     Enigma enigma = obterEnigmaAleatorio(difficulty);
-                    
                     if (enigma == null) {
                         view.mostrarMensagemCarregar(); 
                         canEnter = true;
@@ -271,7 +276,6 @@ public class GameEngine {
                         continue;
                     }
 
-                    // --- MOVIMENTO REAL DO JOGADOR (Única vez que mexe!) ---
                     currentPlayer.moverPara(destination);
                     
                     GameReport.PlayerReport pReport = getPlayerReport(currentPlayer.getNome());
@@ -319,26 +323,30 @@ public class GameEngine {
         view.mostrarFimJogo();
     }
 
-    // === MÉTODOS DE LÓGICA E CONTAGEM ===
+    // === NOVO MÉTODO PARA VISUALIZAÇÃO GLOBAL ===
+    private void mostrarEstadoGlobal(Player jogadorAtivo) {
+        view.mostrarCabecalhoEstado();
+        Iterator<Player> it = todosJogadores.iterator();
+        while (it.hasNext()) {
+            Player p = it.next();
+            boolean isAtivo = p.equals(jogadorAtivo);
+            view.mostrarLocalizacaoJogador(p.getNome(), p.getLocalAtual().getNome(), isAtivo);
+        }
+    }
+
+    // === MÉTODOS DE LÓGICA E CONTAGEM (Inalterados) ===
     
-    // Método trazido do labirinto.java para escolher enigmas
     private Enigma obterEnigmaAleatorio(Dificuldade difAlvo) {
         if (enigmasDisponiveis == null || enigmasDisponiveis.isEmpty()) return null;
-
         ArrayUnorderedList<Enigma> candidatos = new ArrayUnorderedList<>();
         Iterator<Enigma> it = enigmasDisponiveis.iterator();
         while (it.hasNext()) {
             Enigma e = it.next();
-            if (e.getDificuldade() == difAlvo) {
-                candidatos.addToRear(e);
-            }
+            if (e.getDificuldade() == difAlvo) candidatos.addToRear(e);
         }
-
         if (candidatos.isEmpty()) return null;
-
         int totalCandidatos = candidatos.size();
         int indiceSorteado = (int) (Math.random() * totalCandidatos);
-
         Enigma enigmaEscolhido = null;
         Iterator<Enigma> itCandidatos = candidatos.iterator();
         int idx = 0;
@@ -350,18 +358,13 @@ public class GameEngine {
             }
             idx++;
         }
-
-        if (enigmaEscolhido != null) {
-            enigmasDisponiveis.remove(enigmaEscolhido);
-        }
+        if (enigmaEscolhido != null) enigmasDisponiveis.remove(enigmaEscolhido);
         return enigmaEscolhido;
     }
 
     private boolean presentAndSolveEnigma(Player player, Enigma enigma) {
         if (enigma == null) return true;
-        
         totalEnigmasTentados++; 
-
         view.mostrarEnigmaNaPorta();
         view.mostrarPergunta(enigma.getPergunta());
         boolean correct = false;
@@ -383,9 +386,7 @@ public class GameEngine {
             answerStr = String.valueOf(answer);
         }
         view.mostrarResultadoEnigma(correct);
-        
         if (correct) totalEnigmasResolvidos++; 
-
         GameReport.PlayerReport pReport = getPlayerReport(player.getNome());
         if (pReport != null) {
             GameReport.EnigmaEvent event = new GameReport.EnigmaEvent(
@@ -409,6 +410,7 @@ public class GameEngine {
                 player.recuar(steps);
             } catch (Exception e) {}
         } else if (effect.equals("SWAP")) {
+            // Nova lógica para SWAP que atualiza lista global também se necessário
             try {
                 Player other = turnQueue.dequeue();
                 if (other != player) {
@@ -431,7 +433,7 @@ public class GameEngine {
         int choice;
         if (player instanceof Bot) {
             Bot bot = (Bot) player;
-            choice = bot.escolherAlavanca(room, lever.getNumAlavancas()); // Inteligência do Bot
+            choice = bot.escolherAlavanca(room, lever.getNumAlavancas()); 
             view.mostrarBotEscolheAlavanca(choice);
         } else {
             do {

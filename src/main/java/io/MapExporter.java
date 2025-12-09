@@ -7,7 +7,7 @@ import java.util.Iterator;
 import Lists.ArrayUnorderedList;
 import game.Divisao;
 import game.EventoCorredor;
-import game.LabyrinthGraph; // A tua lista
+import game.LabyrinthGraph;
 
 public class MapExporter {
 
@@ -30,15 +30,19 @@ public class MapExporter {
         for (int i = 0; i < vertices.length; i++) {
             Divisao sala = (Divisao) vertices[i];
             
-            // Gerar um código único baseado no ID (ex: "S1", "S2")
-            // Usamos o hashCode ou um contador simples se o ID não for acessível diretamente
-            // Como adicionaste um ID único na Divisao, podes usar algo como:
-            String codigo = "S" + sala.hashCode(); 
+            // CORREÇÃO: Usar o ID sequencial da classe Divisao
+            String codigo = "S" + sala.getId(); 
             
             json.append("    { ");
             json.append("\"codigo\": \"").append(codigo).append("\", ");
             json.append("\"tipo\": \"").append(sala.getTipo().toString()).append("\", ");
             json.append("\"nome\": \"").append(escapeJson(sala.getNome())).append("\"");
+            
+            // Se for sala de alavanca, gravar o ID que desbloqueia
+            if (sala.getIdDesbloqueio() != -1) {
+                 json.append(", \"idDesbloqueio\": ").append(sala.getIdDesbloqueio());
+            }
+
             json.append(" }");
             
             if (i < vertices.length - 1) json.append(",");
@@ -49,25 +53,23 @@ public class MapExporter {
         // --- 2. GRAVAR LIGAÇÕES ---
         json.append("  \"ligacoes\": [\n");
         
-        // Para evitar duplicados (A->B e B->A), usamos uma lógica de comparação
-        // Como o iterador do grafo pode ser complexo, vamos iterar todos os vértices e os seus vizinhos
-        
         boolean primeiraLigacao = true;
         
         for (int i = 0; i < vertices.length; i++) {
             Divisao origem = (Divisao) vertices[i];
-            String codOrigem = "S" + origem.hashCode();
+            // CORREÇÃO: Usar ID
+            String codOrigem = "S" + origem.getId();
             
             ArrayUnorderedList<Divisao> vizinhos = grafo.getVizinhos(origem);
             Iterator<Divisao> itViz = vizinhos.iterator();
             
             while (itViz.hasNext()) {
                 Divisao destino = itViz.next();
-                String codDestino = "S" + destino.hashCode();
+                // CORREÇÃO: Usar ID
+                String codDestino = "S" + destino.getId();
                 
-                // TRUQUE: Só gravamos se o código da origem for "menor" que o do destino (alfabeticamente ou hash)
-                // Isto evita gravar a ligação A->B e depois B->A novamente.
-                if (codOrigem.compareTo(codDestino) < 0) {
+                // Evitar duplicados gravando apenas se o ID da origem for menor que o do destino
+                if (origem.getId() < destino.getId()) {
                     
                     if (!primeiraLigacao) json.append(",\n");
                     
@@ -91,6 +93,7 @@ public class MapExporter {
         // --- 3. ESCREVER NO FICHEIRO ---
         try (FileWriter writer = new FileWriter(nomeFicheiro)) {
             writer.write(json.toString());
+            // Idealmente aqui não farias print, mas para manter a consistência com o resto do teu código:
             System.out.println("💾 Mapa gravado com sucesso em: " + nomeFicheiro);
         } catch (IOException e) {
             System.out.println("❌ Erro ao gravar o mapa: " + e.getMessage());

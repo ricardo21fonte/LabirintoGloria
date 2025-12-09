@@ -21,7 +21,8 @@ public class MapLoader {
         ArrayUnorderedList<Divisao> listaSalas = new ArrayUnorderedList<>();
         ArrayUnorderedList<String> listaCodigos = new ArrayUnorderedList<>();
 
-        // try-with-resources: Garante que o ficheiro fecha sempre
+        int maiorIdEncontrado = 0; // Para rastrear o maior ID
+
         try (FileReader reader = new FileReader(filePath)) {
             JSONObject jsonObject = (JSONObject) parser.parse(reader);
             
@@ -30,11 +31,30 @@ public class MapLoader {
 
             for (Object s : salas) {
                 JSONObject salaJSON = (JSONObject) s;
-                String codigo = (String) salaJSON.get("codigo");
+                String codigo = (String) salaJSON.get("codigo"); // Ex: "S5"
                 String nome = (String) salaJSON.get("nome");
                 TipoDivisao tipo = TipoDivisao.valueOf((String) salaJSON.get("tipo"));
 
                 Divisao d = new Divisao(nome, tipo);
+                
+                // --- CORREÇÃO DE IDS ---
+                // Extrair o número do código (S5 -> 5)
+                try {
+                    if (codigo.startsWith("S")) {
+                        int idLido = Integer.parseInt(codigo.substring(1));
+                        d.definirIdManual(idLido); // Força o ID do ficheiro
+                        
+                        if (idLido > maiorIdEncontrado) {
+                            maiorIdEncontrado = idLido;
+                        }
+                    }
+                } catch (Exception e) {
+                    // Se falhar o parse (ex: código "T1"), mantém o ID automático gerado pelo construtor
+                    // e tentamos ver se o ID automático é maior
+                    if (d.getId() > maiorIdEncontrado) maiorIdEncontrado = d.getId();
+                }
+                // -----------------------
+
                 if (tipo == TipoDivisao.SALA_ALAVANCA && salaJSON.get("idDesbloqueio") != null) {
                     d.setIdDesbloqueio(((Long) salaJSON.get("idDesbloqueio")).intValue());
                 }
@@ -43,6 +63,10 @@ public class MapLoader {
                 listaSalas.addToRear(d);
                 listaCodigos.addToRear(codigo);
             }
+
+            // ATUALIZAR O CONTADOR ESTÁTICO GLOBAL
+            // Garante que a próxima sala criada terá um ID novo e único
+            Divisao.setNextId(maiorIdEncontrado + 1);
 
             JSONArray ligacoes = (JSONArray) jsonObject.get("ligacoes");
             if (ligacoes != null) {
@@ -64,7 +88,7 @@ public class MapLoader {
                 }
             }
         } catch (Exception e) {
-            return null; // Retorna null em caso de erro (o Menu trata disto)
+            return null;
         }
         return graph;
     }

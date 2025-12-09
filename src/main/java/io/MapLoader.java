@@ -1,16 +1,17 @@
 package io;
 
 import java.io.FileReader;
+
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 
-import game.Divisao;
-import game.LabyrinthGraph;
-import game.EventoCorredor;
-import enums.TipoDivisao;
-import enums.CorredorEvento;
 import Lists.ArrayUnorderedList;
+import enums.CorredorEvento;
+import enums.TipoDivisao;
+import game.Divisao;
+import game.EventoCorredor;
+import game.LabyrinthGraph;
 
 public class MapLoader {
 
@@ -52,7 +53,17 @@ public class MapLoader {
                     throw new Exception("Tipo de sala inválido no JSON: " + tipoStr);
                 }
 
-                Divisao d = new Divisao(nome, tipo);
+               Divisao d = new Divisao(nome, tipo);
+                if (tipo == TipoDivisao.SALA_ALAVANCA) {
+                    Object rawId = salaJSON.get("idDesbloqueio");
+                    if (rawId != null) {
+                        int id = ((Long) rawId).intValue();  // JSON-simple devolve Long
+                        d.setIdDesbloqueio(id);
+                        System.out.println("      (Sala de alavanca com idDesbloqueio = " + id + ")");
+                    } else {
+                        System.out.println("      AVISO: Sala de alavanca " + codigo + " sem 'idDesbloqueio' no JSON.");
+                    }
+                }
                 graph.addVertex(d);
 
                 listaSalas.addToRear(d);

@@ -12,6 +12,9 @@ public class Bot extends Player {
 
     private Dificuldade inteligencia;
     private LabyrinthGraph<Divisao> mapaConhecido;
+    private ArrayUnorderedList<MemoriaAlavanca> memoriasAlavancas = new ArrayUnorderedList<>();
+
+
 
     public Bot(String nome, Divisao inicio, Dificuldade inteligencia, LabyrinthGraph<Divisao> mapa) {
         super(nome, inicio);
@@ -209,4 +212,80 @@ public class Bot extends Player {
     }
     
     public Dificuldade getInteligencia() { return inteligencia; }
+    // =================================================================
+    // 4. MEMÓRIA DE ALAVANCAS (inteligência do Bot nas salas de alavanca)
+    // =================================================================
+
+    /**
+     * Escolhe uma alavanca numa determinada sala, evitando repetir
+     * alavancas que este Bot já tentou nessa sala.
+     *
+     * @param sala          sala onde está a alavanca
+     * @param numAlavancas  número total de alavancas (normalmente 3)
+     * @return              índice da alavanca (1..numAlavancas)
+     */
+    public int escolherAlavanca(Divisao sala, int numAlavancas) {
+        MemoriaAlavanca mem = obterMemoriaAlavanca(sala, numAlavancas);
+
+        // contar quantas alavancas ainda não foram tentadas
+        int disponiveis = 0;
+        for (int i = 0; i < numAlavancas; i++) {
+            if (!mem.tentadas[i]) {
+                disponiveis++;
+            }
+        }
+
+        // se já tentou todas, faz fallback aleatório (não deve acontecer muitas vezes)
+        if (disponiveis == 0) {
+            return 1 + (int)(Math.random() * numAlavancas);
+        }
+
+        // escolher uma das não tentadas, de forma aleatória
+        int salto = (int)(Math.random() * disponiveis);
+        for (int i = 0; i < numAlavancas; i++) {
+            if (!mem.tentadas[i]) {
+                if (salto == 0) {
+                    mem.tentadas[i] = true; // marca como tentada
+                    return i + 1;           // alavancas são 1..N
+                }
+                salto--;
+            }
+        }
+
+        // segurança (não devia chegar aqui)
+        return 1;
+    }
+
+    /**
+     * Procura (ou cria) a memória de alavancas para uma determinada sala.
+     */
+    private MemoriaAlavanca obterMemoriaAlavanca(Divisao sala, int numAlavancas) {
+        Iterator<MemoriaAlavanca> it = memoriasAlavancas.iterator();
+        while (it.hasNext()) {
+            MemoriaAlavanca memoria = it.next();
+            if (memoria.sala.equals(sala)) {
+                return memoria;
+            }
+        }
+
+        // se ainda não existe memória para esta sala, criar
+        MemoriaAlavanca nova = new MemoriaAlavanca(sala, numAlavancas);
+        memoriasAlavancas.addToRear(nova);
+        return nova;
+    }
+
+    /**
+     * Classe interna que guarda a memória de quais alavancas
+     * já foram tentadas numa sala específica.
+     */
+    private static class MemoriaAlavanca {
+        Divisao sala;
+        boolean[] tentadas;
+
+        MemoriaAlavanca(Divisao sala, int numAlavancas) {
+            this.sala = sala;
+            this.tentadas = new boolean[numAlavancas]; // tudo a false por defeito
+        }
+    }
+
 }

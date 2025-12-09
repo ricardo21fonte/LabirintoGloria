@@ -234,9 +234,14 @@ public class GameEngine {
                 boolean canEnter = true;
                 if (destination.getTipo() == TipoDivisao.SALA_ENIGMA) {
                     Enigma enigma = labyrinthGame.obterEnigma(difficulty);
-                    // A LÓGICA DE CONTAGEM ESTÁ AQUI EM BAIXO
-                    boolean solved = presentAndSolveEnigma(currentPlayer, enigma);
-                    if (solved) {
+                    if (enigma == null) {
+                        // Sem enigma -> deixas passar, sem efeitos
+                        view.mostrarMensagemCarregar(); // ou cria uma mensagem tipo "Sem mais enigmas nesta dificuldade"
+                        canEnter = true;
+                    } else {
+                        boolean solved = presentAndSolveEnigma(currentPlayer, enigma);
+
+                        if (solved) {
                         int bonus = applyEffect(enigma.getEfeitoSucesso(), currentPlayer, turnQueue);
                         if (bonus > 0) {
                             movements += bonus;
@@ -246,7 +251,7 @@ public class GameEngine {
                         canEnter = false;
                         turnEnded = true;
                         applyEffect(enigma.getEfeitoFalha(), currentPlayer, turnQueue);
-                    }
+                    }}
                 }
 
                 if (canEnter) {
@@ -480,9 +485,11 @@ public class GameEngine {
         Alavanca lever = room.getAlavanca();
         view.mostrarSalaAlavanca();
         view.mostrarOpcoesAlavanca();
+
         int choice;
         if (player instanceof Bot) {
-            choice = 1 + (int)(Math.random() * lever.getNumAlavancas());
+            Bot bot = (Bot) player;  // <-- crias um OBJETO bot
+            choice = bot.escolherAlavanca(room, lever.getNumAlavancas());
             view.mostrarBotEscolheAlavanca(choice);
         } else {
             do {
@@ -490,15 +497,20 @@ public class GameEngine {
                 if(choice < 1 || choice > 3) view.mostrarErroOpcaoInvalida(1, 3);
             } while(choice < 1 || choice > 3);
         }
+
         AlavancaEnum result = lever.ativar(choice);
         int lockId = room.getIdDesbloqueio();
+
         view.mostrarResultadoAlavanca(result, lockId, player.getNome());
+
         if (result == AlavancaEnum.ABRIR_PORTA && lockId > 0) {
             player.desbloquearTranca(lockId);
-            return false;
+            // se não marcasses na própria Alavanca, podias fazer aqui:
+            // lever.marcarResolvida();
+            return false; // turno continua
         } else if (result == AlavancaEnum.PENALIZAR) {
             player.recuar(2);
-            return true;
+            return true;  // termina o turno
         }
         return false;
     }

@@ -8,7 +8,7 @@ import enums.CorredorEvento;
 import enums.TipoDivisao;
 import game.Divisao;
 import game.EventoCorredor;
-import game.LabyrinthGraph;
+import graph.LabyrinthGraph;
 
 public class MapGenerator {
 

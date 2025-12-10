@@ -1,0 +1,25 @@
+{
+  "vencedor": "Bot_1",
+  "dataHora": "2025-12-10T01:48:11.409504400",
+  "duracao": 6,
+  "mapaNome": "ze3",
+  "dificuldade": "null",
+  "totalEnigmasResolvidos": 0,
+  "totalEnigmasTentados": 0,
+  "totalObstaculos": 0,
+  "jogadores": [
+    {
+      "nome": "Bot_1",
+      "tipo": "Bot",
+      "localAtual": "Câmara do Tesouro",
+      "turnosJogados": 0,
+      "vencedor": false,
+      "percurso": ["Corredor 16", "Corredor 16", "Corredor 8", "Sala Misteriosa 3", "Sala Misteriosa 3", "Sala Misteriosa 5", "Sala Misteriosa 3", "Sala Misteriosa 5", "Ante-Câmara 1", "Sala Misteriosa 5", "Ante-Câmara 1", "Câmara do Tesouro"],
+      "obstaculos": [],
+      "enigmas": [
+      ],
+      "efeitosAplicados": [],
+      "totalEnigmasResolvidos": 0
+    }
+  ]
+}

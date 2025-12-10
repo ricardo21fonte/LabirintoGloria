@@ -1,7 +1,9 @@
 package app;
 
 import game.Divisao;
-import game.LabyrinthGraph;
+import graph.LabyrinthGraph;
+import engine.GameEngine; // <--- NOVO: Importar do pacote engine
+import ui.GameView;       // <--- NOVO: Importar do pacote ui
 
 public class Main {
 
@@ -14,13 +16,15 @@ public class Main {
             return;
         }
 
-        // --- AQUI ESTÁ O QUE FALTA NO TEU MAIN ---
         // 1. Ir buscar o nome ao Menu
         String nomeMapa = menuDoJogo.getNomeMapaAtual();
 
-        GameEngine engine = new GameEngine(labirintoGraph);
+        // --- CORREÇÃO AQUI ---
+        // Agora tens de criar a View e passar para o Engine
+        GameView view = new GameView(); 
+        GameEngine engine = new GameEngine(labirintoGraph, view);
         
-        // 2. Entregar o nome ao Engine
+        // Se o método setNomeDoMapa der erro, vê a nota abaixo*
         engine.setNomeDoMapa(nomeMapa);
         
         engine.start();

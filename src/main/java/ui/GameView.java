@@ -1,4 +1,4 @@
-package app;
+package ui;
 
 import java.util.Scanner;
 
@@ -240,58 +240,62 @@ public class GameView {
     }
 
     public void mostrarEfeito(String efeito) {
-        if (efeito == null || efeito.equals("NONE")) {
-            return; // nada a mostrar
-        }
-
-        System.out.print("🔮 Efeito do enigma: ");
-
-        // SUCESSO FÁCIL / MÉDIO → BONUS_MOVE:x  (x casas a avançar)
-        if (efeito.startsWith("BONUS_MOVE:")) {
-            String[] partes = efeito.split(":"); // ["BONUS_MOVE", "1"] ou ["BONUS_MOVE", "2"]
-            try {
-                int casas = Integer.parseInt(partes[1]);
-                if (casas == 1) {
-                    System.out.println("avanças 1 casa!");
-                } else {
-                    System.out.println("avanças " + casas + " casas!");
-                }
-            } catch (NumberFormatException e) {
-                System.out.println("bónus de movimento (valor inválido no efeito: " + efeito + ")");
-            }
-            return;
-        }
-
-        // SUCESSO DIFÍCIL → BONUS_DICE
-        if (efeito.equals("BONUS_DICE")) {
-            System.out.println("lanças um dado e avanças o valor obtido!");
-            return;
-        }
-
-        // FALHA DIFÍCIL → BLOCK_EXTRA
-        if (efeito.equals("BLOCK_EXTRA")) {
-            System.out.println("ficas bloqueado por mais 1 turno!");
-            return;
-        }
-
-        // FALHAS FÁCIL / MÉDIO → BACK:x  (x casas para trás)
-        if (efeito.startsWith("BACK:")) {
-            String[] partes = efeito.split(":"); // ["BACK", "1"] ou ["BACK", "2"]
-            try {
-                int casas = Integer.parseInt(partes[1]);
-                if (casas == 1) {
-                    System.out.println("recuas 1 casa.");
-                } else {
-                    System.out.println("recuas " + casas + " casas.");
-                }
-            } catch (NumberFormatException e) {
-                System.out.println("recuas algumas casas (valor inválido no efeito: " + efeito + ")");
-            }
-
-        }
-
-
+    // 1. Se não houver efeito, sai logo (não imprime nada)
+    if (efeito == null || efeito.equals("NONE")) {
+        return; 
     }
+
+    System.out.print("🔮 Efeito do enigma: ");
+
+    // --- O QUE FALTAVA (CORREÇÃO) ---
+    if (efeito.equals("EXTRA_TURN")) {
+        System.out.println("ganhaste uma jogada extra!");
+        return;
+    }
+    
+    if (efeito.equals("BLOCK")) {
+        System.out.println("perdes o turno!");
+        return;
+    }
+    // --------------------------------
+
+    // SUCESSO: BONUS_MOVE:x
+    if (efeito.startsWith("BONUS_MOVE:")) {
+        try {
+            int casas = Integer.parseInt(efeito.split(":")[1]);
+            System.out.println("avanças " + casas + " casa(s)!");
+        } catch (Exception e) {
+            System.out.println("avanço bónus!");
+        }
+        return;
+    }
+
+    // SUCESSO: BONUS_DICE
+    if (efeito.equals("BONUS_DICE")) {
+        System.out.println("lanças um dado e avanças o valor obtido!");
+        return;
+    }
+
+    // FALHA: BACK:x
+    if (efeito.startsWith("BACK:")) {
+        try {
+            int casas = Integer.parseInt(efeito.split(":")[1]);
+            System.out.println("recuas " + casas + " casa(s).");
+        } catch (Exception e) {
+            System.out.println("recuas algumas casas.");
+        }
+        return;
+    }
+
+    // FALHA: BLOCK_EXTRA
+    if (efeito.equals("BLOCK_EXTRA")) {
+        System.out.println("ficas bloqueado por mais 1 turno!");
+        return;
+    }
+    
+    // Caso de "fallback" (se aparecer algo novo que não previste, imprime o código)
+    System.out.println(efeito); 
+}
 
     public void mostrarGanhouMovimentos(int n) {
         System.out.println("   (Tens agora " + n + " movimentos!)");

@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test;
 import Lists.ArrayUnorderedList;
 import enums.CorredorEvento;
 import enums.TipoDivisao;
+import graph.LabyrinthGraph;
 
 class LabyrinthGraphTest {
 

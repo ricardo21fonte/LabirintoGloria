@@ -1,0 +1,25 @@
+{
+  "vencedor": "Bot_1",
+  "dataHora": "2025-12-10T01:54:28.258082300",
+  "duracao": 3,
+  "mapaNome": "teste55",
+  "dificuldade": "null",
+  "totalEnigmasResolvidos": 0,
+  "totalEnigmasTentados": 0,
+  "totalObstaculos": 0,
+  "jogadores": [
+    {
+      "nome": "Bot_1",
+      "tipo": "Bot",
+      "localAtual": "Câmara do Tesouro",
+      "turnosJogados": 0,
+      "vencedor": false,
+      "percurso": ["Corredor 1", "Corredor 5", "Corredor 18", "Corredor 5", "Corredor 18", "Corredor 11", "Ante-Câmara 1", "Câmara do Tesouro"],
+      "obstaculos": [],
+      "enigmas": [
+      ],
+      "efeitosAplicados": [],
+      "totalEnigmasResolvidos": 0
+    }
+  ]
+}

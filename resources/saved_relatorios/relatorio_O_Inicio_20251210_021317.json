@@ -1,0 +1,38 @@
+{
+  "vencedor": "Bot_1",
+  "dataHora": "2025-12-10T02:13:17.880335400",
+  "duracao": 2,
+  "mapaNome": "O_Inicio",
+  "dificuldade": "FACIL",
+  "totalEnigmasResolvidos": 0,
+  "totalEnigmasTentados": 0,
+  "totalObstaculos": 0,
+  "jogadores": [
+    {
+      "nome": "1",
+      "tipo": "Humano",
+      "localAtual": "Cozinha Abandonada",
+      "turnosJogados": 2,
+      "vencedor": false,
+      "percurso": ["Cozinha Abandonada"],
+      "obstaculos": [],
+      "enigmas": [
+      ],
+      "efeitosAplicados": [],
+      "totalEnigmasResolvidos": 0
+    },
+    {
+      "nome": "Bot_1",
+      "tipo": "Bot",
+      "localAtual": "Câmara do Tesouro",
+      "turnosJogados": 2,
+      "vencedor": true,
+      "percurso": ["Sala das Máquinas", "Câmara do Tesouro"],
+      "obstaculos": [],
+      "enigmas": [
+      ],
+      "efeitosAplicados": [],
+      "totalEnigmasResolvidos": 0
+    }
+  ]
+}

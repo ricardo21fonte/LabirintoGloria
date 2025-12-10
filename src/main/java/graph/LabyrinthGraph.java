@@ -1,9 +1,10 @@
-package game;
+package graph;
 
 import java.util.Iterator;
 
 import Lists.ArrayUnorderedList;
 import enums.CorredorEvento;
+import game.EventoCorredor;
 import structures.GraphList;
 import structures.MapaNode;
 

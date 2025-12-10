@@ -5,7 +5,7 @@ import java.util.Scanner;
 
 import Lists.ArrayUnorderedList;
 import game.Divisao;
-import game.LabyrinthGraph;
+import graph.LabyrinthGraph;
 import io.GameReport;
 import io.GameReportLoader;
 import io.MapLoader;

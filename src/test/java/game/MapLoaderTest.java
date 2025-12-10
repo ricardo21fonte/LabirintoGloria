@@ -11,6 +11,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
+import graph.LabyrinthGraph;
 import io.MapLoader;
 
 class MapLoaderTest {

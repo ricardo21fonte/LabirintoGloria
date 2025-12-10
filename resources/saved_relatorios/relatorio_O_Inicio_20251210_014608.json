@@ -1,0 +1,25 @@
+{
+  "vencedor": "Bot_1",
+  "dataHora": "2025-12-10T01:46:08.984396100",
+  "duracao": 2,
+  "mapaNome": "O_Inicio",
+  "dificuldade": "null",
+  "totalEnigmasResolvidos": 0,
+  "totalEnigmasTentados": 0,
+  "totalObstaculos": 0,
+  "jogadores": [
+    {
+      "nome": "Bot_1",
+      "tipo": "Bot",
+      "localAtual": "Câmara do Tesouro",
+      "turnosJogados": 0,
+      "vencedor": false,
+      "percurso": ["Corredor Vazio", "Laboratório de Alquimia", "Sala de Controlo", "Sala de Controlo", "Câmara do Tesouro"],
+      "obstaculos": [],
+      "enigmas": [
+      ],
+      "efeitosAplicados": [],
+      "totalEnigmasResolvidos": 0
+    }
+  ]
+}

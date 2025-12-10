@@ -7,7 +7,7 @@ import java.util.Iterator;
 import Lists.ArrayUnorderedList;
 import game.Divisao;
 import game.EventoCorredor;
-import game.LabyrinthGraph;
+import graph.LabyrinthGraph;
 
 public class MapExporter {
 

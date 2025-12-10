@@ -7,6 +7,8 @@ import Queue.LinkedQueue;
 import enums.CorredorEvento;
 import enums.Dificuldade;
 import enums.TipoDivisao;
+import graph.LabyrinthGraph;
+import ui.GameView;
 
 public class Bot extends Player {
 
@@ -91,7 +93,7 @@ public class Bot extends Player {
             while (it.hasNext()) {
                 Divisao vizinho = it.next();
 
-                if (!contem(visitados, vizinho)) {
+                if (!visitados.contains(vizinho)) {
                     if (podePassar(atual, vizinho)) {
                         visitados.addToRear(vizinho);
                         fila.enqueue(vizinho);
@@ -150,13 +152,6 @@ public class Bot extends Player {
             case DIFICIL: chanceAcerto = 0.75; break;
         }
         return Math.random() <= chanceAcerto;
-    }
-
-    // --- Auxiliares ---
-    private boolean contem(ArrayUnorderedList<Divisao> lista, Divisao alvo) {
-        Iterator<Divisao> it = lista.iterator();
-        while (it.hasNext()) if (it.next().equals(alvo)) return true;
-        return false;
     }
 
     private Divisao obterPai(ArrayUnorderedList<Parente> lista, Divisao filho) {
@@ -249,5 +244,34 @@ public class Bot extends Player {
             this.tentadas = new boolean[numAlavancas]; // tudo a false por defeito
         }
     }
+
+    @Override
+public int lancarDados(GameView view) {
+    view.avisarBotLancaDados();
+    try { Thread.sleep(1000); } catch (Exception e){}
+    int val = (int)(Math.random() * 6) + 1;
+    view.mostrarResultadoDados(true, val);
+    return val;
+}
+
+@Override
+public Divisao escolherDestino(ArrayUnorderedList<Divisao> vizinhos, GameView view) {
+    Divisao d = this.escolherMovimento(); // O teu método de IA
+    if(d != null) view.mostrarBotDecisao(d.getNome());
+    return d;
+}
+
+@Override
+public boolean resolverEnigma(Enigma e, GameView view) {
+    view.mostrarBotAnalisaEnigma(getNome(), getInteligencia().toString());
+    return this.tentarResolverEnigma(e); // O teu método de IA
+}
+
+@Override
+public int decidirAlavanca(Divisao sala, GameView view) {
+    int escolha = this.escolherAlavanca(sala, 3); // O teu método de memória
+    view.mostrarBotEscolheAlavanca(escolha);
+    return escolha;
+}
 
 }

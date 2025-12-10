@@ -23,11 +23,9 @@
     { "codigo": "E4", "tipo": "SALA_ENIGMA", "nome": "Cripta dos Sábios" },
     { "codigo": "E5", "tipo": "SALA_ENIGMA", "nome": "Sala dos Espelhos" },
 
-    { "codigo": "A1", "tipo": "SALA_ALAVANCA", "nome": "Sala das Máquinas" },
-    { "codigo": "A2", "tipo": "SALA_ALAVANCA", "nome": "Sala de Controlo" },
-    { "codigo": "A3", "tipo": "SALA_ALAVANCA", "nome": "Arsenal" },
-    { "codigo": "A4", "tipo": "SALA_ALAVANCA", "nome": "Sala do Trono" },
-    { "codigo": "A5", "tipo": "SALA_ALAVANCA", "nome": "Bunker Secreto" }
+    { "codigo": "A1", "tipo": "SALA_ALAVANCA", "nome": "Sala das Máquinas", "idDesbloqueio": 1 },
+    { "codigo": "A2", "tipo": "SALA_ALAVANCA", "nome": "Sala de Controlo", "idDesbloqueio": 2 },
+    { "codigo": "A3", "tipo": "SALA_ALAVANCA", "nome": "Arsenal", "idDesbloqueio": 3 }
   ],
   "ligacoes": [
     

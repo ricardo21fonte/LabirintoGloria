@@ -1,48 +1,122 @@
-package game;
+package game; // Confirma que está no package 'game' ou 'core.model' conforme a tua estrutura
 
+import java.util.Iterator;
+
+import Exceptions.EmptyCollectionException;
+import Lists.ArrayUnorderedList;
 import Lists.UnorderedLinkedList;
 import Stacks.LinkedStack;
-import Exceptions.EmptyCollectionException;
-import enums.TipoDivisao;
-import Lists.ArrayUnorderedList;
+import ui.GameView;
 
 public class Player {
     private String nome;
     private Divisao localAtual;
     private UnorderedLinkedList<String> historico;
     private int jogadasExtra;
-
-    // AGORA É CLARO: número de turnos ainda bloqueados
     private int turnosBloqueado;
-
     private LinkedStack<Divisao> caminho;
-
-    // tamanho mínimo da stack até onde é permitido recuar
     private int limiteRecuoMinSize;
-
     private ArrayUnorderedList<Integer> trancasDesbloqueadas;
-    // =========================
-    //       CONSTRUTOR
-    // =========================
+
     public Player(String nome, Divisao inicio) {
         this.nome = nome;
         this.localAtual = inicio;
         this.historico = new UnorderedLinkedList<>();
         this.jogadasExtra = 0;
         this.turnosBloqueado = 0;
-
         this.caminho = new LinkedStack<>();
         caminho.push(inicio);
-
         this.limiteRecuoMinSize = 1;
         this.trancasDesbloqueadas = new ArrayUnorderedList<>();
-
         historico.addToRear("Inicio: " + inicio.getNome());
     }
 
-    // =========================
-    //       LÓGICA DE JOGO
-    // =========================
+    // =========================================================
+    // 🎮 MÉTODOS QUE O BOT VAI DAR OVERRIDE
+    // (Estes métodos têm de existir aqui para o Bot não dar erro)
+    // =========================================================
+
+    /**
+     * Comportamento Base (Humano): Pede para carregar Enter e lança.
+     */
+    public int lancarDados(GameView view) {
+        view.pedirHumanoLancaDados();
+        int val = (int)(Math.random() * 6) + 1;
+        view.mostrarResultadoDados(false, val);
+        return val;
+    }
+
+    /**
+     * Comportamento Base (Humano): Mostra menu e pede escolha.
+     */
+    public Divisao escolherDestino(ArrayUnorderedList<Divisao> vizinhos, GameView view) {
+        if (vizinhos == null || vizinhos.isEmpty()) return null;
+
+        // Converter vizinhos para array para mostrar no menu (1, 2, 3...)
+        Divisao[] opcoes = new Divisao[vizinhos.size()];
+        int i = 0;
+        Iterator<Divisao> it = vizinhos.iterator();
+        while (it.hasNext()) {
+            Divisao v = it.next();
+            opcoes[i] = v;
+            view.mostrarOpcaoMovimento(i + 1, v.getNome(), v.getTipo().toString());
+            i++;
+        }
+        view.mostrarOpcaoParar();
+
+        // Loop para garantir escolha válida
+        while (true) {
+            int escolha = view.pedirEscolhaMovimento();
+            if (escolha == 0) return null; // Parar
+            if (escolha > 0 && escolha <= vizinhos.size()) {
+                return opcoes[escolha - 1];
+            }
+            view.mostrarErroOpcaoInvalida(0, vizinhos.size());
+        }
+    }
+
+    /**
+     * Comportamento Base (Humano): Mostra pergunta e pede input numérico.
+     */
+    public boolean resolverEnigma(Enigma enigma, GameView view) {
+        view.mostrarPergunta(enigma.getPergunta());
+        String[] opcoes = enigma.getOpcoes();
+        view.mostrarOpcoesEnigma(opcoes);
+
+        int resposta;
+        do {
+            resposta = view.pedirRespostaEnigma();
+            if (resposta < 1 || resposta > opcoes.length) {
+                view.mostrarErroOpcaoInvalida(1, opcoes.length);
+            }
+        } while (resposta < 1 || resposta > opcoes.length);
+
+        boolean acertou = enigma.verificarResposta(resposta);
+        view.mostrarResultadoEnigma(acertou);
+        return acertou;
+    }
+
+    /**
+     * Comportamento Base (Humano): Escolhe alavanca (1, 2 ou 3) via menu.
+     */
+    public int decidirAlavanca(Divisao sala, GameView view) {
+        view.mostrarSalaAlavanca();
+        view.mostrarOpcoesAlavanca();
+        
+        int escolha;
+        do {
+            escolha = view.pedirAlavanca();
+            if (escolha < 1 || escolha > 3) {
+                view.mostrarErroOpcaoInvalida(1, 3);
+            }
+        } while (escolha < 1 || escolha > 3);
+        
+        return escolha;
+    }
+
+    // =========================================================
+    // ⚙️ GETTERS, SETTERS E LÓGICA INTERNA
+    // =========================================================
 
     public void moverPara(Divisao novaSala) {
         this.localAtual = novaSala;
@@ -51,24 +125,14 @@ public class Player {
     }
 
     public void recuar(int casas) {
-        if (caminho == null) {
-            System.out.println(nome + " não tem caminho registado para recuar.");
+        if (caminho == null || caminho.size() <= limiteRecuoMinSize) {
+            // Pode adicionar mensagem na View aqui se quiseres
             return;
         }
-
-        if (caminho.size() <= limiteRecuoMinSize) {
-            System.out.println(nome + " não pode recuar mais (já está no limite de recuo).");
-            return;
-        }
-
+        
         int passos = casas;
-
         while (passos > 0 && caminho.size() > limiteRecuoMinSize) {
-            try {
-                caminho.pop();
-            } catch (EmptyCollectionException e) {
-                break;
-            }
+            try { caminho.pop(); } catch (EmptyCollectionException e) { break; }
             passos--;
         }
 
@@ -76,26 +140,16 @@ public class Player {
             Divisao novaPosicao = caminho.peek();
             this.localAtual = novaPosicao;
             historico.addToRear("Recuou para: " + novaPosicao.getNome());
-            System.out.println(nome + " recuou até " + novaPosicao.getNome());
-        } catch (EmptyCollectionException e) {
-            System.out.println("Erro ao recuar: pilha vazia inesperadamente.");
-        }
+        } catch (EmptyCollectionException e) {}
     }
 
-    // BLOQUEAR N TURNOS
     public void bloquear(int turnos) {
         this.turnosBloqueado += turnos;
-        System.out.println(nome + " está bloqueado por " + turnos + " turno(s).");
     }
 
     public void setLocalAtual(Divisao novaSala) {
         this.localAtual = novaSala;
-        historico.addToRear("Teleportado para: " + novaSala.getNome());
-        System.out.println(nome + " foi teleportado para " + novaSala.getNome());
-
-        if (caminho == null) {
-            caminho = new LinkedStack<>();
-        }
+        if (caminho == null) caminho = new LinkedStack<>();
         caminho.push(novaSala);
     }
 
@@ -103,81 +157,31 @@ public class Player {
         this.limiteRecuoMinSize = caminho.size();
     }
 
-    // =========================
-    //     GETTERS / SETTERS
-    // =========================
-
-    public String getNome() { return nome; }
-    public void setNome(String nome) { this.nome = nome; }
-
-    public Divisao getLocalAtual() { return localAtual; }
-
-    public UnorderedLinkedList<String> getHistorico() { return historico; }
-    public void setHistorico(UnorderedLinkedList<String> historico) { this.historico = historico; }
-
-    public int getJogadasExtra() { return jogadasExtra; }
-    public void setJogadasExtra(int jogadasExtra) { this.jogadasExtra = jogadasExtra; }
-
-    // AGORA: true se ainda tem turnos bloqueados
-    public boolean isBloqueado() {
-        return turnosBloqueado > 0;
-    }
-
-    public int getTurnosBloqueado() {
-        return turnosBloqueado;
-    }
-
-    public void consumirUmTurnoBloqueado() {
-        if (turnosBloqueado > 0) {
-            turnosBloqueado--;
-        }
-    }
-
-    public LinkedStack<Divisao> getCaminho() { return caminho; }
-    public void setCaminho(LinkedStack<Divisao> caminho) { this.caminho = caminho; }
-
-    public int getLimiteRecuoMinSize() { return limiteRecuoMinSize; }
-    public void setLimiteRecuoMinSize(int limiteRecuoMinSize) { this.limiteRecuoMinSize = limiteRecuoMinSize; }
-
     public void desbloquearTranca(int id) {
         if (!podePassarTranca(id)) {
             trancasDesbloqueadas.addToRear(id);
-            System.out.println(nome + " desbloqueou a tranca #" + id + " (só para este jogador).");
         }
     }
 
     public boolean podePassarTranca(int id) {
-        java.util.Iterator<Integer> it = trancasDesbloqueadas.iterator();
+        Iterator<Integer> it = trancasDesbloqueadas.iterator();
         while (it.hasNext()) {
-            int valor = it.next();
-            if (valor == id) return true;
+            if (it.next() == id) return true;
         }
         return false;
     }
 
-
-
-    // =========================
-    //     MÉTODOS EXTRA
-    // =========================
-
+    // --- Getters Simples ---
+    public String getNome() { return nome; }
+    public Divisao getLocalAtual() { return localAtual; }
+    public UnorderedLinkedList<String> getHistorico() { return historico; }
+    public int getJogadasExtra() { return jogadasExtra; }
+    public void setJogadasExtra(int n) { this.jogadasExtra = n; }
+    public void adicionarJogadasExtras(int n) { this.jogadasExtra += n; }
+    public boolean isBloqueado() { return turnosBloqueado > 0; }
+    public int getTurnosBloqueado() { return turnosBloqueado; }
+    public void consumirUmTurnoBloqueado() { if (turnosBloqueado > 0) turnosBloqueado--; }
+    
     @Override
-    public String toString() {
-        return "Jogador " + nome + " na sala: " + localAtual.getNome();
-    }
-
-    public void adicionarJogadasExtras(int n) {
-        this.jogadasExtra += n;
-        System.out.println(nome + " ganhou " + n + " jogadas extra!");
-    }
-
-    public boolean temJogadasExtra() {
-        return jogadasExtra > 0;
-    }
-
-    public void usarJogadaExtra() {
-        if (jogadasExtra > 0) {
-            jogadasExtra--;
-        }
-    }
+    public String toString() { return "Jogador " + nome + " @ " + localAtual.getNome(); }
 }

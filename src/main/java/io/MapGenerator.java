@@ -44,7 +44,7 @@ public class MapGenerator {
      * @return a generated LabyrinthGraph
      */
     public LabyrinthGraph<Divisao> gerarMapaTotalmenteCustomizado(int numEntradas, int numEnigmas, int numNormais, int numTrancas) {
-        System.out.println("🏗️ A gerar Grafo Orgânico com " + numTrancas + " trancas aleatórias...");
+        System.out.println("A gerar Grafo Orgânico com " + numTrancas + " trancas aleatórias...");
 
         LabyrinthGraph<Divisao> grafo = new LabyrinthGraph<>();
         ArrayUnorderedList<Divisao[]> candidatosParaTrancas = new ArrayUnorderedList<>();
@@ -61,7 +61,7 @@ public class MapGenerator {
             salasConectadas.addToRear(guardiao);
 
             EventoCorredor evento = sortearArmadilhaOuNada();
-            grafo.addCorridor(guardiao, tesouro, evento);
+            grafo.addCorredor(guardiao, tesouro, evento);
             candidatosParaTrancas.addToRear(new Divisao[]{guardiao, tesouro});
         }
 
@@ -95,7 +95,7 @@ public class MapGenerator {
             Divisao pai;
             try { pai = fronteira.dequeue(); } catch (Exception e) { pai = tesouro; }
 
-            grafo.addCorridor(pai, novaSala, sortearArmadilhaOuNada());
+            grafo.addCorredor(pai, novaSala, sortearArmadilhaOuNada());
             candidatosParaTrancas.addToRear(new Divisao[]{pai, novaSala});
 
             fronteira.enqueue(novaSala);
@@ -108,12 +108,12 @@ public class MapGenerator {
             grafo.addVertex(spawn);
             Divisao ponta = obterSalaFallback(fronteira, salasConectadas);
 
-            grafo.addCorridor(spawn, ponta, sortearArmadilhaOuNada());
+            grafo.addCorredor(spawn, ponta, sortearArmadilhaOuNada());
         }
         criarCiclosAleatorios(grafo, sacoDeSalas, candidatosParaTrancas);
         aplicarTrancasAleatorias(grafo, candidatosParaTrancas, numTrancas);
 
-        System.out.println("✅ Mapa gerado com sucesso!");
+        System.out.println("Mapa gerado com sucesso!");
         return grafo;
     }
     /**
@@ -143,13 +143,13 @@ public class MapGenerator {
                 EventoCorredor tranca = new EventoCorredor(CorredorEvento.LOCKED, idChave);
                 grafo.setCorredorEvento(origem, destino, tranca);
                 
-                System.out.println("   🔒 Tranca #" + idChave + " colocada entre [" + origem.getNome() + "] e [" + destino.getNome() + "]");
+                System.out.println("   Tranca #" + idChave + " colocada entre [" + origem.getNome() + "] e [" + destino.getNome() + "]");
                 aplicadas++;
             }
         }
         
         if (aplicadas < qtd) {
-            System.out.println("⚠️ Aviso: Só foi possível colocar " + aplicadas + " de " + qtd + " trancas (mapa muito cheio de armadilhas).");
+            System.out.println("Aviso: Só foi possível colocar " + aplicadas + " de " + qtd + " trancas (mapa muito cheio de armadilhas).");
         }
     }
     /**
@@ -167,7 +167,7 @@ public class MapGenerator {
             int i2 = (int)(Math.random() * arr.length);
 
             if (i1 != i2) {
-                grafo.addCorridor(arr[i1], arr[i2], sortearArmadilhaOuNada());
+                grafo.addCorredor(arr[i1], arr[i2], sortearArmadilhaOuNada());
                 candidatos.addToRear(new Divisao[]{arr[i1], arr[i2]});
             }
         }

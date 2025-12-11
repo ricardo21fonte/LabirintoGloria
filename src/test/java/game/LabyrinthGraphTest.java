@@ -31,7 +31,7 @@ class LabyrinthGraphTest {
     void testeAdicionarCorredor() {
         // 1. Criar um corredor normal entre A e B
         EventoCorredor evento = new EventoCorredor(CorredorEvento.NONE, 0);
-        grafo.addCorridor(salaA, salaB, evento);
+        grafo.addCorredor(salaA, salaB, evento);
 
         // 2. Verificar se são vizinhos
         ArrayUnorderedList<Divisao> vizinhosA = grafo.getVizinhos(salaA);
@@ -48,12 +48,11 @@ class LabyrinthGraphTest {
 
     @Test
     void testeRelocalizarArmadilha() {
-        // 1. Ligar A-B (com armadilha) e B-C (livre)
         EventoCorredor armadilha = new EventoCorredor(CorredorEvento.MOVE_BACK, 2);
-        grafo.addCorridor(salaA, salaB, armadilha);
+        grafo.addCorredor(salaA, salaB, armadilha);
         
         EventoCorredor livre = new EventoCorredor(CorredorEvento.NONE, 0);
-        grafo.addCorridor(salaB, salaC, livre);
+        grafo.addCorredor(salaB, salaC, livre);
 
         // 2. Verificar estado inicial
         assertEquals(CorredorEvento.MOVE_BACK, grafo.getCorredorEvento(salaA, salaB).getTipo());

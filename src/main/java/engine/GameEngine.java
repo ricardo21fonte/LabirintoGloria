@@ -7,10 +7,12 @@ import enums.AlavancaEnum;
 import enums.CorredorEvento;
 import enums.Dificuldade;
 import enums.TipoDivisao;
+import enums.TipoEvento;
 import game.Alavanca;
 import game.Bot;
 import game.Divisao;
 import game.Enigma;
+import game.EventoAleatorio;
 import game.EventoCorredor;
 import game.Player;
 import graph.LabyrinthGraph;
@@ -88,8 +90,8 @@ public class GameEngine {
     /**
      * Starts the game:
      */
-     public void start() {
-         GameInitializer init = new GameInitializer(view, graph);
+    public void start() {
+        GameInitializer init = new GameInitializer(view, graph);
         GameData dados = init.setupCompleto();
 
         if (dados == null) return;
@@ -105,7 +107,7 @@ public class GameEngine {
         while (jogoACorrer && turnManager.temJogadores()) {
 
             Player atual = turnManager.proximoJogador();
-            if (atual == null) break; // Segurança
+            if (atual == null) break; // Seguran莽a
 
             turnoCount++;
             view.mostrarInicioTurno(atual.getNome(), atual.getLocalAtual().getNome());
@@ -142,11 +144,11 @@ public class GameEngine {
         while (movimentos > 0) {
             view.mostrarStatusMovimento(player instanceof Bot, movimentos, player.getLocalAtual().getNome());
 
-            // Decisão de movimento
+            // Decis茫o de movimento
             Divisao destino = player.escolherDestino(graph.getVizinhos(player.getLocalAtual()), view);
             if (destino == null) return true; // Parou
 
-            // Lógica de Enigmas
+            // L贸gica de Enigmas
             if (destino.getTipo() == TipoDivisao.SALA_ENIGMA) {
                 if (!processarEnigma(player)) {
                     return true; // Errou, turno acaba
@@ -160,8 +162,34 @@ public class GameEngine {
             player.moverPara(destino);
             registarRelatorioMovimento(player, destino);
 
-            // Armadilhas
-            if (verificarArmadilha(player, origem, destino)) return true;
+            // [1] CORRE脟脙O: VERIFICAR VIT脫RIA IMEDIATAMENTE (BUG DE SEQU脢NCIA)
+            if (destino.getTipo() == TipoDivisao.SALA_CENTRAL) return true; // Venceu
+
+            // [2] CHECK FOR FIXED TRAP (Armadilha Fixa)
+            if (verificarArmadilha(player, origem, destino)) return true; // Turn ends if trap hits
+
+            // [3] CORRE脟脙O: CHECK FOR RANDOM EVENT (Only if Corridor was originally NONE)
+            EventoCorredor evCorredor = graph.getCorredorEvento(origem, destino);
+            if (evCorredor.getTipo() == CorredorEvento.NONE) {
+
+                if (Math.random() < 0.25) {
+                    EventoAleatorio evento = EventoAleatorio.gerarAleatorio();
+
+                    if (evento.getTipo() != TipoEvento.SEM_EVENTO) {
+
+                        // CORRE脟脙O: Usar System.out para a descri莽茫o do evento aleat贸rio (sem prefixo "enigma")
+                        System.out.print("馃敭 Evento Aleat贸rio: ");
+                        System.out.println(evento.getDescricao());
+
+                        // Passar 'view' e 'todosJogadores' para permitir a escolha do alvo na troca
+                        evento.aplicar(player, todosJogadores, view);
+
+                        if (evento.getTipo() == TipoEvento.RECUAR || evento.getTipo() == TipoEvento.BLOQUEAR_TURNOS) {
+                            return true; // Encerra o turno devido a efeito severo
+                        }
+                    }
+                }
+            }
 
             movimentos--;
 
@@ -170,8 +198,7 @@ public class GameEngine {
                 if (processarAlavanca(player, destino)) return true;
             }
 
-            // Vitória
-            if (destino.getTipo() == TipoDivisao.SALA_CENTRAL) return true; // Venceu
+            // [Antigo check de vit贸ria removido daqui]
         }
         return false;
     }
@@ -230,7 +257,7 @@ public class GameEngine {
         if (enigmasDisponiveis == null || enigmasDisponiveis.isEmpty()) {
 
             if (enigmasUsados != null && !enigmasUsados.isEmpty()) {
-                System.out.println("A recarregar enigmas já respondidos...");
+                System.out.println("A recarregar enigmas j谩 respondidos...");
                 while (!enigmasUsados.isEmpty()) {
                     enigmasDisponiveis.addToRear(enigmasUsados.removeFirst());
                 }
@@ -266,7 +293,7 @@ public class GameEngine {
                     view.mostrarErro("Efeito 'BACK' mal formatado no ficheiro JSON.");
                 }
             } catch (NumberFormatException e) {
-                view.mostrarErro("O valor de recuo no enigma não é um número válido.");
+                view.mostrarErro("O valor de recuo no enigma n茫o 茅 um n煤mero v谩lido.");
             }
         }else if (effect.equals("BLOCK")) {
             p.bloquear(1);
@@ -375,6 +402,7 @@ public class GameEngine {
 
         if (ev.getTipo() == CorredorEvento.BLOCK_TURN || ev.getTipo() == CorredorEvento.MOVE_BACK) {
             view.mostrarArmadilhaAtivada();
+            totalObstaculos++; // Aumenta o contador de obst谩culos
 
             if (ev.getTipo() == CorredorEvento.BLOCK_TURN) {
                 p.bloquear(ev.getValor());
@@ -383,6 +411,17 @@ public class GameEngine {
                 p.recuar(ev.getValor(), view);
             }
             graph.relocalizarArmadilha(o, d);
+
+            // Registar no relat贸rio
+            Iterator<GameReport.PlayerReport> it = playerReports.iterator();
+            while(it.hasNext()) {
+                GameReport.PlayerReport pr = it.next();
+                if(pr.getNome().equals(p.getNome())) {
+                    pr.adicionarObstaculo("Armadilha em " + d.getNome());
+                    break;
+                }
+            }
+
             return true;
         }
         return false;

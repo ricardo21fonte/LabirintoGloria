@@ -13,8 +13,6 @@ class BotLogicTest {
 
     @Test
     void testeBotEncontraCaminhoMaisCurto() {
-        // 1. Criar um mapa simples: A -> B -> C (Tesouro)
-        // E um caminho falso mais longo: A -> D -> E -> F -> C
         LabyrinthGraph<Divisao> mapa = new LabyrinthGraph<>();
 
         Divisao start = new Divisao("Inicio", TipoDivisao.ENTRADA);
@@ -27,20 +25,15 @@ class BotLogicTest {
         mapa.addVertex(fim);
         mapa.addVertex(longe1);
 
-        // Caminho Curto (2 passos)
-        mapa.addCorridor(start, meio, new EventoCorredor(CorredorEvento.NONE, 0));
-        mapa.addCorridor(meio, fim, new EventoCorredor(CorredorEvento.NONE, 0));
+        mapa.addCorredor(start, meio, new EventoCorredor(CorredorEvento.NONE, 0));
+        mapa.addCorredor(meio, fim, new EventoCorredor(CorredorEvento.NONE, 0));
 
-        // Caminho Longo / Alternativo
-        mapa.addCorridor(start, longe1, new EventoCorredor(CorredorEvento.NONE, 0));
+        mapa.addCorredor(start, longe1, new EventoCorredor(CorredorEvento.NONE, 0));
 
-        // 2. Criar Bot Inteligente (DIFICIL = 75% acerto enigmas, mas BFS é sempre igual)
         Bot bot = new Bot("Robo", start, Dificuldade.DIFICIL, mapa);
 
-        // 3. Perguntar ao Bot para onde ir
         Divisao escolha = bot.escolherMovimento();
 
-        // 4. O Bot DEVE escolher "Meio", pois é o caminho mais rápido para o "Tesouro"
         assertNotNull(escolha, "O bot deve encontrar um caminho");
         assertEquals(meio, escolha, "O Bot devia ter escolhido o caminho mais curto (Meio).");
     }
@@ -58,12 +51,12 @@ class BotLogicTest {
         mapa.addVertex(start); mapa.addVertex(trancada); mapa.addVertex(livre); mapa.addVertex(fim);
 
         // Caminho Curto mas TRANCADO (ID 1)
-        mapa.addCorridor(start, trancada, new EventoCorredor(CorredorEvento.LOCKED, 1));
-        mapa.addCorridor(trancada, fim, new EventoCorredor(CorredorEvento.NONE, 0));
+        mapa.addCorredor(start, trancada, new EventoCorredor(CorredorEvento.LOCKED, 1));
+        mapa.addCorredor(trancada, fim, new EventoCorredor(CorredorEvento.NONE, 0));
 
         // Caminho Longo mas LIVRE
-        mapa.addCorridor(start, livre, new EventoCorredor(CorredorEvento.NONE, 0));
-        mapa.addCorridor(livre, fim, new EventoCorredor(CorredorEvento.NONE, 0));
+        mapa.addCorredor(start, livre, new EventoCorredor(CorredorEvento.NONE, 0));
+        mapa.addCorredor(livre, fim, new EventoCorredor(CorredorEvento.NONE, 0));
 
         Bot bot = new Bot("Robo", start, Dificuldade.DIFICIL, mapa);
 

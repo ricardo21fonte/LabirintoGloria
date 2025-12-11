@@ -23,12 +23,11 @@ class GameSimulationTest {
         mapa.addVertex(meio);
         mapa.addVertex(fim);
 
-        mapa.addCorridor(inicio, meio, new EventoCorredor(CorredorEvento.NONE, 0));
-        mapa.addCorridor(meio, fim, new EventoCorredor(CorredorEvento.NONE, 0));
+        mapa.addCorredor(inicio, meio, new EventoCorredor(CorredorEvento.NONE, 0));
+        mapa.addCorredor(meio, fim, new EventoCorredor(CorredorEvento.NONE, 0));
 
         Bot bot = new Bot("AutoBot", inicio, Dificuldade.DIFICIL, mapa);
 
-        // 2. Loop de Jogo Simulado (Max 10 turnos para não ser infinito)
         boolean ganhou = false;
         int turnos = 0;
 

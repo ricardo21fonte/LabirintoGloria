@@ -126,7 +126,7 @@ public class Divisao implements Comparable<Divisao> { // <--- 1. ADICIONADO impl
         if (this == obj) return true;
         if (obj == null || getClass() != obj.getClass()) return false;
         Divisao outra = (Divisao) obj;
-        return this.id == outra.id;
+        return this.nome.equals(outra.nome);
     }
 
     /**
@@ -136,6 +136,6 @@ public class Divisao implements Comparable<Divisao> { // <--- 1. ADICIONADO impl
      */
     @Override
     public int compareTo(Divisao outra) {
-        return Integer.compare(this.id, outra.id);
+        return this.nome.compareTo(outra.nome);
     }
 }

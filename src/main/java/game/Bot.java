@@ -342,4 +342,31 @@ public class Bot extends Player {
         return escolha;
     }
 
+    @Override
+    public Player escolherAlvoParaTroca(ArrayUnorderedList<Player> todosJogadores, GameView view) {
+        if (todosJogadores.size() < 2) return null;
+
+        view.mostrarBotDecisao("A escolher alvo para troca de posição...");
+
+        Player alvoTroca = null;
+        do {
+            int indiceAleatorio = (int) (Math.random() * todosJogadores.size());
+
+            // Percorrer a lista para obter o jogador (necessário para ArrayUnorderedList)
+            Iterator<Player> it = todosJogadores.iterator();
+            alvoTroca = null;
+            int idx = 0;
+            while(it.hasNext()) {
+                Player p = it.next();
+                if (idx == indiceAleatorio) {
+                    alvoTroca = p;
+                    break;
+                }
+                idx++;
+            }
+        } while (alvoTroca == this || alvoTroca == null);
+
+        view.mostrarBotDecisao("Alvo escolhido: " + alvoTroca.getNome());
+        return alvoTroca;
+    }
 }

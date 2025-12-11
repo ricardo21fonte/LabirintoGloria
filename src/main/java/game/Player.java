@@ -306,7 +306,35 @@ public class Player {
     public void consumirUmTurnoBloqueado() {
         if (turnosBloqueado > 0) turnosBloqueado--;
     }
+    public Player escolherAlvoParaTroca(ArrayUnorderedList<Player> todosJogadores, GameView view) {
 
+        view.mostrarEscolhaAlvoTroca(todosJogadores, this.nome);
+
+        Player[] opcoes = new Player[todosJogadores.size()];
+        int i = 0;
+        Iterator<Player> it = todosJogadores.iterator();
+        while (it.hasNext()) {
+            opcoes[i] = it.next();
+            i++;
+        }
+
+        while (true) {
+            int escolha = view.pedirEscolhaMovimento();
+
+            if (escolha >= 1 && escolha <= opcoes.length) {
+                Player escolhido = opcoes[escolha - 1];
+
+                if (escolhido.equals(this)) {
+                    view.mostrarErro("Não podes trocar contigo mesmo. Escolhe outro.");
+                    continue;
+                }
+                return escolhido;
+            }
+            if (escolha == 0) return null; // Opção de 'Parar'
+
+            view.mostrarErroOpcaoInvalida(1, opcoes.length);
+        }
+    }
     /**
      * Returns a string representation of the player
      * @return a string representation of this player

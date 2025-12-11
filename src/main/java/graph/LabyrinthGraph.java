@@ -46,14 +46,14 @@ public class LabyrinthGraph<T> extends GraphList<T> {
      * @param vertex2 the second vertex
      * @param event   the corridor event to associate with this edge
      */
-    public void addCorridor(T vertex1, T vertex2, EventoCorredor event) {
+    public void addCorredor(T vertex1, T vertex2, EventoCorredor event) {
         super.addEdge(vertex1, vertex2);
 
         int index1 = getIndex(vertex1);
         int index2 = getIndex(vertex2);
 
         adicionarEventoUnico(index1, index2, event);
-        adicionarEventoUnico(index2, index1, event); // bidirecional
+        adicionarEventoUnico(index2, index1, event);
     }
 
     /**
@@ -197,7 +197,7 @@ public class LabyrinthGraph<T> extends GraphList<T> {
 
                 if (ev.getTipo() == CorredorEvento.NONE) {
                     setCorredorEvento(salaAleatoria, vizinhoAleatorio, armadilha);
-                    System.out.println("   👻 ...e mudou-se para o corredor entre [" + salaAleatoria.toString() + "] e [" + vizinhoAleatorio.toString() + "]!");
+                    System.out.println("  ...e mudou-se para o corredor entre [" + salaAleatoria.toString() + "] e [" + vizinhoAleatorio.toString() + "]!");
                     return;
                 }
             }

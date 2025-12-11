@@ -149,7 +149,7 @@ public class MapLoader {
                         }
                     }
 
-                    graph.addCorridor(d1, d2, new EventoCorredor(tipoEv, valor));
+                    graph.addCorredor(d1, d2, new EventoCorredor(tipoEv, valor));
                 }
             }
         } catch (Exception e) {

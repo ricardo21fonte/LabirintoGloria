@@ -1,7 +1,7 @@
 package game;
 
-import enums.TipoEvento;
 import Lists.ArrayUnorderedList;
+import enums.TipoEvento;
 import ui.GameView;
 /**
  * Represents a random event that can affect one or more players in the game.
@@ -85,7 +85,7 @@ public class EventoAleatorio {
                 break;
 
             case TROCAR_POSICAO:
-                trocarPosicaoComOutro(alvo, todosJogadores);
+                trocarPosicaoComOutro(alvo, todosJogadores, view);
                 break;
 
             case SEM_EVENTO:
@@ -126,56 +126,31 @@ public class EventoAleatorio {
     }
 
     /**
-     * Swaps the position of the target player with a randomly chosen other player.
-     * @param alvo      the player who triggered the event
-     * @param jogadores list of all players in the game
+     * Swaps the position of the target player with a chosen other player.
+     * A escolha do alvo é delegada ao objeto Player/Bot.
      */
-    private void trocarPosicaoComOutro(Player alvo, ArrayUnorderedList<Player> jogadores) {
-        int n = jogadores.size();
-        if (n < 2) return;
+    private void trocarPosicaoComOutro(Player alvo, ArrayUnorderedList<Player> jogadores, GameView view) {
+        if (jogadores.size() < 2) return;
 
-        // Encontrar índice
-        int indiceAlvo = -1;
-        int idx = 0;
-        for (Player p : jogadores) {
-            if (p == alvo) {
-                indiceAlvo = idx;
-                break;
-            }
-            idx++;
+        Player alvoTroca = alvo.escolherAlvoParaTroca(jogadores, view);
+
+        if (alvoTroca == null || alvoTroca.equals(alvo)) {
+            System.out.println("   (Troca cancelada ou alvo inválido)");
+            return;
         }
-        if (indiceAlvo == -1) return;
-
-        // Escolher outro índice aleatório
-        int indiceOutro;
-        do {
-            indiceOutro = (int) (Math.random() * n);
-        } while (indiceOutro == indiceAlvo);
-
-        // Encontrar o jogador com esse índice
-        Player outro = null;
-        idx = 0;
-        for (Player p : jogadores) {
-            if (idx == indiceOutro) {
-                outro = p;
-                break;
-            }
-            idx++;
-        }
-        if (outro == null) return;
 
         Divisao posAlvo = alvo.getLocalAtual();
-        Divisao posOutro = outro.getLocalAtual();
+        Divisao posOutro = alvoTroca.getLocalAtual();
 
         // Troca de posição
         alvo.setLocalAtual(posOutro);
-        outro.setLocalAtual(posAlvo);
+        alvoTroca.setLocalAtual(posAlvo);
 
         // Marca limite de recuo para ambos
         alvo.marcarLimiteRecuo();
-        outro.marcarLimiteRecuo();
+        alvoTroca.marcarLimiteRecuo();
 
-        System.out.println(alvo.getNome() + " trocou de posição com " + outro.getNome() + "!");
+        System.out.println(alvo.getNome() + " trocou de posição com " + alvoTroca.getNome() + "!");
     }
     /**
      * Generates a new random event with a random type and intensity.

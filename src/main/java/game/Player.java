@@ -91,7 +91,6 @@ public class Player {
     public Divisao escolherDestino(ArrayUnorderedList<Divisao> vizinhos, GameView view) {
         if (vizinhos == null || vizinhos.isEmpty()) return null;
 
-        // Converter vizinhos para array para mostrar no menu (1, 2, 3...)
         Divisao[] opcoes = new Divisao[vizinhos.size()];
         int i = 0;
         Iterator<Divisao> it = vizinhos.iterator();
@@ -103,7 +102,6 @@ public class Player {
         }
         view.mostrarOpcaoParar();
 
-        // Loop para garantir escolha válida
         while (true) {
             int escolha = view.pedirEscolhaMovimento();
             if (escolha == 0) return null; // Parar
@@ -225,6 +223,7 @@ public class Player {
      * Marks the current size of the path stack as the minimum allowed for future "recuar" operations.
      */
     public void marcarLimiteRecuo() {
+
         this.limiteRecuoMinSize = caminho.size();
     }
 
@@ -264,12 +263,6 @@ public class Player {
     public Divisao getLocalAtual() { return localAtual; }
 
     /**
-     * Returns the movement/action history of this player.
-     * @return the history list
-     */
-    public UnorderedLinkedList<String> getHistorico() { return historico; }
-
-    /**
      * Returns the number of extra moves the player currently has.
      * @return the extra moves count
      */
@@ -306,6 +299,12 @@ public class Player {
     public void consumirUmTurnoBloqueado() {
         if (turnosBloqueado > 0) turnosBloqueado--;
     }
+    /**
+     * Allows a human player to choose another player as the target for a position swap.
+     * @param todosJogadores the list of all players currently in the game
+     * @param view           the game view used to display options and read the user's choice
+     * @return the chosen Player to swap positions with
+     */
     public Player escolherAlvoParaTroca(ArrayUnorderedList<Player> todosJogadores, GameView view) {
 
         view.mostrarEscolhaAlvoTroca(todosJogadores, this.nome);

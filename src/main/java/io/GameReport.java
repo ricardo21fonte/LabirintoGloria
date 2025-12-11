@@ -261,11 +261,6 @@ public class GameReport {
         public ArrayUnorderedList<String> getEfeitosAplicados() { return efeitosAplicados; }
 
         /**
-         * Adds a new effect description to this player's record.
-         * @param descricao description of an effect that was applied
-         */
-        public void adicionarEfeito(String descricao) { this.efeitosAplicados.addToRear(descricao); }
-        /**
          * Counts how many enigmas this player has successfully solved.
          * @return number of resolved enigmas
          */

@@ -107,7 +107,7 @@ public class GameEngine {
         while (jogoACorrer && turnManager.temJogadores()) {
 
             Player atual = turnManager.proximoJogador();
-            if (atual == null) break; // Seguran莽a
+            if (atual == null) break;
 
             turnoCount++;
             view.mostrarInicioTurno(atual.getNome(), atual.getLocalAtual().getNome());
@@ -144,31 +144,25 @@ public class GameEngine {
         while (movimentos > 0) {
             view.mostrarStatusMovimento(player instanceof Bot, movimentos, player.getLocalAtual().getNome());
 
-            // Decis茫o de movimento
             Divisao destino = player.escolherDestino(graph.getVizinhos(player.getLocalAtual()), view);
-            if (destino == null) return true; // Parou
+            if (destino == null) return true;
 
-            // L贸gica de Enigmas
             if (destino.getTipo() == TipoDivisao.SALA_ENIGMA) {
                 if (!processarEnigma(player)) {
-                    return true; // Errou, turno acaba
+                    return true;
                 }
             }
 
             if (!podeEntrar(player, destino)) continue;
 
-            // MOVER
+
             Divisao origem = player.getLocalAtual();
             player.moverPara(destino);
             registarRelatorioMovimento(player, destino);
 
-            // [1] CORRE脟脙O: VERIFICAR VIT脫RIA IMEDIATAMENTE (BUG DE SEQU脢NCIA)
-            if (destino.getTipo() == TipoDivisao.SALA_CENTRAL) return true; // Venceu
+            if (destino.getTipo() == TipoDivisao.SALA_CENTRAL) return true;
+            if (verificarArmadilha(player, origem, destino)) return true;
 
-            // [2] CHECK FOR FIXED TRAP (Armadilha Fixa)
-            if (verificarArmadilha(player, origem, destino)) return true; // Turn ends if trap hits
-
-            // [3] CORRE脟脙O: CHECK FOR RANDOM EVENT (Only if Corridor was originally NONE)
             EventoCorredor evCorredor = graph.getCorredorEvento(origem, destino);
             if (evCorredor.getTipo() == CorredorEvento.NONE) {
 
@@ -177,15 +171,13 @@ public class GameEngine {
 
                     if (evento.getTipo() != TipoEvento.SEM_EVENTO) {
 
-                        // CORRE脟脙O: Usar System.out para a descri莽茫o do evento aleat贸rio (sem prefixo "enigma")
-                        System.out.print("馃敭 Evento Aleat贸rio: ");
+                        System.out.print("Evento Aleatorio: ");
                         System.out.println(evento.getDescricao());
 
-                        // Passar 'view' e 'todosJogadores' para permitir a escolha do alvo na troca
                         evento.aplicar(player, todosJogadores, view);
 
                         if (evento.getTipo() == TipoEvento.RECUAR || evento.getTipo() == TipoEvento.BLOQUEAR_TURNOS) {
-                            return true; // Encerra o turno devido a efeito severo
+                            return true;
                         }
                     }
                 }
@@ -197,8 +189,6 @@ public class GameEngine {
             if (destino.getTipo() == TipoDivisao.SALA_ALAVANCA) {
                 if (processarAlavanca(player, destino)) return true;
             }
-
-            // [Antigo check de vit贸ria removido daqui]
         }
         return false;
     }
@@ -227,7 +217,7 @@ public class GameEngine {
         return acertou;
     }
     /**
-     * Handles the interaction with a lever room TipoDivisao#SALA_ALAVANCA.
+     * Handles the interaction with a lever room TipoDivisao.
      * @param player player interacting with the lever room
      * @param sala   room that contains the lever puzzle
      * @return true if the player's turn should end after this
@@ -257,7 +247,7 @@ public class GameEngine {
         if (enigmasDisponiveis == null || enigmasDisponiveis.isEmpty()) {
 
             if (enigmasUsados != null && !enigmasUsados.isEmpty()) {
-                System.out.println("A recarregar enigmas j谩 respondidos...");
+                System.out.println("A recarregar enigmas ja respondidos...");
                 while (!enigmasUsados.isEmpty()) {
                     enigmasDisponiveis.addToRear(enigmasUsados.removeFirst());
                 }
@@ -293,7 +283,7 @@ public class GameEngine {
                     view.mostrarErro("Efeito 'BACK' mal formatado no ficheiro JSON.");
                 }
             } catch (NumberFormatException e) {
-                view.mostrarErro("O valor de recuo no enigma n茫o 茅 um n煤mero v谩lido.");
+                view.mostrarErro("O valor de recuo no enigma nao e um numero valido.");
             }
         }else if (effect.equals("BLOCK")) {
             p.bloquear(1);
@@ -402,7 +392,7 @@ public class GameEngine {
 
         if (ev.getTipo() == CorredorEvento.BLOCK_TURN || ev.getTipo() == CorredorEvento.MOVE_BACK) {
             view.mostrarArmadilhaAtivada();
-            totalObstaculos++; // Aumenta o contador de obst谩culos
+            totalObstaculos++;
 
             if (ev.getTipo() == CorredorEvento.BLOCK_TURN) {
                 p.bloquear(ev.getValor());
@@ -412,7 +402,7 @@ public class GameEngine {
             }
             graph.relocalizarArmadilha(o, d);
 
-            // Registar no relat贸rio
+            // Regista no relatorio
             Iterator<GameReport.PlayerReport> it = playerReports.iterator();
             while(it.hasNext()) {
                 GameReport.PlayerReport pr = it.next();

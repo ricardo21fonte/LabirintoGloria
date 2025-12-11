@@ -164,7 +164,7 @@ public class Menu {
 
                 nomeMapaAtual = nomeFicheiro.replace(".json", "");
 
-                System.out.println("Podes carregar este mapa no Menu Principal > Opção 2.");
+                System.out.println("Podes carregar o mapa no Menu Principal > Opção 2.");
             }
         }
         return mapaGerado;
@@ -181,23 +181,33 @@ public class Menu {
 
         if (mapa == null || mapa.size() == 0) {
             System.out.println(" Falha crítica: O mapa não pôde ser carregado.");
-            System.out.println("   Verifique se o ficheiro existe em: " + path);
+            System.out.println("   Verifica se o ficheiro existe: " + path);
             return apresentarMenuPrincipal();
         }
 
         System.out.println("\n Mapa carregado com sucesso: " + mapa.getVertices().length + " divisões.");
         System.out.println("1. Jogar agora");
         System.out.println("2. Editar Mapa (Adicionar/Modificar)");
+        System.out.println("3. Exportar para DOT (Gráfico)"); // Adicionar nova opção
         System.out.print("Escolha: ");
 
         int op = lerInteiro();
         if (op == 2) {
             return menuEditor(mapa);
         }
+        // lógica para o DOT
+        else if (op == 3) {
+            MapExporter exporter = new MapExporter();
+            String nomeFicheiroDot = nomeMapaAtual + ".dot";
+            exporter.exportarDot(mapa, nomeFicheiroDot);
+
+            System.out.println("Pressione ENTER para voltar ao menu principal...");
+            lerString();
+            return apresentarMenuPrincipal();
+        }
 
         return mapa;
     }
-
     /**
      * Interactive map editor menu.
      * @param grafo The map to be edited.
@@ -215,7 +225,7 @@ public class Menu {
         switch (opcao) {
             case 1:
                 adicionarLigacaoManual(grafo);
-                return menuEditor(grafo); // Volta ao menu para mais edições
+                return menuEditor(grafo);
             case 0:
                 System.out.println("A jogar mapa modificado...");
                 return grafo;
@@ -232,7 +242,6 @@ public class Menu {
     private void adicionarLigacaoManual(LabyrinthGraph<Divisao> grafo) {
         System.out.println("\n --- Adicionar Ligação --- ");
 
-        // Listar todas as salas para escolha
         Object[] vertices = grafo.getVertices();
         if (vertices.length < 2) {
             System.out.println("AVISO: Mapa precisa de pelo menos 2 salas.");
@@ -241,17 +250,14 @@ public class Menu {
         System.out.println("Salas disponíveis (ID: Nome):");
         for (Object v : vertices) {
             Divisao d = (Divisao) v;
-            // É seguro usar o ID aqui (I/O)
             System.out.println(" [" + d.getId() + "]: " + d.getNome());
         }
 
-        // Pedir Sala de Origem
         System.out.print("ID da Sala de Origem: ");
         int idOrigem = lerInteiro();
         Divisao origem = encontrarSalaPorId(grafo, idOrigem);
         if (origem == null) { System.out.println("ID de origem inválido."); return; }
 
-        // Pedir Sala de Destino
         System.out.print("ID da Sala de Destino: ");
         int idDestino = lerInteiro();
         Divisao destino = encontrarSalaPorId(grafo, idDestino);
@@ -262,13 +268,11 @@ public class Menu {
             return;
         }
 
-        // Por simplificação do Editor, vamos sempre adicionar como corredor seguro NONE
         EventoCorredor novoCorredor = new EventoCorredor(CorredorEvento.NONE, 0);
 
-        // Adiciona a ligação ao grafo
-        grafo.addCorridor(origem, destino, novoCorredor);
+        grafo.addCorredor(origem, destino, novoCorredor);
 
-        System.out.println("✅ Ligação adicionada: " + origem.getNome() + " <-> " + destino.getNome());
+        System.out.println("Ligação adicionada: " + origem.getNome() + " <-> " + destino.getNome());
     }
 
     /**
@@ -325,7 +329,6 @@ public class Menu {
             return;
         }
 
-        // 1. Encontrar o nome do ficheiro selecionado
         String selectedFilename = null;
         Iterator<String> itSelect = relatorios.iterator();
         int current = 1;
@@ -338,7 +341,6 @@ public class Menu {
             current++;
         }
 
-        // 2. Carregar o relatório e exibir (exibirRelatorio está implementado nos seus uploads originais)
         GameReport report = loader.carregarRelatorio(selectedFilename);
 
         if (report != null) {
@@ -352,7 +354,10 @@ public class Menu {
         menuRelatorios();
     }
 
-    // Método auxiliar exibido nos seus uploads originais (implementação simplificada)
+    /**
+     * Displays a detailed summary of a finished game in the console.
+     * @param report the GameReport instance containing all game statistics
+     */
     private void exibirRelatorio(GameReport report) {
         System.out.println("\n========== RELATÓRIO COMPLETO DO JOGO ==========");
         System.out.println("Vencedor: " + report.getVencedor());

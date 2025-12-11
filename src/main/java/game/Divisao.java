@@ -5,7 +5,7 @@ import enums.TipoDivisao;
 /**
  * Represents a single room (or division) in the labyrinth.
  */
-public class Divisao implements Comparable<Divisao> { // <--- 1. ADICIONADO implements Comparable
+public class Divisao implements Comparable<Divisao> {
 
     /**
      * Global counter used to assign unique IDs to each new Divisao.
@@ -71,10 +71,10 @@ public class Divisao implements Comparable<Divisao> { // <--- 1. ADICIONADO impl
 
     /**
      * Associates a lever puzzle with this room.
-     * @param a the lever to set
+     * @param alavanca the lever to set
      */
-    public void setAlavanca(Alavanca a) {
-        this.alavancaDoPuzzle = a;
+    public void setAlavanca(Alavanca alavanca) {
+        this.alavancaDoPuzzle = alavanca;
     }
 
     /**

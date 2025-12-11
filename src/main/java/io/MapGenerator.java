@@ -149,7 +149,7 @@ public class MapGenerator {
         }
         
         if (aplicadas < qtd) {
-            System.out.println("Aviso: Só foi possível colocar " + aplicadas + " de " + qtd + " trancas (mapa muito cheio de armadilhas).");
+            System.out.println("Aviso: Só foi possível colocar " + aplicadas + " de " + qtd + " trancas.");
         }
     }
     /**

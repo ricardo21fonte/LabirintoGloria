@@ -224,7 +224,7 @@ public class Bot extends Player {
     public int escolherAlavanca(Divisao sala, int numAlavancas) {
         MemoriaAlavanca mem = obterMemoriaAlavanca(sala, numAlavancas);
 
-        // contar quantas alavancas ainda não foram tentadas
+        // conta quantas alavancas ainda não foram tentadas
         int disponiveis = 0;
         for (int i = 0; i < numAlavancas; i++) {
             if (!mem.tentadas[i]) {
@@ -265,7 +265,6 @@ public class Bot extends Player {
             }
         }
 
-        // se ainda não existe memória para esta sala, cria
         MemoriaAlavanca nova = new MemoriaAlavanca(sala, numAlavancas);
         memoriasAlavancas.addToRear(nova);
         return nova;
@@ -288,7 +287,7 @@ public class Bot extends Player {
          */
         MemoriaAlavanca(Divisao sala, int numAlavancas) {
             this.sala = sala;
-            this.tentadas = new boolean[numAlavancas]; // tudo a false por defeito
+            this.tentadas = new boolean[numAlavancas];
         }
     }
     /**
@@ -342,6 +341,12 @@ public class Bot extends Player {
         return escolha;
     }
 
+    /**
+     * Selects a random target player whose position will be swapped with this bot.
+     * @param todosJogadores the list containing all players currently in the game
+     * @param view           the game view used to display the bot's decision messages
+     * @return the selected  Player to swap positions with
+     */
     @Override
     public Player escolherAlvoParaTroca(ArrayUnorderedList<Player> todosJogadores, GameView view) {
         if (todosJogadores.size() < 2) return null;
@@ -352,7 +357,6 @@ public class Bot extends Player {
         do {
             int indiceAleatorio = (int) (Math.random() * todosJogadores.size());
 
-            // Percorrer a lista para obter o jogador (necessário para ArrayUnorderedList)
             Iterator<Player> it = todosJogadores.iterator();
             alvoTroca = null;
             int idx = 0;

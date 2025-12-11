@@ -105,13 +105,13 @@ public class EventoAleatorio {
         Divisao[] posicoesOriginais = new Divisao[n];
         int i = 0;
 
-        // Guardar as posições atuais
+        // Guarda posições atuais
         for (Player j : jogadores) {
             posicoesOriginais[i] = j.getLocalAtual();
             i++;
         }
 
-        // Atribuir novas posições
+        // Atribui novas posições
         i = 0;
         for (Player j : jogadores) {
             Divisao novaPosicao = posicoesOriginais[(i + 1) % n];
@@ -119,7 +119,7 @@ public class EventoAleatorio {
             i++;
         }
 
-        // Após a troca marca limite de recuo em cada jogador
+        // define limite de recuo em cada jogador
         for (Player j : jogadores) {
             j.marcarLimiteRecuo();
         }
@@ -127,7 +127,6 @@ public class EventoAleatorio {
 
     /**
      * Swaps the position of the target player with a chosen other player.
-     * A escolha do alvo é delegada ao objeto Player/Bot.
      */
     private void trocarPosicaoComOutro(Player alvo, ArrayUnorderedList<Player> jogadores, GameView view) {
         if (jogadores.size() < 2) return;
@@ -146,7 +145,7 @@ public class EventoAleatorio {
         alvo.setLocalAtual(posOutro);
         alvoTroca.setLocalAtual(posAlvo);
 
-        // Marca limite de recuo para ambos
+        // Define limite de recuo para ambos
         alvo.marcarLimiteRecuo();
         alvoTroca.marcarLimiteRecuo();
 
@@ -177,11 +176,4 @@ public class EventoAleatorio {
         return descricao;
     }
 
-    /**
-     * Returns the intensity of this event.
-     * @return the event intensity
-     */
-    public int getIntensidade() {
-        return intensidade;
-    }
 }

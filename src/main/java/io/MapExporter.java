@@ -57,7 +57,6 @@ public class MapExporter {
         
         for (int i = 0; i < vertices.length; i++) {
             Divisao origem = (Divisao) vertices[i];
-            // CORREÇÃO: Usar ID
             String codOrigem = "S" + origem.getId();
             
             ArrayUnorderedList<Divisao> vizinhos = grafo.getVizinhos(origem);
@@ -91,14 +90,30 @@ public class MapExporter {
         //Escreve no ficheiro
         try (FileWriter writer = new FileWriter(nomeFicheiro)) {
             writer.write(json.toString());
-            System.out.println("💾 Mapa gravado com sucesso em: " + nomeFicheiro);
+            System.out.println("Mapa gravado com sucesso em: " + nomeFicheiro);
         } catch (IOException e) {
-            System.out.println("❌ Erro ao gravar o mapa: " + e.getMessage());
+            System.out.println("Erro ao gravar o mapa: " + e.getMessage());
         }
     }
 
     private String escapeJson(String text) {
         if (text == null) return "";
         return text.replace("\\", "\\\\").replace("\"", "\\\"");
+    }
+    /**
+     * Exports the given labyrinth graph to a DOT format file.
+     * @param grafo        the labyrinth graph to be exported as DOT
+     * @param nomeFicheiro the path and name of the output DOT file to create
+     */
+    public void exportarDot(LabyrinthGraph<Divisao> grafo, String nomeFicheiro) {
+        String dotContent = grafo.toDotString();
+
+        // Escreve no ficheiro
+        try (FileWriter writer = new FileWriter(nomeFicheiro)) {
+            writer.write(dotContent);
+            System.out.println("Mapa DOT gravado com sucesso em: " + nomeFicheiro);
+        } catch (IOException e) {
+            System.out.println("Erro ao gravar o mapa DOT: " + e.getMessage());
+        }
     }
 }

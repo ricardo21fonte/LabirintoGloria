@@ -185,7 +185,7 @@ public class GameInitializer {
             } while(opt < 1 || opt > 3);
             
             Dificuldade dif = (opt == 2) ? Dificuldade.MEDIO : (opt == 3) ? Dificuldade.DIFICIL : Dificuldade.FACIL;
-            Bot bot = new Bot("Bot_" + i, spawn, dif, labyrinthGraph);
+            Bot bot = new Bot("Bot " + i, spawn, dif, labyrinthGraph);
             
             turnQueue.enqueue(bot);
             listaGlobal.addToRear(bot);

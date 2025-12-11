@@ -29,7 +29,7 @@ public class Alavanca {
         efeitos[1] = AlavancaEnum.PENALIZAR;
         efeitos[2] = AlavancaEnum.NADA;
 
-        // Shuffle positions so the order is not always the same
+        // Shuffle positions
         baralhar();
     }
     /**
@@ -54,11 +54,6 @@ public class Alavanca {
                 return AlavancaEnum.NADA;
             }
             return efeitos[escolha - 1];
-        }
-
-
-        public int getNumAlavancas() {
-            return NUM_ALAVANCAS;
         }
 
 

@@ -24,13 +24,6 @@ public class GameView {
     }
 
     /**
-     * Closes the underlying input scanner.
-     */
-    public void fechar() {
-        scanner.close();
-    }
-
-    /**
      * Reads an integer from the input.
      * @return the integer read
      */
@@ -70,6 +63,7 @@ public class GameView {
      * Displays a message indicating that game resources are loading.
      */
     public void mostrarMensagemCarregar() {
+
         System.out.println("\n--- A CARREGAR RECURSOS DO JOGO ---");
     }
 
@@ -79,7 +73,7 @@ public class GameView {
      */
     public void mostrarErro(String mensagem) {
         System.out.println("\n ERRO: " + mensagem);
-        System.out.println("   (Verifique os dados e tente novamente)");}
+        System.out.println("Verifique os dados e tente novamente");}
     /**
      * Asks the user to choose the difficulty level for riddles.
      * @return the difficulty option chosen
@@ -96,7 +90,7 @@ public class GameView {
      * @param max maximum valid option
      */
     public void mostrarErroOpcaoInvalida(int min, int max) {
-        System.out.println(" Opção inválida. Escolha entre " + min + " e " + max + ".");
+        System.out.println("Opção inválida. Escolha entre " + min + " e " + max + ".");
     }
 
     /**
@@ -116,13 +110,6 @@ public class GameView {
     }
 
     /**
-     * Displays a warning indicating the game is full with human players and bots cannot be added.
-     */
-    public void mostrarAvisoJogoCheio() {
-        System.out.println("\n(O jogo está cheio com 8 humanos. Não é possível adicionar bots.)");
-    }
-
-    /**
      * Displays a message indicating there are no players and the game ends.
      */
     public void mostrarSemJogadores() {
@@ -133,7 +120,7 @@ public class GameView {
      * Displays the start-of-game banner.
      */
     public void mostrarInicioJogo() {
-        System.out.println("\n⚔️ QUE COMECE A CORRIDA! ⚔️");
+        System.out.println("\nQUE COMECE A CORRIDA!!!!️");
     }
 
     /**
@@ -161,7 +148,7 @@ public class GameView {
      * @param nomeSala the name of the starting room
      */
     public void mostrarSpawn(String nomeSala) {
-        System.out.println("   Spawn: " + nomeSala);
+        System.out.println("Spawn: " + nomeSala);
     }
 
     /**
@@ -190,11 +177,11 @@ public class GameView {
      * @param nomeSala the name of the room where the bot spawns
      */
     public void mostrarBotCriado(String nomeSala) {
-        System.out.println("   Bot criado no " + nomeSala);
+        System.out.println("Bot criado no " + nomeSala);
     }
 
 
-    // GAME LOOP (TURNOS E DADOS)
+    // GAME LOOP
 
     /**
      * Shows the header for the beginning of a player's turn.
@@ -203,8 +190,8 @@ public class GameView {
      */
     public void mostrarInicioTurno(String nome, String local) {
         System.out.println("\n================================================");
-        System.out.println(" VEZ DE: " + nome.toUpperCase());
-        System.out.println(" Local: " + local);
+        System.out.println("VEZ DE: " + nome.toUpperCase());
+        System.out.println("Local: " + local);
     }
 
     /**
@@ -214,11 +201,11 @@ public class GameView {
      */
     public void mostrarBloqueado(String nome, int turnos) {
         System.out.println( nome + " está bloqueado!");
-        System.out.println("   Faltam " + turnos + " turno(s) de bloqueio.");
+        System.out.println("Faltam " + turnos + " turno(s) de bloqueio.");
     }
 
     public void mostrarEscolhaAlvoTroca(ArrayUnorderedList<Player> jogadores, String nomeJogadorAtual) {
-        System.out.println("\n💥 EVENTO DE TROCA DE POSIÇÃO! Escolhe o jogador para trocar:");
+        System.out.println("\nEVENTO DE TROCA DE POSIÇÃO! Escolhe o jogador para trocar:");
         Iterator<Player> it = jogadores.iterator();
         int i = 1;
 
@@ -234,14 +221,14 @@ public class GameView {
      * Displays that a bot is about to roll the dice.
      */
     public void avisarBotLancaDados() {
-        System.out.println(" O Bot vai lançar os dados...");
+        System.out.println("O Bot vai lançar os dados...");
     }
 
     /**
      * Prompts a human player to press ENTER to roll the dice.
      */
     public void pedirHumanoLancaDados() {
-        System.out.println("🎲 Pressiona ENTER para lançar o dado...");
+        System.out.println("Pressiona ENTER para lançar o dado...");
         lerString(); 
     }
 
@@ -251,8 +238,8 @@ public class GameView {
      * @param valor dice value
      */
     public void mostrarResultadoDados(boolean isBot, int valor) {
-        if(isBot) System.out.println(" O Bot rolou um " + valor + "!");
-        else      System.out.println(" ROLASTE UM " + valor + "!");
+        if(isBot) System.out.println("O Bot lancou um " + valor + "!");
+        else      System.out.println("Lancaste um " + valor + "!");
     }
 
     /**
@@ -261,8 +248,8 @@ public class GameView {
      * @param total total movements allowed this turn
      */
     public void mostrarBonusJogadas(int extra, int total) {
-        System.out.println(" BÓNUS: tens " + extra + " movimento(s) extra acumulado(s)!");
-        System.out.println(" Total de movimentos neste turno: " + total);
+        System.out.println("BÓNUS: tens " + extra + " movimento(s) extra acumulado(s)!");
+        System.out.println("Total de movimentos neste turno: " + total);
     }
     /**
      * Shows movement status information, including remaining steps and current location.
@@ -272,7 +259,7 @@ public class GameView {
      */
     public void mostrarStatusMovimento(boolean isBot, int passos, String local) {
         if (isBot) {
-            System.out.println("\n [Bot] Passos: " + passos + " | Local: " + local);
+            System.out.println("\n[Bot] Passos: " + passos + " | Local: " + local);
         } else {
             System.out.println("\n--- Passos Restantes: " + passos + " ---");
             System.out.println("Estás em: " + local);
@@ -292,7 +279,7 @@ public class GameView {
      * @param nome winner's name
      */
     public void mostrarVencedor(String nome) {
-        System.out.println("\n VENCEDOR: " + nome + "! PARABÉNS! ");
+        System.out.println("\nVENCEDOR: " + nome + "! PARABÉNS! ");
     }
 
     /**
@@ -302,10 +289,6 @@ public class GameView {
         System.out.println("Obrigado por jogar!");
     }
 
-    // =======================================================
-    // MOVIMENTO E INTERAÇÕES
-    // =======================================================
-
     /**
      * Displays one movement option in a menu, representing a neighbour room.
      * @param indice   menu index
@@ -313,14 +296,15 @@ public class GameView {
      * @param tipoSala room type as a string
      */
     public void mostrarOpcaoMovimento(int indice, String nomeSala, String tipoSala) {
-        System.out.println("   [" + indice + "] Ir para: " + nomeSala + " (" + tipoSala + ")");
+        System.out.println("[" + indice + "] Ir para: " + nomeSala + " (" + tipoSala + ")");
     }
 
     /**
      * Displays the "stop" movement option.
      */
     public void mostrarOpcaoParar() {
-        System.out.println("   [0] Parar");
+
+        System.out.println("[0] Parar");
     }
 
     /**
@@ -337,7 +321,8 @@ public class GameView {
      * @param destino the name of the destination room
      */
     public void mostrarBotDecisao(String destino) {
-        System.out.println("   A avançar para: " + destino);
+
+        System.out.println("A avançar para: " + destino);
     }
 
     /**
@@ -345,24 +330,15 @@ public class GameView {
      * @param id the lock ID
      */
     public void mostrarPortaoTrancado(int id) {
-        System.out.println("   Portão Trancado (Tranca #" + id + ").");
-        System.out.println("   Ativa primeiro a Sala de Controlo #" + id + " com este jogador.");
-    }
-
-    /**
-     * Displays that the lock is already open for a given player.
-     * @param id   the lock ID
-     * @param nome player name
-     */
-    public void mostrarTrancaJaAberta(int id, String nome) {
-        System.out.println(" Tranca #" + id + " já foi desbloqueada para " + nome + ". Passas.");
+        System.out.println("Portão Trancado (Tranca #" + id + ").");
+        System.out.println("Ativa primeiro a Sala de Controlo #" + id + " com este jogador.");
     }
 
     /**
      * Displays a message indicating a trap was activated and the turn ends.
      */
     public void mostrarArmadilhaAtivada() {
-        System.out.println(" Armadilha ativada! Turno encerrado.");
+        System.out.println("Armadilha ativada! Turno encerrado.");
     }
 
     /**
@@ -373,7 +349,7 @@ public class GameView {
      */
     public void mostrarRecuo(String nomeJogador, int casas, String nomeNovaSala) {
         System.out.println( nomeJogador + " recuou " + casas + " casa(s)!");
-        System.out.println("  Nova Posição: " + nomeNovaSala);
+        System.out.println("Nova Posição: " + nomeNovaSala);
     }
 
     /**
@@ -383,21 +359,16 @@ public class GameView {
     public void mostrarAvisoSemRecuo(String nomeJogador) {
         System.out.println(nomeJogador + ": Tentativa de recuo cancelada Limite de recuo atingido.");
     }
-    // ENIGMAS
 
-    /**
-     * Displays a message indicating there is a riddle at the door.
-     */
-    public void mostrarEnigmaNaPorta() {
-        System.out.println("\n ENIGMA NA PORTA!");
-    }
+    // ENIGMAs
 
     /**
      * Displays the riddle question text.
      * @param p the question string
      */
     public void mostrarPergunta(String p) {
-        System.out.println("P: " + p);
+
+        System.out.println("Pergunta: " + p);
     }
 
     /**
@@ -406,7 +377,7 @@ public class GameView {
      * @param dif  difficulty description
      */
     public void mostrarBotAnalisaEnigma(String nome, String dif) {
-        System.out.println("  O Bot " + nome + " (" + dif + ") está a analisar o enigma...");
+        System.out.println("O Bot " + nome + " (" + dif + ") está a analisar o enigma...");
     }
 
     /**
@@ -448,21 +419,21 @@ public class GameView {
     }
     System.out.print("Efeito: ");
     if (efeito.equals("EXTRA_TURN")) {
-        System.out.println("ganhaste uma jogada extra!");
+        System.out.println("Ganhaste uma jogada extra!");
         return;
     }
     
     if (efeito.equals("BLOCK")) {
-        System.out.println("perdes o turno!");
+        System.out.println("Perdes o turno!");
         return;
     }
 
     if (efeito.startsWith("BONUS_MOVE:")) {
         try {
             int casas = Integer.parseInt(efeito.split(":")[1]);
-            System.out.println("avanças " + casas + " casa(s)!");
+            System.out.println("Avanças " + casas + " casa(s)!");
         } catch (Exception e) {
-            System.out.println("avanço bónus!");
+            System.out.println("Avanço bónus!");
         }
         return;
     }
@@ -475,28 +446,20 @@ public class GameView {
     if (efeito.startsWith("BACK:")) {
         try {
             int casas = Integer.parseInt(efeito.split(":")[1]);
-            System.out.println("recuas " + casas + " casa(s).");
+            System.out.println("Recuas " + casas + " casa(s).");
         } catch (Exception e) {
-            System.out.println("recuas algumas casas.");
+            System.out.println("Recuas algumas casas.");
         }
         return;
     }
 
     if (efeito.equals("BLOCK_EXTRA")) {
-        System.out.println("ficas bloqueado por mais 1 turno!");
+        System.out.println("Ficas bloqueado por mais 1 turno!");
         return;
     }
 
     System.out.println(efeito);
 
-    }
-
-    /**
-     * Displays a message showing how many movements the player now has.
-     * @param n current number of movements
-     */
-    public void mostrarGanhouMovimentos(int n) {
-        System.out.println("   (Tens agora " + n + " movimentos!)");
     }
 
     // ALAVANCAS
@@ -505,7 +468,7 @@ public class GameView {
      * Displays that the player entered a control room with 3 levers.
      */
     public void mostrarSalaAlavanca() {
-        System.out.println("\n SALA DE CONTROLO! Vês 3 Alavancas.");
+        System.out.println("\nSALA DE CONTROLO! Vês 3 Alavancas.");
         System.out.println("Uma abre O CAMINHO, outra penaliza, outra não faz nada.");
     }
 
@@ -532,6 +495,7 @@ public class GameView {
      * @param n the lever number
      */
     public void mostrarBotEscolheAlavanca(int n) {
+
         System.out.println("O Bot puxa a alavanca " + n);
     }
 
@@ -558,24 +522,6 @@ public class GameView {
                 System.out.println("Nada acontece. Alavanca inútil.");
                 break;
         }
-    }
-
-    /**
-     * Displays a header for the global game state section.
-     */
-    public void mostrarCabecalhoEstado() {
-        System.out.println("\n--- ESTADO ATUAL DO JOGO ---");
-    }
-
-    /**
-     * Displays the location of a player in a global state listing.
-     * @param nome    player name
-     * @param sala    current room name
-     * @param isAtivo true if this is the active player or false otherwise
-     */
-    public void mostrarLocalizacaoJogador(String nome, String sala, boolean isAtivo) {
-        String prefixo = isAtivo ? " 👉 " : "    "; // Seta aponta para quem vai jogar
-        System.out.println(prefixo + "👤 " + nome + " \t-> 📍 " + sala);
     }
 
 }

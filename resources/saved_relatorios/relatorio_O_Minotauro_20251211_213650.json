@@ -1,0 +1,38 @@
+{
+  "vencedor": "gdfdfdfd",
+  "dataHora": "2025-12-11T21:36:50.397115100",
+  "duracao": 22,
+  "mapaNome": "O_Minotauro",
+  "dificuldade": "MEDIO",
+  "totalEnigmasResolvidos": 6,
+  "totalEnigmasTentados": 13,
+  "totalObstaculos": 5,
+  "jogadores": [
+    {
+      "nome": "gdfdfdfd",
+      "tipo": "Humano",
+      "localAtual": "Trono do Minotauro",
+      "turnosJogados": 22,
+      "vencedor": true,
+      "percurso": ["Corredor das Sombras", "Corredor das Sombras", "O Guardião Cego", "Labirinto Interior A", "Corredor das Sombras", "Túnel Húmido", "Labirinto Interior A", "Sala da Chave de Ouro", "Labirinto Interior A", "Sala da Chave de Ouro", "Labirinto Interior A", "Sala da Chave de Ouro", "Labirinto Interior A", "O Esfinge de Pedra", "Labirinto Interior A", "Sala da Chave de Ouro", "Labirinto Interior A", "Sala da Chave de Ouro", "Labirinto Interior A", "Labirinto Interior B", "Sala das Runas", "Labirinto Interior B", "Sala da Chave de Prata", "O Oráculo", "Sala da Chave de Prata", "Trono do Minotauro"],
+      "obstaculos": ["Armadilha em Labirinto Interior A", "Armadilha em Labirinto Interior B", "Armadilha em Sala da Chave de Prata", "Armadilha em O Oráculo"],
+      "enigmas": [
+      ],
+      "efeitosAplicados": [],
+      "totalEnigmasResolvidos": 0
+    },
+    {
+      "nome": "Bot 1",
+      "tipo": "Bot",
+      "localAtual": "Sala da Chave de Prata",
+      "turnosJogados": 22,
+      "vencedor": false,
+      "percurso": ["O Guardião Cego", "Labirinto Interior A", "Sala da Chave de Ouro", "Labirinto Interior A", "Sala da Chave de Ouro", "O Guardião Cego", "Labirinto Interior A", "Sala da Chave de Ouro", "Labirinto Interior A", "Labirinto Interior B", "Labirinto Interior B", "Sala da Chave de Prata"],
+      "obstaculos": ["Armadilha em Labirinto Interior B"],
+      "enigmas": [
+      ],
+      "efeitosAplicados": [],
+      "totalEnigmasResolvidos": 0
+    }
+  ]
+}

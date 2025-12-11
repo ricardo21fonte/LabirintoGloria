@@ -2,10 +2,11 @@ package graph;
 
 import java.util.Iterator;
 
+import Graphs.GraphList;
 import Lists.ArrayUnorderedList;
 import enums.CorredorEvento;
+import game.Divisao;
 import game.EventoCorredor;
-import Graphs.GraphList;
 import structures.MapaNode;
 /**
  * Graph representation for the labyrinth game.
@@ -127,7 +128,6 @@ public class LabyrinthGraph<T> extends GraphList<T> {
         return vizinhos;
     }
 
-    //  MÉTODOS PARA ARMADILHAS
 
     /**
      * Updates the event of an existing edge, replacing the previous value.
@@ -157,7 +157,7 @@ public class LabyrinthGraph<T> extends GraphList<T> {
             while (it.hasNext()) {
                 MapaNode<Integer, EventoCorredor> node = it.next();
                 if (node.getKey().equals(indexDestino)) {
-                    node.setValue(novoEvento); // Substitui o evento antigo pelo novo
+                    node.setValue(novoEvento);
                     return;
                 }
             }
@@ -174,7 +174,7 @@ public class LabyrinthGraph<T> extends GraphList<T> {
         EventoCorredor armadilha = getCorredorEvento(v1, v2);
 
         setCorredorEvento(v1, v2, new EventoCorredor(CorredorEvento.NONE, 0));
-        System.out.println("   👻 A armadilha desapareceu deste corredor...");
+        System.out.println("A armadilha desapareceu deste corredor...");
 
         int tentativas = 50;
         while (tentativas > 0) {
@@ -192,17 +192,133 @@ public class LabyrinthGraph<T> extends GraphList<T> {
                 for(int k=0; k<randViz; k++) it.next();
                 T vizinhoAleatorio = it.next();
                 
-                // Verifica se este corredor está vazio
+                // Verifica se corredor está vazio
                 EventoCorredor ev = getCorredorEvento(salaAleatoria, vizinhoAleatorio);
 
                 if (ev.getTipo() == CorredorEvento.NONE) {
                     setCorredorEvento(salaAleatoria, vizinhoAleatorio, armadilha);
-                    System.out.println("  ...e mudou-se para o corredor entre [" + salaAleatoria.toString() + "] e [" + vizinhoAleatorio.toString() + "]!");
+                    System.out.println("Mudou-se para um corredor novo!");
                     return;
                 }
             }
             tentativas--;
         }
-        System.out.println("   (A armadilha dissipou-se e não encontrou novo lugar).");
+        System.out.println("(A armadilha não encontrou lugar).");
+    }
+    /**
+     * Builds and returns a DOT language representation of the labyrinth graph.
+     * @return a String containing the DOT representation of this graph
+     */
+    public String toDotString() {
+        StringBuilder dot = new StringBuilder();
+        dot.append("digraph Labyrinth {\n");
+        dot.append("    rankdir=LR;\n"); // Layout da esquerda para a direita (opcional)
+        dot.append("    node [style=filled, fontname=\"Arial\"];\n"); // Estilo de nó padrão
+
+        Object[] salas = getVertices();
+
+        // 1. Definição
+        for (Object v : salas) {
+            Divisao sala = (Divisao) v;
+            String dotId = "S" + sala.getId();
+            String label = escapeDot(sala.getNome());
+            String cor = "white";
+            String forma = "box";
+
+            //Estilos
+            switch (sala.getTipo()) {
+                case ENTRADA:
+                    cor = "greenyellow";
+                    break;
+                case SALA_CENTRAL:
+                    cor = "gold";
+                    forma = "doublecircle";
+                    break;
+                case SALA_ALAVANCA:
+                    cor = "lightblue";
+                    forma = "box";
+                    if (sala.getIdDesbloqueio() != -1) {
+                        label += " (Chave #" + sala.getIdDesbloqueio() + ")";
+                    }
+                    break;
+                case SALA_ENIGMA:
+                    cor = "orange";
+                    forma = "diamond";
+                    break;
+                default:
+                    cor = "whitesmoke";
+                    break;
+            }
+
+            dot.append("    ").append(dotId)
+                    .append(" [label=\"").append(label)
+                    .append("\", shape=").append(forma)
+                    .append(", fillcolor=").append(cor)
+                    .append("];\n");
+        }
+
+        // corredores
+        for (int i = 0; i < numVertices; i++) {
+            T verticeOrigem = vertices[i];
+            Divisao origem = (Divisao) verticeOrigem;
+
+            String codOrigem = "S" + origem.getId();
+
+            Lists.ArrayUnorderedList<T> vizinhos = getVizinhos(verticeOrigem);
+            java.util.Iterator<T> itViz = vizinhos.iterator();
+
+            while (itViz.hasNext()) {
+                T verticeDestino = itViz.next();
+                Divisao destino = (Divisao) verticeDestino;
+
+                if (origem.getId() < destino.getId()) {
+                    String codDestino = "S" + destino.getId();
+
+                    EventoCorredor evento = getCorredorEvento(verticeOrigem, verticeDestino);
+                    String corLinha = "black";
+                    String estilo = "solid";
+                    String label = "";
+
+                    switch (evento.getTipo()) {
+                        case LOCKED:
+                            corLinha = "red";
+                            estilo = "bold";
+                            label = " Tranca #" + evento.getValor() + " ";
+                            break;
+                        case MOVE_BACK:
+                            corLinha = "darkred";
+                            estilo = "dashed";
+                            label = " Recuo (" + evento.getValor() + "c) ";
+                            break;
+                        case BLOCK_TURN:
+                            corLinha = "purple";
+                            estilo = "dashed";
+                            label = " Bloqueio ";
+                            break;
+                        default:
+
+                            break;
+                    }
+
+                    dot.append("    ").append(codOrigem).append(" -> ").append(codDestino)
+                            .append(" [color=\"").append(corLinha).append("\"")
+                            .append(", style=\"").append(estilo).append("\"")
+                            .append(", label=\"").append(label).append("\"")
+                            .append("];\n");
+                }
+            }
+        }
+
+        dot.append("}\n");
+        return dot.toString();
+    }
+    /**
+     * Escapes a text string so it is safe to use as a DOT node or edge label.
+     * @param text the original text to escape; may be {@code null}
+     * @return the escaped text, or an empty string if {@code text} is {@code null}
+     */
+    private String escapeDot(String text) {
+        if (text == null) return "";
+        return text.replace("\"", "\\\"");
     }
 }

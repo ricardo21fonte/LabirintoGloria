@@ -103,12 +103,11 @@ public class MapLoader {
 
             JSONArray ligacoes = (JSONArray) jsonObject.get("ligacoes");
             if (ligacoes == null) {
-                // Sem ligações ainda é um mapa válido, só isolado
-                System.out.println("AVISO: mapa sem 'ligacoes'.");
+                System.out.println("AVISO: mapa sem ligacoes.");
             } else {
                 for (Object l : ligacoes) {
                     if (!(l instanceof JSONObject)) {
-                        System.out.println("AVISO: entrada em 'ligacoes' inválida. Ignorada.");
+                        System.out.println("AVISO: entrada sem ligacoes inválida. Ignorada.");
                         continue;
                     }
 
@@ -120,7 +119,7 @@ public class MapLoader {
                     Object valObj = lig.get("valor");
 
                     if (origem == null || destino == null) {
-                        System.out.println("AVISO: ligação sem 'origem' ou 'destino'. Ignorada: " + lig);
+                        System.out.println("AVISO: ligação sem origem ou destino. Ignorada: " + lig);
                         continue;
                     }
 

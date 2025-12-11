@@ -1,0 +1,51 @@
+{
+  "vencedor": "Bot 3",
+  "dataHora": "2025-12-11T21:25:57.273337",
+  "duracao": 20,
+  "mapaNome": "A_Tortura",
+  "dificuldade": "MEDIO",
+  "totalEnigmasResolvidos": 10,
+  "totalEnigmasTentados": 20,
+  "totalObstaculos": 4,
+  "jogadores": [
+    {
+      "nome": "Bot 1",
+      "tipo": "Bot",
+      "localAtual": "A Esfinge",
+      "turnosJogados": 20,
+      "vencedor": false,
+      "percurso": ["Sala das Sombras", "Poço Sem Fundo", "Sala das Sombras", "Corredor dos Espinhos", "Poço Sem Fundo", "Poço Sem Fundo", "Poço Sem Fundo", "A Esfinge"],
+      "obstaculos": ["Armadilha em Poço Sem Fundo"],
+      "enigmas": [
+      ],
+      "efeitosAplicados": [],
+      "totalEnigmasResolvidos": 0
+    },
+    {
+      "nome": "Bot 2",
+      "tipo": "Bot",
+      "localAtual": "Poço Sem Fundo",
+      "turnosJogados": 20,
+      "vencedor": false,
+      "percurso": ["Sala das Sombras", "Ponte Quebrada", "Corredor dos Espinhos", "Poço Sem Fundo", "Poço Sem Fundo"],
+      "obstaculos": ["Armadilha em Poço Sem Fundo"],
+      "enigmas": [
+      ],
+      "efeitosAplicados": [],
+      "totalEnigmasResolvidos": 0
+    },
+    {
+      "nome": "Bot 3",
+      "tipo": "Bot",
+      "localAtual": "O Trono da Agonia",
+      "turnosJogados": 20,
+      "vencedor": true,
+      "percurso": ["Poço Sem Fundo", "A Esfinge", "Poço Sem Fundo", "A Esfinge", "Poço Sem Fundo", "Poço Sem Fundo", "A Esfinge", "O Enigma Final", "A Esfinge", "Poço Sem Fundo", "A Esfinge", "O Enigma Final", "A Esfinge", "O Enigma Final", "O Trono da Agonia"],
+      "obstaculos": ["Armadilha em O Enigma Final", "Armadilha em O Enigma Final"],
+      "enigmas": [
+      ],
+      "efeitosAplicados": [],
+      "totalEnigmasResolvidos": 0
+    }
+  ]
+}

@@ -6,19 +6,28 @@ import java.io.IOException;
 import java.time.format.DateTimeFormatter;
 import java.util.Iterator; 
 
-import Lists.ArrayUnorderedList; 
-
+import Lists.ArrayUnorderedList;
+/**
+ * Responsible for exporting a GameReport to a JSON file.
+ */
 public class GameExporter {
-    
-    // --- MUDANÇA 1: Nova pasta para relatórios ---
+    /**
+     * Directory where exported game reports will be stored.
+     */
     private static final String RELATORIOS_DIR = "resources/saved_relatorios";
-    
+    /**
+     * Formatter used to convert the date/time of the game into a compact string for the file name.
+     */
     private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("yyyyMMdd_HHmmss");
-
+    /**
+     * Creates a new GameExporter
+     */
     public GameExporter() {
         ensureDirectory();
     }
-
+    /**
+     * Ensures that the directory defined exists.
+     */
     private void ensureDirectory() {
         File dir = new File(RELATORIOS_DIR);
         if (!dir.exists()) {
@@ -27,17 +36,18 @@ public class GameExporter {
             }
         }
     }
-
-    public void exportarJogo(GameReport report) {
-        if (report == null) {
+    /**
+     * Exports the given GameReport to a JSON file.
+     */
+     public void exportarJogo(GameReport report) {
+            if (report == null) {
             System.out.println("Erro: Relatório nulo.");
             return;
         }
 
         try {
             String timestamp = report.getDataHora().format(FORMATTER);
-            
-            // --- MUDANÇA 2: Usar o nome do mapa no ficheiro ---
+
             String nomeMapaLimpo = report.getMapaNome().replaceAll("[^a-zA-Z0-9.-]", "_");
             
             String filename = RELATORIOS_DIR + File.separator + "relatorio_" + nomeMapaLimpo + "_" + timestamp + ".json";
@@ -54,11 +64,11 @@ public class GameExporter {
         }
     }
 
-    // ... (MANTÉM O RESTO DO MÉTODO generateJSON e escapeJson IGUAIS AO QUE ME MOSTRASTE) ...
-    // O teu método generateJSON já está correto (tem o totalEnigmasTentados).
-    // Só precisas de copiar o resto do ficheiro aqui para baixo.
-    
-    private String generateJSON(GameReport report) {
+
+    /**
+     * Generates the JSON representation of the given GameReport.
+     */
+     private String generateJSON(GameReport report) {
         StringBuilder json = new StringBuilder();
         json.append("{\n");
         json.append("  \"vencedor\": \"").append(escapeJson(report.getVencedor())).append("\",\n");

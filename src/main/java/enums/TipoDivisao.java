@@ -1,6 +1,8 @@
 package enums;
-
-public enum TipoDivisao {
+/**
+ * Represents the type of an division in the labyrinth map.
+ */
+ public enum TipoDivisao {
     ENTRADA,
     SALA_NORMAL,
     SALA_ENIGMA,

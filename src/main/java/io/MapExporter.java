@@ -9,36 +9,36 @@ import game.Divisao;
 import game.EventoCorredor;
 import graph.LabyrinthGraph;
 
+/**
+ * Class responsible for exporting a LabyrinthGraph to a JSON file.
+ */
 public class MapExporter {
 
     /**
-     * Grava o grafo atual num ficheiro JSON.
-     * @param grafo O labirinto a gravar.
-     * @param nomeMapa O nome interno do mapa (ex: "Mapa Gerado 1").
-     * @param nomeFicheiro O caminho do ficheiro (ex: "meu_mapa.json").
+     * Exports the labyrinth graph to a JSON file.
+     * @param grafo       the labyrinth graph to export
+     * @param nomeMapa    the logical/visible name of the map
+     * @param nomeFicheiro the output file path/name
      */
     public void exportarMapa(LabyrinthGraph<Divisao> grafo, String nomeMapa, String nomeFicheiro) {
         StringBuilder json = new StringBuilder();
         
         json.append("{\n");
         json.append("  \"nome\": \"").append(escapeJson(nomeMapa)).append("\",\n");
-        
-        // --- 1. GRAVAR SALAS ---
+
         json.append("  \"salas\": [\n");
         
         Object[] vertices = grafo.getVertices();
         for (int i = 0; i < vertices.length; i++) {
             Divisao sala = (Divisao) vertices[i];
-            
-            // CORREÇÃO: Usar o ID sequencial da classe Divisao
+
             String codigo = "S" + sala.getId(); 
             
             json.append("    { ");
             json.append("\"codigo\": \"").append(codigo).append("\", ");
             json.append("\"tipo\": \"").append(sala.getTipo().toString()).append("\", ");
             json.append("\"nome\": \"").append(escapeJson(sala.getNome())).append("\"");
-            
-            // Se for sala de alavanca, gravar o ID que desbloqueia
+
             if (sala.getIdDesbloqueio() != -1) {
                  json.append(", \"idDesbloqueio\": ").append(sala.getIdDesbloqueio());
             }
@@ -50,7 +50,7 @@ public class MapExporter {
         }
         json.append("  ],\n");
 
-        // --- 2. GRAVAR LIGAÇÕES ---
+        //Grava Ligacao
         json.append("  \"ligacoes\": [\n");
         
         boolean primeiraLigacao = true;
@@ -65,11 +65,9 @@ public class MapExporter {
             
             while (itViz.hasNext()) {
                 Divisao destino = itViz.next();
-                // CORREÇÃO: Usar ID
                 String codDestino = "S" + destino.getId();
-                
-                // Evitar duplicados gravando apenas se o ID da origem for menor que o do destino
-                if (origem.getId() < destino.getId()) {
+
+                if (origem.compareTo(destino) < 0) {
                     
                     if (!primeiraLigacao) json.append(",\n");
                     
@@ -90,10 +88,9 @@ public class MapExporter {
         json.append("\n  ]\n");
         json.append("}");
 
-        // --- 3. ESCREVER NO FICHEIRO ---
+        //Escreve no ficheiro
         try (FileWriter writer = new FileWriter(nomeFicheiro)) {
             writer.write(json.toString());
-            // Idealmente aqui não farias print, mas para manter a consistência com o resto do teu código:
             System.out.println("💾 Mapa gravado com sucesso em: " + nomeFicheiro);
         } catch (IOException e) {
             System.out.println("❌ Erro ao gravar o mapa: " + e.getMessage());

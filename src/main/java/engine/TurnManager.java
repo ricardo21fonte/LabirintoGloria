@@ -4,38 +4,42 @@ import Queue.LinkedQueue;
 import game.Bot;
 import game.Player;
 import ui.GameView;
-
+/**
+ * Manages the turn order of the game.
+ */
 public class TurnManager {
+    /** Queue that stores the players in turn order. */
     private LinkedQueue<Player> fila;
+
+    /** View used to show messages and ask for input. */
     private GameView view;
 
+    /**
+     * Creates a TurnManager with the given queue and view.
+     * @param fila queue that holds all players participating in the game
+     * @param view UI component used for feedback and pauses between turns
+     */
     public TurnManager(LinkedQueue<Player> fila, GameView view) {
         this.fila = fila;
         this.view = view;
     }
 
     /**
-     * Retorna o próximo jogador APTO a jogar.
-     * Se um jogador estiver bloqueado, processa o bloqueio e passa ao próximo.
+     * Returns the next player allowed to play.
+     * @return the next Player that can act this turn
      */
     public Player proximoJogador() {
         if (fila.isEmpty()) return null;
 
         Player p = null;
         try {
-            // Tenta tirar o próximo
             p = fila.dequeue();
 
-            // Lógica de bloqueio (Loop até achar um desbloqueado ou a fila rodar toda)
             while (p.isBloqueado()) {
                 view.mostrarBloqueado(p.getNome(), p.getTurnosBloqueado());
                 p.consumirUmTurnoBloqueado();
-                
-                // Volta para o fim da fila
                 fila.enqueue(p);
-                pausa(p); // Pequena pausa visual
-
-                // Tenta o próximo
+                pausa(p);
                 if (fila.isEmpty()) return null;
                 p = fila.dequeue();
             }
@@ -44,17 +48,25 @@ public class TurnManager {
         }
         return p;
     }
-
+    /**
+     * Should be called at the end of a player's turn.
+     * @param p the player whose turn has just finished
+     */
     public void fimDoTurno(Player p) {
         fila.enqueue(p);
         pausa(p);
     }
-
+    /**
+     * Checks whether there are still players in the turn queue.
+     * @return true if there is at least one player waiting,
+     */
     public boolean temJogadores() {
         return !fila.isEmpty();
     }
-    
-    // Método auxiliar de pausa (movido do Engine)
+    /**
+     * Method to add a short pause between turns.
+     * @param p the player whose context defines the type of pause
+     */
     private void pausa(Player p) {
         if (p instanceof Bot) {
             try { Thread.sleep(1000); } catch (Exception e) {}

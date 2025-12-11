@@ -172,13 +172,13 @@ public class Player {
     /**
      * Moves the player backwards along the path by a given number of steps.
      * @param casas number of steps to move back
+     * @param view  the view used to display feedback about the recoil action
      */
     public void recuar(int casas, GameView view) {
         Divisao posicaoInicial = getLocalAtual();
         int passosRealizados = 0;
 
         if (caminho == null || caminho.size() <= limiteRecuoMinSize) {
-            // Se já está no limite de recuo, não recua mais
             view.mostrarAvisoSemRecuo(this.nome);
             return;
         }
@@ -198,13 +198,10 @@ public class Player {
             Divisao novaPosicao = caminho.peek();
             this.localAtual = novaPosicao;
             historico.addToRear("Recuou para: " + novaPosicao.getNome());
-
-            // 💡 CHAMADA À VIEW PARA MOSTRAR O RESULTADO
             view.mostrarRecuo(this.nome, casas, novaPosicao.getNome());
 
         } catch (EmptyCollectionException e) {
-            // Não deve acontecer se a verificação de limite foi bem feita
-            this.localAtual = posicaoInicial; // Fica onde estava se der erro
+            this.localAtual = posicaoInicial;
             view.mostrarAvisoSemRecuo(this.nome);
         }
     }
@@ -249,7 +246,7 @@ public class Player {
     public boolean podePassarTranca(int id) {
         Iterator<Integer> it = trancasDesbloqueadas.iterator();
         while (it.hasNext()) {
-            if (it.next() == id) return true;
+            if (it.next().equals(id)) return true;
         }
         return false;
     }

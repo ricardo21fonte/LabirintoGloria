@@ -71,6 +71,13 @@ public class GameView {
     }
 
     /**
+     * Displays the error messages
+     * @param mensagem display error message
+     */
+    public void mostrarErro(String mensagem) {
+        System.out.println("\n ERRO: " + mensagem);
+        System.out.println("   (Verifique os dados e tente novamente)");}
+    /**
      * Asks the user to choose the difficulty level for riddles.
      * @return the difficulty option chosen
      */
@@ -102,7 +109,7 @@ public class GameView {
      * Displays an error indicating that the map has no entrance rooms.
      */
     public void mostrarErroSemEntradas() {
-        System.out.println("❌ Erro: O mapa não tem Entradas!");
+        System.out.println("Erro: O mapa não tem Entradas!");
     }
 
     /**
@@ -342,15 +349,23 @@ public class GameView {
         System.out.println("⛔ Armadilha ativada! Turno encerrado.");
     }
 
-    
+    /**
+     * Displays a message indicating that a player has moved backwards
+     * @param nomeJogador  the name of the player who moved back
+     * @param casas        how many tiles the player moved back
+     * @param nomeNovaSala the name of the room where the player ended up
+     */
     public void mostrarRecuo(String nomeJogador, int casas, String nomeNovaSala) {
         System.out.println("🔙 " + nomeJogador + " recuou " + casas + " casa(s)!");
         System.out.println("   📍 Nova Posição: " + nomeNovaSala);
     }
 
-    // Também pode ser útil para penalidades
+    /**
+     * Displays a warning indicating that a backward move was cancelled
+     * @param nomeJogador the name of the player who attempted to move back
+     */
     public void mostrarAvisoSemRecuo(String nomeJogador) {
-        System.out.println("⚠️ " + nomeJogador + ": Tentativa de recuo cancelada (Limite de recuo atingido).");
+        System.out.println("⚠️ " + nomeJogador + ": Tentativa de recuo cancelada Limite de recuo atingido.");
     }
     // ENIGMAS
 
@@ -412,7 +427,6 @@ public class GameView {
      */
 
     public void mostrarEfeito(String efeito) {
-    // 1. Se não houver efeito, sai logo
     if (efeito == null || efeito.equals("NONE")) {
         return; 
     }
@@ -457,37 +471,60 @@ public class GameView {
         return;
     }
 
-    System.out.println(efeito); 
-}
+    System.out.println(efeito);
 
+    }
+
+    /**
+     * Displays a message showing how many movements the player now has.
+     * @param n current number of movements
+     */
     public void mostrarGanhouMovimentos(int n) {
         System.out.println("   (Tens agora " + n + " movimentos!)");
     }
 
-    // =======================================================
     // ALAVANCAS
-    // =======================================================
 
+    /**
+     * Displays that the player entered a control room with 3 levers.
+     */
     public void mostrarSalaAlavanca() {
         System.out.println("\n⚙️ SALA DE CONTROLO! Vês 3 Alavancas.");
         System.out.println("   Uma abre O CAMINHO, outra penaliza, outra não faz nada.");
     }
 
+    /**
+     * Displays the 3 lever options in a menu.
+     */
     public void mostrarOpcoesAlavanca() {
         System.out.println("[1] Alavanca 1");
         System.out.println("[2] Alavanca 2");
         System.out.println("[3] Alavanca 3");
     }
 
+    /**
+     * Asks the player to choose a lever.
+     * @return the lever number chosen
+     */
     public int pedirAlavanca() {
         System.out.print("Escolhe (1-3): ");
         return lerInteiro();
     }
 
+    /**
+     * Displays which lever was chosen by a bot.
+     * @param n the lever number
+     */
     public void mostrarBotEscolheAlavanca(int n) {
         System.out.println("🤖 O Bot puxa a alavanca " + n);
     }
 
+    /**
+     * Displays the result of pulling a lever, including lock info and player name.
+     * @param res     result type of the lever (effect)
+     * @param idTranca ID of the lock that may be opened, if any
+     * @param nomeJog name of the player that pulled the lever
+     */
     public void mostrarResultadoAlavanca(AlavancaEnum res, int idTranca, String nomeJog) {
         switch (res) {
             case ABRIR_PORTA:
@@ -506,14 +543,21 @@ public class GameView {
                 break;
         }
     }
-    // =======================================================
-    // ESTADO GLOBAL (VISUALIZAÇÃO EXTRA)
-    // =======================================================
 
+    // ESTADO GLOBAL (VISUALIZAÇÃO EXTRA)
+    /**
+     * Displays a header for the global game state section.
+     */
     public void mostrarCabecalhoEstado() {
         System.out.println("\n--- 🌍 ESTADO ATUAL DO JOGO ---");
     }
 
+    /**
+     * Displays the location of a player in a global state listing.
+     * @param nome    player name
+     * @param sala    current room name
+     * @param isAtivo true if this is the active player or false otherwise
+     */
     public void mostrarLocalizacaoJogador(String nome, String sala, boolean isAtivo) {
         String prefixo = isAtivo ? " 👉 " : "    "; // Seta aponta para quem vai jogar
         System.out.println(prefixo + "👤 " + nome + " \t-> 📍 " + sala);

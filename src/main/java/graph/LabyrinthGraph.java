@@ -7,25 +7,32 @@ import enums.CorredorEvento;
 import game.EventoCorredor;
 import Graphs.GraphList;
 import structures.MapaNode;
-
+/**
+ * Graph representation for the labyrinth game.
+ * @param <T> the type of vertices stored in the labyrinth graph
+ */
 public class LabyrinthGraph<T> extends GraphList<T> {
 
-    // Índice = origem, lista tem pares <destino, evento>
+    /**
+     * For each vertex index, stores a list of key-value pairs where:
+     */
     private ArrayUnorderedList<MapaNode<Integer, EventoCorredor>>[] edgeEvents;
-
+    /**
+     * Creates an empty LabyrinthGraph
+     */
     public LabyrinthGraph() {
         super();
         this.edgeEvents = (ArrayUnorderedList<MapaNode<Integer, EventoCorredor>>[]) new ArrayUnorderedList[DEFAULT_CAPACITY];
     }
-
+    /**
+     * Expands the storage capacity when the number of vertices is reached
+     */
     @Override
     protected void expandCapacity() {
-        // Deixa o GraphList aumentar vertices / adjLists
         super.expandCapacity();
 
         ArrayUnorderedList<MapaNode<Integer, EventoCorredor>>[] largerEdgeEvents = (ArrayUnorderedList<MapaNode<Integer, EventoCorredor>>[]) new ArrayUnorderedList[vertices.length];
 
-        // copiar existentes
         for (int i = 0; i < edgeEvents.length; i++) {
             largerEdgeEvents[i] = edgeEvents[i];
         }
@@ -33,7 +40,12 @@ public class LabyrinthGraph<T> extends GraphList<T> {
         edgeEvents = largerEdgeEvents;
     }
 
-    // Adiciona corredor com evento (nos dois sentidos)
+    /**
+     * Adds an undirected edge between two vertices, associating the same event with both directions.
+     * @param vertex1 the first vertex
+     * @param vertex2 the second vertex
+     * @param event   the corridor event to associate with this edge
+     */
     public void addCorridor(T vertex1, T vertex2, EventoCorredor event) {
         super.addEdge(vertex1, vertex2);
 
@@ -44,6 +56,12 @@ public class LabyrinthGraph<T> extends GraphList<T> {
         adicionarEventoUnico(index2, index1, event); // bidirecional
     }
 
+    /**
+     * Associates a edge event from one origin vertex index to a destination index.
+     * @param origem  the origin vertex index
+     * @param destino the destination vertex index
+     * @param event   the event to be stored
+     */
     private void adicionarEventoUnico(int origem, int destino, EventoCorredor event) {
         if (edgeEvents[origem] == null) {
             edgeEvents[origem] = new ArrayUnorderedList<>();
@@ -53,7 +71,12 @@ public class LabyrinthGraph<T> extends GraphList<T> {
         edgeEvents[origem].addToRear(node);
     }
 
-    // Retorna o evento associado a um corredor específico
+    /**
+     * Returns the event associated with a specific edge between two vertices.
+     * @param vertex1 the first vertex
+     * @param vertex2 the second vertex
+     * @return the EventoCorredor associated with the corridor
+     */
     public EventoCorredor getCorredorEvento(T vertex1, T vertex2) {
         int index1 = getIndex(vertex1);
         int index2 = getIndex(vertex2);
@@ -70,10 +93,13 @@ public class LabyrinthGraph<T> extends GraphList<T> {
             }
         }
 
-        // se não tiver evento específico, é seguro
         return new EventoCorredor(CorredorEvento.NONE, 0);
     }
 
+    /**
+     * Returns the current vertices array,
+     * @return an Object containing all vertices stored in the graph
+     */
     public Object[] getVertices() {
         Object[] verticesCopia = new Object[numVertices];
         for (int i = 0; i < numVertices; i++) {
@@ -82,13 +108,17 @@ public class LabyrinthGraph<T> extends GraphList<T> {
         return verticesCopia;
     }
 
+    /**
+     * Returns all neighbours of a given vertex as a list.
+     * @param sala the vertex whose neighbours are requested
+     * @return an ArrayUnorderedList with all adjacent vertices
+     */
     public Lists.ArrayUnorderedList<T> getVizinhos(T sala) {
         Lists.ArrayUnorderedList<T> vizinhos = new Lists.ArrayUnorderedList<>();
         int index = getIndex(sala);
 
         if (!indexIsValid(index)) return vizinhos;
 
-        // Nota: adjLists vem da classe pai GraphList
         java.util.Iterator<Integer> it = adjLists[index].iterator();
         while (it.hasNext()) {
             int vizinhoIndex = it.next();
@@ -97,24 +127,30 @@ public class LabyrinthGraph<T> extends GraphList<T> {
         return vizinhos;
     }
 
-    // =========================================================================
-    //  MÉTODOS PARA ARMADILHAS DINÂMICAS (ATUALIZAÇÃO E RELOCALIZAÇÃO)
-    // =========================================================================
+    //  MÉTODOS PARA ARMADILHAS
 
     /**
-     * Atualiza o evento de um corredor existente (substitui o valor antigo).
+     * Updates the event of an existing edge, replacing the previous value.
+
+     * @param vertex1    the first endpoint of the edge
+     * @param vertex2    the second endpoint of the edge
+     * @param novoEvento the new edge event to set
      */
     public void setCorredorEvento(T vertex1, T vertex2, EventoCorredor novoEvento) {
         int index1 = getIndex(vertex1);
         int index2 = getIndex(vertex2);
 
         if (indexIsValid(index1) && indexIsValid(index2)) {
-            // Atualizar nos dois sentidos (Grafo não direcionado)
             atualizarEventoUnico(index1, index2, novoEvento);
             atualizarEventoUnico(index2, index1, novoEvento);
         }
     }
-
+    /**
+     * Updates the event associated with an edge from one origin index to a destination index.
+     * @param indexOrigem origin vertex index
+     * @param indexDestino destination vertex index
+     * @param novoEvento the new event to assign to that edge
+     */
     private void atualizarEventoUnico(int indexOrigem, int indexDestino, EventoCorredor novoEvento) {
         if (edgeEvents[indexOrigem] != null) {
             Iterator<MapaNode<Integer, EventoCorredor>> it = edgeEvents[indexOrigem].iterator();
@@ -129,20 +165,20 @@ public class LabyrinthGraph<T> extends GraphList<T> {
     }
 
     /**
-     * Move uma armadilha do corredor atual para um corredor aleatório livre.
+     * Relocates a trap from the given edge to a random safe edge.
+     * @param v1 the first vertex of the original edge
+     * @param v2 the second vertex of the original edge
      */
     public void relocalizarArmadilha(T v1, T v2) {
-        // 1. Guardar a armadilha que estava aqui (para a pôr noutro lado)
+
         EventoCorredor armadilha = getCorredorEvento(v1, v2);
-        
-        // 2. Limpar o corredor atual (Define como NONE - Seguro)
+
         setCorredorEvento(v1, v2, new EventoCorredor(CorredorEvento.NONE, 0));
         System.out.println("   👻 A armadilha desapareceu deste corredor...");
 
-        // 3. Encontrar um novo sítio aleatório para a armadilha
-        int tentativas = 50; // Limite para evitar loops infinitos se o mapa estiver cheio
+        int tentativas = 50;
         while (tentativas > 0) {
-            // Escolhe uma sala aleatória (origem)
+            // Escolhe uma sala aleatória
             int idx1 = (int)(Math.random() * numVertices);
             T salaAleatoria = vertices[idx1];
             
@@ -150,20 +186,19 @@ public class LabyrinthGraph<T> extends GraphList<T> {
             ArrayUnorderedList<T> vizinhos = getVizinhos(salaAleatoria);
             
             if (!vizinhos.isEmpty()) {
-                // Escolhe um vizinho aleatório (destino)
+                // Escolhe um vizinho aleatório
                 int randViz = (int)(Math.random() * vizinhos.size());
                 Iterator<T> it = vizinhos.iterator();
-                for(int k=0; k<randViz; k++) it.next(); // Avança até ao índice sorteado
+                for(int k=0; k<randViz; k++) it.next();
                 T vizinhoAleatorio = it.next();
                 
-                // Verifica se este corredor está vazio (seguro)
+                // Verifica se este corredor está vazio
                 EventoCorredor ev = getCorredorEvento(salaAleatoria, vizinhoAleatorio);
-                
-                // Só muda a armadilha para aqui se for NONE (não sobrepõe trancas ou outras armadilhas)
+
                 if (ev.getTipo() == CorredorEvento.NONE) {
                     setCorredorEvento(salaAleatoria, vizinhoAleatorio, armadilha);
                     System.out.println("   👻 ...e mudou-se para o corredor entre [" + salaAleatoria.toString() + "] e [" + vizinhoAleatorio.toString() + "]!");
-                    return; // Sucesso, saímos do método
+                    return;
                 }
             }
             tentativas--;

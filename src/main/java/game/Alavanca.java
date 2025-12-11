@@ -45,9 +45,7 @@ public class Alavanca {
     }
 
     /**
-     * Activates one of the levers based on the player's choice and returns
-     * the corresponding effect.
-     *
+     * Activates one of the levers based on the player's choice
      * @param escolha the lever number chosen by the player;
      * @return the  effect associated with the chosen lever;
      */

@@ -1,10 +1,12 @@
 package enums;
-
+/**
+ * Represents the type of events that can occur on the way to a divison.
+ */
 public enum CorredorEvento {
-    NONE,           // Nada acontece
-    EXTRA_TURN,     // Ganhar jogada extra
-    SWAP_POSITION,  // Trocar com outro jogador
-    MOVE_BACK,      // Recuar casas
+    NONE,
+    EXTRA_TURN,
+    SWAP_POSITION,
+    MOVE_BACK,
     BLOCK_TURN ,
-    LOCKED    // Ficar impedido de jogar
+    LOCKED
 }

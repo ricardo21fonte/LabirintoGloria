@@ -46,10 +46,6 @@ public class Bot extends Player {
         this.inteligencia = inteligencia;
         this.mapaConhecido = mapa;
     }
-
-    // =================================================================
-    // 1. BOT (MOVEMENT DECISION)
-    // =================================================================
     /**
      * Decides the next move of the bot according to a priority strategy:
      * @return the next Divisao the bot wants to move to
@@ -72,7 +68,7 @@ public class Bot extends Player {
     }
 
     /**
-     * Executes a BFS (Breadth-First Search) from the bot's current location in order to find a room of a given type.
+     * Executes a BFS  from the bot's current location in order to find a room of a given type.
      * @param tipoAlvo             the target room type to search for
      * @param apenasAlavancasUteis if true, lever rooms already "solved"
      * @return the next Divisao step towards the found target room
@@ -93,13 +89,10 @@ public class Bot extends Player {
             Divisao atual;
             try { atual = fila.dequeue(); } catch (Exception e) { break; }
 
-            // --- LÓGICA DE DECISÃO (A única parte que mudava) ---
             if (atual.getTipo() == tipoAlvo) {
                 boolean encontrou = true;
-                
-                // Se estamos à procura de alavancas, verificar se é útil
+
                 if (apenasAlavancasUteis && tipoAlvo == TipoDivisao.SALA_ALAVANCA) {
-                    // Se já tivermos a chave para esta tranca, a alavanca não é útil (encontrou = false)
                     if (this.podePassarTranca(atual.getIdDesbloqueio())) {
                         encontrou = false; 
                     }
@@ -130,8 +123,7 @@ public class Bot extends Player {
         return null;
     }
     /**
-     * Verifies whether the bot can pass from one division to another, based on the corridor event between them.
-     *
+     * Verifies whether the bot can pass from one division to another, based on the corredor event between them.
      * @param origem  the origin division
      * @param destino the destination division
      * @return true if the bot can pass through the corridor or false otherwise
@@ -148,7 +140,6 @@ public class Bot extends Player {
 
     /**
      * Reconstructs the first step towards a destination division using the generated BFS tree.
-     *
      * @param arvore   list of relationships produced by BFS
      * @param destino  the target division
      * @return the first Divisao to move to from the current location in order to reach destination
@@ -194,7 +185,6 @@ public class Bot extends Player {
 
     /**
      * Finds the parent division of a given child division inside the BFS tree.
-     *
      * @param lista list of relationships
      * @param filho the child division
      * @return the parent division
@@ -208,7 +198,7 @@ public class Bot extends Player {
         return null;
     }
     /**
-     * Helper class used to store parent-child relationships during BFS.
+     * Class used to store parent-child relationships during BFS.
      */
     private class Parente {
 
@@ -227,7 +217,6 @@ public class Bot extends Player {
 
     /**
      * Chooses a lever in a given room, avoiding levers that this bot has already tried in that specific room.
-     *
      * @param sala         the room that contains the levers
      * @param numAlavancas the total number of levers
      * @return the chosen lever index in the range
@@ -243,12 +232,10 @@ public class Bot extends Player {
             }
         }
 
-        // se já tentou todas, faz fallback aleatório
         if (disponiveis == 0) {
             return 1 + (int)(Math.random() * numAlavancas);
         }
 
-        // escolher uma das não tentadas, de forma aleatória
         int salto = (int)(Math.random() * disponiveis);
         for (int i = 0; i < numAlavancas; i++) {
             if (!mem.tentadas[i]) {
@@ -264,8 +251,7 @@ public class Bot extends Player {
     }
 
     /**
-     * Retrieves (or creates) the lever memory associated with a given room.
-     *
+     * Creates the lever memory associated with a given room.
      * @param sala         the room whose lever memory is needed
      * @param numAlavancas the total number of levers in that room
      * @return an existing MemoriaAlavanca for the room, or a new one if none existed yet
@@ -286,7 +272,7 @@ public class Bot extends Player {
     }
 
     /**
-     * Internal static class that stores which levers have already been tried in a specific room.
+     * Class that stores which levers have already been tried in a specific room.
      */
     private static class MemoriaAlavanca {
         /**

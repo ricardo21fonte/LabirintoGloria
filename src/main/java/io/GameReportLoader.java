@@ -11,9 +11,13 @@ import org.json.simple.parser.JSONParser;
 import Lists.ArrayUnorderedList; 
 
 public class GameReportLoader {
-    
+    /**
+     * Directory where game reports are stored as JSON files.
+     */
     private static final String RELATORIOS_DIR = "resources/saved_relatorios";
-    
+    /**
+     * Lists all report filenames stored in the reports directory.
+     */
     public ArrayUnorderedList<String> listarRelatorios() {
         ArrayUnorderedList<String> relatorios = new ArrayUnorderedList<>();
         File dir = new File(RELATORIOS_DIR);
@@ -31,25 +35,28 @@ public class GameReportLoader {
         }
         return relatorios;
     }
-
+    /**
+     * Loads a single GameReport from a JSON file with the given name.
+     * @param filename name of the JSON report file
+     * @return aa GameReport
+     */
     public GameReport carregarRelatorio(String filename) {
         JSONParser parser = new JSONParser();
         GameReport report = new GameReport();
 
         try (FileReader reader = new FileReader(RELATORIOS_DIR + File.separator + filename)) {
-            
-            // 1. Ler o Objeto Principal
+
             JSONObject json = (JSONObject) parser.parse(reader);
 
             report.setVencedor((String) json.get("vencedor"));
             
-            // Ler Data
+            // Le os Dados
             String dataStr = (String) json.get("dataHora");
             if (dataStr != null && !dataStr.isEmpty()) {
                 try { report.setDataHora(LocalDateTime.parse(dataStr)); } catch (Exception e) {}
             }
             
-            // Ler Inteiros (Convertendo de Long do json-simple)
+
             report.setDuracao(getInt(json, "duracao"));
             report.setMapaNome((String) json.get("mapaNome"));
             report.setDificuldade((String) json.get("dificuldade"));
@@ -58,7 +65,7 @@ public class GameReportLoader {
             report.setTotalEnigmasTentados(getInt(json, "totalEnigmasTentados"));
             report.setTotalObstaculos(getInt(json, "totalObstaculos"));
 
-            // 2. Ler Jogadores
+            // Le os Jogadores
             JSONArray jogadoresArray = (JSONArray) json.get("jogadores");
             if (jogadoresArray != null) {
                 for (Object pObj : jogadoresArray) {
@@ -72,12 +79,10 @@ public class GameReportLoader {
                     player.setTurnosJogados(getInt(pJson, "turnosJogados"));
                     player.setVencedor((Boolean) pJson.get("vencedor"));
 
-                    // Preencher listas internas
                     preencherLista((JSONArray) pJson.get("percurso"), player.getPercurso());
                     preencherLista((JSONArray) pJson.get("obstaculos"), player.getObstaculos());
                     preencherLista((JSONArray) pJson.get("efeitosAplicados"), player.getEfeitosAplicados());
-                    
-                    // Preencher Enigmas
+
                     JSONArray enigmasArray = (JSONArray) pJson.get("enigmas");
                     if (enigmasArray != null) {
                         for (Object eObj : enigmasArray) {
@@ -103,17 +108,27 @@ public class GameReportLoader {
         }
     }
 
-    // --- Helpers Simples ---
-
+    /**
+     * Method that copies all elements from a JSON array into a ArrayUnorderedList
+     *
+     * @param source the JSON array to read from
+     * @param target the list where all elements will be appended
+     */
     private void preencherLista(JSONArray source, ArrayUnorderedList<String> target) {
         if (source != null) {
             for (Object o : source) target.addToRear((String) o);
         }
     }
 
+    /**
+     * Method to read an integer value from a JSONObject.
+     * @param json the JSON object from which to extract the numeric field
+     * @param key  the key of the numeric attribute
+     * @return the integer value associated with the key
+     */
     private int getInt(JSONObject json, String key) {
         Object val = json.get(key);
         if (val == null) return 0;
-        return ((Long) val).intValue(); // JSON-simple lê números como Long
+        return ((Long) val).intValue();
     }
 }

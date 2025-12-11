@@ -12,34 +12,46 @@ import game.Enigma;
 import game.Player;
 import graph.LabyrinthGraph;
 import io.EnigmaLoader;
-import ui.GameView; // Nota: mudei para o package ui
-
+import ui.GameView;
+/**
+ * Handles the initial game setup.
+ */
 public class GameInitializer {
 
+    /** View used for user interaction (menus, messages, input). */
     private GameView view;
-    private LabyrinthGraph<Divisao> labyrinthGraph;
 
+    /** Labyrinth graph where the game will take place. */
+    private LabyrinthGraph<Divisao> labyrinthGraph;
+    /**
+     * Constructs a new GameInitializer using the provided view and labyrinth graph.
+     * @param view           UI component responsible for I/O
+     * @param labyrinthGraph graph that represents the labyrinth
+     */
     public GameInitializer(GameView view, LabyrinthGraph<Divisao> labyrinthGraph) {
         this.view = view;
         this.labyrinthGraph = labyrinthGraph;
     }
-
+    /**
+     * Executes the complete setup flow for a new game.
+     * @return a fully initialized GameData instance
+     */
     public GameData setupCompleto() {
         view.mostrarMensagemCarregar();
 
-        // 1. Enigmas e Dificuldade
+        // Enigmas e Dificuldade
         ArrayUnorderedList<Enigma> allEnigmas = loadEnigmas();
         Dificuldade difficulty = setupDifficulty();
         ArrayUnorderedList<Enigma> enigmasFiltrados = filterEnigmasByDifficulty(allEnigmas, difficulty);
 
-        // 2. Entradas do Mapa
+        // Entradas do Mapa
         Divisao[] entrances = getMapEntrances();
         if (entrances.length == 0) return null;
 
         LinkedQueue<Player> turnQueue = new LinkedQueue<>();
         ArrayUnorderedList<Player> todosJogadores = new ArrayUnorderedList<>();
 
-        // 3. Criar Jogadores
+        // Cria Jogadores
         int numHumans = setupHumanPlayers(entrances, turnQueue, todosJogadores);
         setupBots(entrances, turnQueue, todosJogadores, numHumans);
 
@@ -54,13 +66,18 @@ public class GameInitializer {
         return new GameData(turnQueue, todosJogadores, enigmasFiltrados, difficulty);
     }
 
-    // --- MÉTODOS DE APOIO (Copiados do teu GameEngine antigo) ---
-
+    /**
+     * Loads enigmas from the default JSON file.
+     * @return list of all enigmas found in the JSON file
+     */
     private ArrayUnorderedList<Enigma> loadEnigmas() {
         EnigmaLoader enigmaLoader = new EnigmaLoader();
         return enigmaLoader.loadEnigmas("resources/enigmas/enigmas.json");
     }
-
+    /**
+     * Asks the user to choose the global difficulty of the game.
+     * @return the chosen difficulty
+     */
     private Dificuldade setupDifficulty() {
         int option = -1;
         do {
@@ -72,7 +89,12 @@ public class GameInitializer {
         if (option == 2) return Dificuldade.MEDIO;
         return Dificuldade.DIFICIL;
     }
-
+    /**
+     * Filters the full list of enigmas, keeping only those that match the given difficulty.
+     * @param all list with all loaded enigmas
+     * @param dif difficulty to filter by
+     * @return new list containing only enigmas of the given difficulty
+     */
     private ArrayUnorderedList<Enigma> filterEnigmasByDifficulty(ArrayUnorderedList<Enigma> all, Dificuldade dif) {
         ArrayUnorderedList<Enigma> filtered = new ArrayUnorderedList<>();
         Iterator<Enigma> it = all.iterator();
@@ -83,7 +105,11 @@ public class GameInitializer {
         view.mostrarDificuldadeDefinida(dif.toString(), filtered.size());
         return filtered;
     }
-
+    /**
+     * Scans the labyrinth graph and collects all entrance rooms
+     * @return an array of entrance rooms; if none are found, displays
+     *         an error message and returns an empty array
+     */
     private Divisao[] getMapEntrances() {
         ArrayUnorderedList<Divisao> entrances = new ArrayUnorderedList<>();
         Object[] vertices = labyrinthGraph.getVertices();
@@ -102,6 +128,14 @@ public class GameInitializer {
         return arr;
     }
 
+    /**
+     * Creates human players, asks for their names, assigns them
+     * random entrance rooms and enqueues them into the turn queue.
+     * @param entrances   array of available entrance rooms
+     * @param turnQueue   queue that controls the turn order
+     * @param listaGlobal global list of all players
+     * @return the number of human players created
+     */
     private int setupHumanPlayers(Divisao[] entrances, LinkedQueue<Player> turnQueue, ArrayUnorderedList<Player> listaGlobal) {
         int numHumans;
         int max = 8;
@@ -125,7 +159,14 @@ public class GameInitializer {
         }
         return numHumans;
     }
-
+    /**
+     * Creates bot players, asks the user for each bot's difficulty,
+     * assigns them random entrance rooms and enqueues them int the turn queue.
+     * @param entrances   array of available entrance rooms
+     * @param turnQueue   queue that controls the turn order
+     * @param listaGlobal global list of all players
+     * @param numHumans   number of human players already created
+     */
     private void setupBots(Divisao[] entrances, LinkedQueue<Player> turnQueue, ArrayUnorderedList<Player> listaGlobal, int numHumans) {
         int maxBots = 8 - numHumans;
         if (maxBots <= 0) return;

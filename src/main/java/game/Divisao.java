@@ -1,10 +1,11 @@
 package game;
 
 import enums.TipoDivisao;
+
 /**
  * Represents a single room (or division) in the labyrinth.
  */
-public class Divisao {
+public class Divisao implements Comparable<Divisao> { // <--- 1. ADICIONADO implements Comparable
 
     /**
      * Global counter used to assign unique IDs to each new Divisao.
@@ -34,6 +35,7 @@ public class Divisao {
      * ID of the door that this room can unlock via its puzzle/lever.
      */
     private int idDaPortaQueAbre = -1;
+
     /**
      * Creates a new Divisao
      * @param nome the room name
@@ -66,6 +68,7 @@ public class Divisao {
      * @return the room ID
      */
     public int getId() { return id; }
+
     /**
      * Associates a lever puzzle with this room.
      * @param a the lever to set
@@ -73,6 +76,7 @@ public class Divisao {
     public void setAlavanca(Alavanca a) {
         this.alavancaDoPuzzle = a;
     }
+
     /**
      * Returns the lever associated with this room
      * @return the lever puzzle
@@ -90,6 +94,7 @@ public class Divisao {
      * @return the door ID to unlock
      */
     public int getIdDesbloqueio() { return idDaPortaQueAbre; }
+
     /**
      * Returns the display name of the room.
      * @return the room name
@@ -121,16 +126,16 @@ public class Divisao {
         if (this == obj) return true;
         if (obj == null || getClass() != obj.getClass()) return false;
         Divisao outra = (Divisao) obj;
-        return this.id == outra.id; 
+        return this.id == outra.id;
     }
 
     /**
-     * Returns a hash code based solely on this room's unique ID.
-     * @return the value
+     * Compares this Divisao with another based on their IDs.
+     * @param outra the other Divisao to compare with.
+     * @return a negative integer, zero, or a positive integer as this object is less than, equal to, or greater than the specified object.
      */
     @Override
-    public int hashCode() {
-
-        return Integer.hashCode(id);
+    public int compareTo(Divisao outra) {
+        return Integer.compare(this.id, outra.id);
     }
 }

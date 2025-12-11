@@ -64,7 +64,7 @@ public class EventoAleatorio {
      * Applies the event to the given target player and to all players in the game.
      * @param alvo           the main target player of the event
      * @param todosJogadores list of all players currently in the game
-     *
+     * @param view  the view used to display feedback about the recoil action
      */
     public void aplicar(Player alvo, ArrayUnorderedList<Player> todosJogadores, GameView view) {
         switch (tipo) {

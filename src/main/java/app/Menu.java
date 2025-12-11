@@ -9,24 +9,38 @@ import graph.LabyrinthGraph;
 import io.GameReport;
 import io.GameReportLoader;
 import io.MapLoader;
-
+/**
+ * Main text-based menu of the game.
+ */
 public class Menu {
+    /** Scanner used to read user input from the console. */
     private Scanner scanner;
-    
-    // Variável para guardar o nome do mapa (para o relatório)
-    private String nomeMapaAtual = "Mapa_Desconhecido"; 
 
+    /**
+     * Logical name of the currently selected map.
+     */
+    private String nomeMapaAtual = "Mapa_Desconhecido";
+
+    /**
+     * Creates a new menu and initializes the input scanner.
+     */
     public Menu() {
         this.scanner = new Scanner(System.in);
     }
-    
+    /**
+     * Returns the logical name of the currently selected map.
+     * @return current map name
+     */
     public String getNomeMapaAtual() {
         return nomeMapaAtual;
     }
-
+    /**
+     * Displays main menu and returns a loaded or generated map,
+     * @return a LabyrinthGraph to be used by the game engine, or {@code null} on exit
+     */
     public LabyrinthGraph<Divisao> apresentarMenuPrincipal() {
         System.out.println("\n==========================================");
-        System.out.println("      🏰 LABIRINTO DA GLÓRIA 🏰");
+        System.out.println("      LABIRINTO DA GLÓRIA ");
         System.out.println("==========================================");
         System.out.println("1. Mapas Originais");
         System.out.println("2. Mapas Guardados");
@@ -47,51 +61,57 @@ public class Menu {
         }
     }
 
+    /**
+     * Menu for choosing one of the original predefined maps.
+     * @return loaded original map, or returns to the main menu on invalid option
+     */
     private LabyrinthGraph<Divisao> menuMapasOriginais() {
         System.out.println("\n MAPAS ORIGINAIS");
         System.out.println("1. O Início (Fácil)");
-        System.out.println("2. A Masmorra (Médio)");
-        System.out.println("3. O Pesadelo (Difícil)");
+        System.out.println("2. O Minotauro (Médio)");
+        System.out.println("3. A Tortura (Difícil)");
         System.out.print("Escolha: ");
 
         String ficheiro = "";
         int op = lerInteiro();
-        
-        // --- CAMINHOS ATUALIZADOS PARA resources/mapas_originais/ ---
-        if (op == 1) { 
-            ficheiro = "resources/mapas_originais/mapa_Oinicio.json"; 
-            nomeMapaAtual = "O_Inicio"; 
+        if (op == 1) {
+            ficheiro = "resources/mapas_originais/mapa_Oinicio.json";
+            nomeMapaAtual = "O_Inicio";
         }
-        else if (op == 2) { 
-            ficheiro = "resources/mapas_originais/mapa_medio.json"; 
-            nomeMapaAtual = "A_Masmorra"; 
+        else if (op == 2) {
+            ficheiro = "resources/mapas_originais/mapa_Ominotauro.json";
+            nomeMapaAtual = "O_Minotauro";
         }
-        else if (op == 3) { 
-            ficheiro = "resources/mapas_originais/mapa_dificil.json"; 
-            nomeMapaAtual = "O_Pesadelo"; 
+        else if (op == 3) {
+            ficheiro = "resources/mapas_originais/mapa_Atortura.json";
+            nomeMapaAtual = "A_Tortura";
         }
         else return apresentarMenuPrincipal();
 
         return carregarFicheiro(ficheiro);
     }
-
+    /**
+     * Menu for loading player-created maps from the saved-games folder.
+     * @return loaded map, or returns to the main menu on failure
+     */
     private LabyrinthGraph<Divisao> menuMapasJogador() {
         System.out.println("\n MAPAS DO JOGADOR ");
         System.out.println("Escreva o nome do ficheiro JSON (ex: 'ze3.json'):");
         System.out.print("> ");
         String nome = lerString();
-        
-        // Define o nome do mapa (sem a extensão .json)
+
         nomeMapaAtual = nome.replace(".json", "");
-        
-        // --- CAMINHO ATUALIZADO: Agora procura em resources/saved_games/ ---
+
         return carregarFicheiro("resources/saved_games/" + nome);
     }
-
+    /**
+     * Menu for generating a random map and optionally saving it to file.
+     * @return the generated map, or returns to the main menu on invalid option
+     */
     private LabyrinthGraph<Divisao> menuGerarAleatorio() {
         io.MapGenerator gerador = new io.MapGenerator();
         LabyrinthGraph<Divisao> mapaGerado = null;
-        
+
         nomeMapaAtual = "Aleatorio_" + System.currentTimeMillis();
 
         System.out.println("\n Criação de um novo mapa!");
@@ -122,56 +142,68 @@ public class Menu {
         }
 
         if (mapaGerado != null) {
-            System.out.println("\n🗺️ Mapa gerado! Desejas gravá-lo para jogar mais tarde?");
+            System.out.println("\n Mapa gerado! Desejas gravá-lo para jogar mais tarde?");
             System.out.println("1 - Sim, gravar");
             System.out.println("2 - Não, jogar apenas agora");
             System.out.print("> ");
-            
+
             int escolhaGravar = lerInteiro();
             if (escolhaGravar == 1) {
                 System.out.print("Nome do ficheiro (ex: ze3.json): ");
                 String nomeFicheiro = lerString();
                 if (!nomeFicheiro.endsWith(".json")) nomeFicheiro += ".json";
-                
+
                 io.MapExporter exporter = new io.MapExporter();
-                
-                // --- CAMINHO ATUALIZADO: Grava na pasta resources/saved_games/ ---
+
                 exporter.exportarMapa(mapaGerado, "Mapa Custom " + java.time.LocalDateTime.now(), "resources/saved_games/" + nomeFicheiro);
-                
-                // Atualiza o nome do mapa se for gravado
+
                 nomeMapaAtual = nomeFicheiro.replace(".json", "");
-                
-                System.out.println("✅ Podes carregar este mapa no Menu Principal > Opção 2.");
+
+                System.out.println("Podes carregar este mapa no Menu Principal > Opção 2.");
             }
         }
         return mapaGerado;
     }
-    
+    /**
+     * Method that loads a map from a given JSON file path and performs validation.
+     *
+     * @param path full path to the JSON file
+     * @return loaded map, or a new map chosen by the user
+     */
     private LabyrinthGraph<Divisao> carregarFicheiro(String path) {
         MapLoader loader = new MapLoader();
         LabyrinthGraph<Divisao> mapa = loader.loadMap(path);
+
         if (mapa == null || mapa.size() == 0) {
-            System.out.println("Erro ao carregar mapa. Tente outra vez.");
+
+            System.out.println(" Falha crítica: O mapa não pôde ser carregado.");
+            System.out.println("   Verifique se o ficheiro existe em: " + path);
             return apresentarMenuPrincipal();
         }
         return mapa;
     }
-
+    /**
+     * Reads an integer from the console.
+     * @return parsed integer
+     */
     private int lerInteiro() {
         try { return Integer.parseInt(scanner.nextLine()); }
         catch (Exception e) { return -1; }
     }
-    
+    /**
+     * Reads a line of text from the console and trims it.
+     * @return trimmed string, or empty string on error
+     */
     private String lerString() {
-        try { return scanner.nextLine().trim(); } 
+        try { return scanner.nextLine().trim(); }
         catch (Exception e) { return ""; }
     }
-
-    // --- MENU RELATÓRIOS (Sem alterações de lógica, apenas mantendo consistência) ---
-
+    /**
+     * Displays the reports menu, allowing the user to list and inspect previously saved game reports.
+     */
     private void menuRelatorios() {
         System.out.println("\n========== RELATÓRIOS DE JOGOS ==========");
-        
+
         GameReportLoader loader = new GameReportLoader();
         ArrayUnorderedList<String> relatorios = loader.listarRelatorios();
 
@@ -227,7 +259,10 @@ public class Menu {
         lerString();
         menuRelatorios();
     }
-
+    /**
+     * Prints a detailed game report to the console
+     * @param report the game report to display
+     */
     private void exibirRelatorio(GameReport report) {
         System.out.println("\n========== RELATÓRIO COMPLETO DO JOGO ==========");
         System.out.println("Vencedor: " + report.getVencedor());
@@ -236,25 +271,25 @@ public class Menu {
         int resolvidos = report.getTotalEnigmasResolvidos();
         int tentados = report.getTotalEnigmasTentados();
         int falhados = tentados - resolvidos;
-        
+
         System.out.println("Total de Enigmas Tentados: " + tentados);
         System.out.println(" -> Resolvidos: " + resolvidos);
         System.out.println(" -> Falhados: " + falhados);
-        
+
         System.out.println("\n========== JOGADORES ==========");
-        
+
         ArrayUnorderedList<GameReport.PlayerReport> jogadores = report.getListaJogadores();
         Iterator<GameReport.PlayerReport> itJogadores = jogadores.iterator();
-        
+
         while (itJogadores.hasNext()) {
             GameReport.PlayerReport player = itJogadores.next();
-            
+
             System.out.println("\n--- " + player.getNome() + " (" + player.getTipo() + ") ---");
             System.out.println("Vencedor: " + (player.isVencedor() ? "SIM" : "NÃO"));
             System.out.println("Localização Final: " + player.getLocalAtual());
             System.out.println("Turnos Jogados: " + player.getTurnosJogados());
             System.out.println("Enigmas Resolvidos: " + player.totalEnigmasResolvidos());
-            
+
             // Percurso
             System.out.println("\nPERCURSO (Caminho):");
             ArrayUnorderedList<String> percurso = player.getPercurso();
@@ -268,7 +303,7 @@ public class Menu {
                     i++;
                 }
             }
-            
+
             // Obstáculos
             System.out.println("\nOBSTÁCULOS:");
             ArrayUnorderedList<String> obstaculos = player.getObstaculos();
@@ -276,7 +311,7 @@ public class Menu {
             while (itO.hasNext()) {
                 System.out.println("  - " + itO.next());
             }
-            
+
             // Enigmas
             System.out.println("\nENIGMAS:");
             ArrayUnorderedList<GameReport.EnigmaEvent> enigmas = player.getEnigmas();

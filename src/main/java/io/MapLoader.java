@@ -1,25 +1,28 @@
 package io;
 
 import java.io.FileReader;
+import java.util.Iterator;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 
 import Lists.ArrayUnorderedList;
+import Queue.LinkedQueue;
 import enums.CorredorEvento;
 import enums.TipoDivisao;
 import game.Divisao;
 import game.EventoCorredor;
 import graph.LabyrinthGraph;
-
+/**
+ * Utility class responsible for loading a labyrinth map from a JSON file
+ */
 public class MapLoader {
 
     /**
-     * Carrega um mapa em formato JSON e constrói o grafo LabyrinthGraph<Divisao>.
-     *
-     * @param filePath caminho para o ficheiro JSON
-     * @return grafo carregado ou null em caso de erro grave de leitura
+     * Loads a map from a JSON file and builds a LabyrinthGraph<Divisao>.
+     * @param filePath the path to the JSON map file
+     * @return a fully constructed graph
      */
     public LabyrinthGraph<Divisao> loadMap(String filePath) {
         LabyrinthGraph<Divisao> graph = new LabyrinthGraph<>();
@@ -27,7 +30,7 @@ public class MapLoader {
         ArrayUnorderedList<Divisao> listaSalas = new ArrayUnorderedList<>();
         ArrayUnorderedList<String> listaCodigos = new ArrayUnorderedList<>();
 
-        int maiorIdEncontrado = 0; // Para rastrear o maior ID
+        int maiorIdEncontrado = 0;
 
         try (FileReader reader = new FileReader(filePath)) {
             JSONObject jsonObject = (JSONObject) parser.parse(reader);
@@ -43,9 +46,6 @@ public class MapLoader {
                 return null;
             }
 
-            // ============================
-            // 1) CARREGAR AS SALAS
-            // ============================
             for (Object s : salas) {
                 if (!(s instanceof JSONObject)) {
                     System.out.println("AVISO: entrada de 'salas' inválida (não é JSON object)");
@@ -54,7 +54,6 @@ public class MapLoader {
 
                 JSONObject salaJSON = (JSONObject) s;
 
-                // Ler campos obrigatórios com validação
                 String codigo = safeGetString(salaJSON, "codigo");
                 String nome   = safeGetString(salaJSON, "nome");
                 String tipoStr= safeGetString(salaJSON, "tipo");
@@ -74,29 +73,23 @@ public class MapLoader {
 
                 Divisao d = new Divisao(nome, tipo);
 
-                // --- CORREÇÃO DE IDS ---
-                // Extrair o número do código (S5 -> 5), se fizer sentido
                 try {
                     if (codigo.startsWith("S")) {
                         int idLido = Integer.parseInt(codigo.substring(1));
-                        d.definirIdManual(idLido); // Força o ID do ficheiro
+                        d.definirIdManual(idLido);
 
                         if (idLido > maiorIdEncontrado) {
                             maiorIdEncontrado = idLido;
                         }
                     } else {
-                        // Se for, por ex., "T1", não mexemos, usamos o ID automático
                         if (d.getId() > maiorIdEncontrado) {
                             maiorIdEncontrado = d.getId();
                         }
                     }
                 } catch (Exception e) {
-                    // Se falhar o parse, mantemos o ID automático
                     if (d.getId() > maiorIdEncontrado) maiorIdEncontrado = d.getId();
                 }
-                // -----------------------
 
-                // idDesbloqueio só faz sentido em SALA_ALAVANCA
                 Object idDesbObj = salaJSON.get("idDesbloqueio");
                 if (tipo == TipoDivisao.SALA_ALAVANCA && idDesbObj instanceof Long) {
                     d.setIdDesbloqueio(((Long) idDesbObj).intValue());
@@ -106,14 +99,8 @@ public class MapLoader {
                 listaSalas.addToRear(d);
                 listaCodigos.addToRear(codigo);
             }
-
-            // ATUALIZAR O CONTADOR ESTÁTICO GLOBAL
-            // Garante que a próxima sala criada terá um ID novo e único
             Divisao.setNextId(maiorIdEncontrado + 1);
 
-            // ============================
-            // 2) CARREGAR AS LIGAÇÕES
-            // ============================
             JSONArray ligacoes = (JSONArray) jsonObject.get("ligacoes");
             if (ligacoes == null) {
                 // Sem ligações ainda é um mapa válido, só isolado
@@ -129,7 +116,7 @@ public class MapLoader {
 
                     String origem  = safeGetString(lig, "origem");
                     String destino = safeGetString(lig, "destino");
-                    String eventoStr = safeGetString(lig, "evento"); // pode ser null, tratamos já abaixo
+                    String eventoStr = safeGetString(lig, "evento");
                     Object valObj = lig.get("valor");
 
                     if (origem == null || destino == null) {
@@ -166,8 +153,11 @@ public class MapLoader {
                 }
             }
         } catch (Exception e) {
-            System.out.println("ERRO ao carregar mapa de '" + filePath + "': " + e.getMessage());
-            e.printStackTrace();
+            return null;
+        }
+
+        if (!validarCaminho(graph)) {
+            System.out.println(" O mapa carregado tem erros estruturais e não pode ser jogado.");
             return null;
         }
 
@@ -175,7 +165,12 @@ public class MapLoader {
     }
 
     /**
-     * Procura uma divisao pelo código textual (ex: "S3") usando as listas paralelas.
+     * Looks up a Divisao
+     *
+     * @param salas    list of all rooms loaded from the file
+     * @param codigos  list of the corresponding textual codes
+     * @param alvo     the target code to search for
+     * @return the matching Divisao
      */
     private Divisao findDiv(ArrayUnorderedList<Divisao> salas, ArrayUnorderedList<String> codigos, String alvo) {
         var itSalas = salas.iterator();
@@ -189,8 +184,7 @@ public class MapLoader {
     }
 
     /**
-     * Lê uma String de um JSONObject de forma segura, devolvendo null se não existir
-     * ou não for String.
+     * Reads an String from a JSONObject
      */
     private String safeGetString(JSONObject obj, String key) {
         Object val = obj.get(key);
@@ -199,5 +193,64 @@ public class MapLoader {
             if (!s.isEmpty()) return s;
         }
         return null;
+    }
+
+    /**
+     * Validates whether the loaded map is playable
+     */
+    private boolean validarCaminho(LabyrinthGraph<Divisao> graph) {
+        if (graph == null || graph.size() == 0) return false;
+
+        LinkedQueue<Divisao> queue = new LinkedQueue<>();
+        ArrayUnorderedList<Divisao> visitados = new ArrayUnorderedList<>();
+
+        boolean temEntrada = false;
+        boolean temTesouro = false;
+
+        Object[] vertices = graph.getVertices();
+        for (Object v : vertices) {
+            Divisao d = (Divisao) v;
+
+            if (d.getTipo() == TipoDivisao.ENTRADA) {
+                queue.enqueue(d);
+                visitados.addToRear(d);
+                temEntrada = true;
+            }
+
+            if (d.getTipo() == TipoDivisao.SALA_CENTRAL) {
+                temTesouro = true;
+            }
+        }
+
+        if (!temEntrada) {
+            System.out.println("Mapa Inválido: Não existe nenhuma sala do tipo 'ENTRADA'.");
+            return false;
+        }
+        if (!temTesouro) {
+            System.out.println("Mapa Inválido: Não existe a 'Câmara do Tesouro' (SALA_CENTRAL).");
+            return false;
+        }
+
+        while (!queue.isEmpty()) {
+            try {
+                Divisao atual = queue.dequeue();
+
+                if (atual.getTipo() == TipoDivisao.SALA_CENTRAL) {
+                    return true;
+                }
+
+                Iterator<Divisao> it = graph.getVizinhos(atual).iterator();
+                while (it.hasNext()) {
+                    Divisao vizinho = it.next();
+                    if (!visitados.contains(vizinho)) {
+                        visitados.addToRear(vizinho);
+                        queue.enqueue(vizinho);
+                    }
+                }
+            } catch (Exception e) { break; }
+        }
+
+        System.out.println("Mapa Inválido: A Câmara do Tesouro está isolada (sem caminho a partir das Entradas)!");
+        return false;
     }
 }

@@ -25,10 +25,12 @@
 
     { "codigo": "A1", "tipo": "SALA_ALAVANCA", "nome": "Sala das Máquinas", "idDesbloqueio": 1 },
     { "codigo": "A2", "tipo": "SALA_ALAVANCA", "nome": "Sala de Controlo", "idDesbloqueio": 2 },
-    { "codigo": "A3", "tipo": "SALA_ALAVANCA", "nome": "Arsenal", "idDesbloqueio": 3 }
+    { "codigo": "A3", "tipo": "SALA_ALAVANCA", "nome": "Arsenal", "idDesbloqueio": 3 },
+    { "codigo": "A4", "tipo": "SALA_ALAVANCA", "nome": "Sala do Trono", "idDesbloqueio": 4 },
+    { "codigo": "A5", "tipo": "SALA_ALAVANCA", "nome": "Bunker Secreto", "idDesbloqueio": 5 }
   ],
   "ligacoes": [
-    
+
     { "origem": "S1", "destino": "N1", "evento": "NONE", "valor": 0 },
     { "origem": "S2", "destino": "N1", "evento": "NONE", "valor": 0 },
     { "origem": "S3", "destino": "N2", "evento": "NONE", "valor": 0 },
@@ -42,7 +44,7 @@
     { "origem": "N2", "destino": "E2", "evento": "NONE", "valor": 0 },
     { "origem": "N3", "destino": "E3", "evento": "NONE", "valor": 0 },
     { "origem": "N4", "destino": "E4", "evento": "NONE", "valor": 0 },
-    
+
     { "origem": "E1", "destino": "A1", "evento": "NONE", "valor": 0 },
     { "origem": "E2", "destino": "A2", "evento": "MOVE_BACK", "valor": 1 },
     { "origem": "E3", "destino": "A3", "evento": "NONE", "valor": 0 },

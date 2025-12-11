@@ -1,0 +1,52 @@
+{
+  "nome": "A Tortura (Difícil)",
+  "salas": [
+    { "codigo": "S99", "tipo": "SALA_CENTRAL", "nome": "O Trono da Agonia" },
+
+    { "codigo": "S1", "tipo": "ENTRADA", "nome": "Entrada do Desespero" },
+    { "codigo": "S2", "tipo": "ENTRADA", "nome": "Portão da Dor" },
+    { "codigo": "S3", "tipo": "ENTRADA", "nome": "Caminho Sem Retorno" },
+
+    { "codigo": "S4", "tipo": "SALA_NORMAL", "nome": "Corredor dos Espinhos" },
+    { "codigo": "S5", "tipo": "SALA_NORMAL", "nome": "Poço Sem Fundo" },
+    { "codigo": "S6", "tipo": "SALA_NORMAL", "nome": "Sala das Sombras" },
+    { "codigo": "S7", "tipo": "SALA_NORMAL", "nome": "Labirinto de Espelhos" },
+    { "codigo": "S8", "tipo": "SALA_NORMAL", "nome": "Ponte Quebrada" },
+
+    { "codigo": "S9", "tipo": "SALA_ENIGMA", "nome": "O Guardião da Primeira Chave" },
+    { "codigo": "S10", "tipo": "SALA_ENIGMA", "nome": "O Guardião da Segunda Chave" },
+    { "codigo": "S11", "tipo": "SALA_ENIGMA", "nome": "O Guardião da Terceira Chave" },
+    { "codigo": "S12", "tipo": "SALA_ENIGMA", "nome": "O Enigma Final" },
+    { "codigo": "S13", "tipo": "SALA_ENIGMA", "nome": "A Esfinge" },
+
+    { "codigo": "S14", "tipo": "SALA_ALAVANCA", "nome": "Alavanca de Ferro (Abre Bronze)", "idDesbloqueio": 1 },
+    { "codigo": "S15", "tipo": "SALA_ALAVANCA", "nome": "Alavanca de Bronze (Abre Ouro)", "idDesbloqueio": 2 },
+    { "codigo": "S16", "tipo": "SALA_ALAVANCA", "nome": "Alavanca de Ouro (Abre Tesouro)", "idDesbloqueio": 3 }
+  ],
+  "ligacoes": [
+    { "origem": "S1", "destino": "S4", "evento": "NONE", "valor": 0 },
+    { "origem": "S2", "destino": "S6", "evento": "NONE", "valor": 0 },
+    { "origem": "S3", "destino": "S8", "evento": "NONE", "valor": 0 },
+
+    { "origem": "S4", "destino": "S5", "evento": "MOVE_BACK", "valor": 2 },
+    { "origem": "S5", "destino": "S6", "evento": "BLOCK_TURN", "valor": 1 },
+    { "origem": "S6", "destino": "S7", "evento": "NONE", "valor": 0 },
+    { "origem": "S7", "destino": "S8", "evento": "MOVE_BACK", "valor": 3 },
+    { "origem": "S8", "destino": "S4", "evento": "NONE", "valor": 0 },
+
+    { "origem": "S4", "destino": "S9", "evento": "NONE", "valor": 0 },
+    { "origem": "S9", "destino": "S14", "evento": "NONE", "valor": 0 },
+
+    { "origem": "S6", "destino": "S10", "evento": "LOCKED", "valor": 1 },
+    { "origem": "S10", "destino": "S15", "evento": "NONE", "valor": 0 },
+
+    { "origem": "S8", "destino": "S11", "evento": "LOCKED", "valor": 2 },
+    { "origem": "S11", "destino": "S16", "evento": "BLOCK_TURN", "valor": 2 },
+
+    { "origem": "S5", "destino": "S13", "evento": "NONE", "valor": 0 },
+    { "origem": "S13", "destino": "S12", "evento": "MOVE_BACK", "valor": 2 },
+
+    { "origem": "S7", "destino": "S12", "evento": "LOCKED", "valor": 3 },
+    { "origem": "S12", "destino": "S99", "evento": "NONE", "valor": 0 }
+  ]
+}

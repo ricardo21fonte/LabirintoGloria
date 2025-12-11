@@ -1,0 +1,54 @@
+{
+  "nome": "O Labirinto do Minotauro (Médio)",
+  "salas": [
+    { "codigo": "S99", "tipo": "SALA_CENTRAL", "nome": "Trono do Minotauro" },
+
+    { "codigo": "S1", "tipo": "ENTRADA", "nome": "Entrada Norte" },
+    { "codigo": "S2", "tipo": "ENTRADA", "nome": "Entrada Sul" },
+    { "codigo": "S3", "tipo": "ENTRADA", "nome": "Entrada Este" },
+    { "codigo": "S4", "tipo": "ENTRADA", "nome": "Entrada Oeste" },
+
+    { "codigo": "S5", "tipo": "SALA_NORMAL", "nome": "Galeria dos Ecos" },
+    { "codigo": "S6", "tipo": "SALA_NORMAL", "nome": "Corredor das Sombras" },
+    { "codigo": "S7", "tipo": "SALA_NORMAL", "nome": "Pátio Esquecido" },
+    { "codigo": "S8", "tipo": "SALA_NORMAL", "nome": "Túnel Húmido" },
+
+    { "codigo": "S9", "tipo": "SALA_ENIGMA", "nome": "O Esfinge de Pedra" },
+    { "codigo": "S10", "tipo": "SALA_ENIGMA", "nome": "O Guardião Cego" },
+    { "codigo": "S11", "tipo": "SALA_ENIGMA", "nome": "Sala das Runas" },
+    { "codigo": "S12", "tipo": "SALA_ENIGMA", "nome": "O Oráculo" },
+
+    { "codigo": "S13", "tipo": "SALA_NORMAL", "nome": "Labirinto Interior A" },
+    { "codigo": "S14", "tipo": "SALA_NORMAL", "nome": "Labirinto Interior B" },
+
+    { "codigo": "S15", "tipo": "SALA_ALAVANCA", "nome": "Sala da Chave de Ouro", "idDesbloqueio": 1 },
+    { "codigo": "S16", "tipo": "SALA_ALAVANCA", "nome": "Sala da Chave de Prata", "idDesbloqueio": 2 }
+  ],
+  "ligacoes": [
+    { "origem": "S1", "destino": "S5", "evento": "NONE", "valor": 0 },
+    { "origem": "S2", "destino": "S6", "evento": "NONE", "valor": 0 },
+    { "origem": "S3", "destino": "S7", "evento": "NONE", "valor": 0 },
+    { "origem": "S4", "destino": "S8", "evento": "NONE", "valor": 0 },
+
+    { "origem": "S5", "destino": "S7", "evento": "NONE", "valor": 0 },
+    { "origem": "S6", "destino": "S8", "evento": "NONE", "valor": 0 },
+
+    { "origem": "S5", "destino": "S9", "evento": "NONE", "valor": 0 },
+    { "origem": "S6", "destino": "S10", "evento": "NONE", "valor": 0 },
+    { "origem": "S7", "destino": "S11", "evento": "NONE", "valor": 0 },
+    { "origem": "S8", "destino": "S12", "evento": "NONE", "valor": 0 },
+
+    { "origem": "S9", "destino": "S13", "evento": "NONE", "valor": 0 },
+    { "origem": "S10", "destino": "S13", "evento": "MOVE_BACK", "valor": 1 },
+    { "origem": "S11", "destino": "S14", "evento": "NONE", "valor": 0 },
+    { "origem": "S12", "destino": "S14", "evento": "MOVE_BACK", "valor": 1 },
+
+    { "origem": "S13", "destino": "S15", "evento": "NONE", "valor": 0 },
+    { "origem": "S14", "destino": "S16", "evento": "NONE", "valor": 0 },
+
+    { "origem": "S13", "destino": "S14", "evento": "BLOCK_TURN", "valor": 1 },
+
+    { "origem": "S15", "destino": "S99", "evento": "LOCKED", "valor": 2 },
+    { "origem": "S16", "destino": "S99", "evento": "LOCKED", "valor": 1 }
+  ]
+}

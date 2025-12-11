@@ -1,30 +1,40 @@
 package game;
 
 import enums.AlavancaEnum;
-
+/**
+ * Represents a lever puzzle with a fixed number of levers, each associated
+ * with a specific effect.
+ */
 public class Alavanca {
-
+    /**
+     * Total number of levers in this puzzle.
+     */
     private static final int NUM_ALAVANCAS = 3;
 
-    // posição 0 → alavanca 1
-    // posição 1 → alavanca 2
-    // posição 2 → alavanca 3
+    /**
+     * Array of lever effects.
+     */
     private AlavancaEnum[] efeitos;
-    // para não repetir o puzzle depois de resolvido
 
 
+    /**
+     * Creates a new lever puzzle with exactly one lever of each type:
+     * The effects are then shuffled so that the mapping between lever number and effect is random for each new instance.
+     */
     public Alavanca() {
+
         efeitos = new AlavancaEnum[NUM_ALAVANCAS];
 
-        // Definir 1 de cada tipo
         efeitos[0] = AlavancaEnum.ABRIR_PORTA;
         efeitos[1] = AlavancaEnum.PENALIZAR;
         efeitos[2] = AlavancaEnum.NADA;
 
-        // Baralhar posições para não ser sempre a mesma ordem
+        // Shuffle positions so the order is not always the same
         baralhar();
     }
-
+    /**
+     * Randomly shuffles the internal array of lever effects.
+     */
     private void baralhar() {
         for (int i = 0; i < efeitos.length; i++) {
             int j = (int)(Math.random() * efeitos.length);
@@ -34,18 +44,24 @@ public class Alavanca {
         }
     }
 
-    /** @param escolha 1, 2 ou 3*/
+    /**
+     * Activates one of the levers based on the player's choice and returns
+     * the corresponding effect.
+     *
+     * @param escolha the lever number chosen by the player;
+     * @return the  effect associated with the chosen lever;
+     */
     public AlavancaEnum ativar(int escolha) {
-        if (escolha < 1 || escolha > NUM_ALAVANCAS) {
-            return AlavancaEnum.NADA;
+            if (escolha < 1 || escolha > NUM_ALAVANCAS) {
+                return AlavancaEnum.NADA;
+            }
+            return efeitos[escolha - 1];
         }
-        return efeitos[escolha - 1];
-    }
 
 
-    public int getNumAlavancas() {
-        return NUM_ALAVANCAS;
-    }
+        public int getNumAlavancas() {
+            return NUM_ALAVANCAS;
+        }
 
 
 }

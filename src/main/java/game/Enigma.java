@@ -1,45 +1,100 @@
 package game;
 
 import enums.Dificuldade;
-
+/**
+ * Represents a riddle (enigma) that can be presented to a player or bot.
+ */
 public class Enigma {
+    /**
+     * The question to be shown to the player.
+     */
     private String pergunta;
+
+    /**
+     * Array of possible answer options.
+     */
     private String[] opcoes;
+
+    /**
+     * Index of the correct option
+     */
     private int indiceCorreto;
+
+    /**
+     * Difficulty level of the riddle.
+     */
     private Dificuldade dificuldade;
 
-    // --- NOVOS CAMPOS PARA OS EFEITOS ---
-    // Guardam o código do que acontece (ex: "SWAP", "BACK:2", "EXTRA_TURN")
+    /**
+     * Effect code applied when the player answers correctly.
+     */
     private String efeitoSucesso;
-    private String efeitoFalha;
 
+    /**
+     * Effect code applied when the player answers incorrectly.
+     */
+    private String efeitoFalha;
+    /**
+     * Creates a new Enigma with the given question, options, correct answer index and difficulty.
+     * @param pergunta       the question text
+     * @param opcoes         the list of possible options
+     * @param indiceCorreto  the index (0-based) of the correct option in {@code opcoes}
+     * @param dificuldade    the difficulty level of this riddle
+     */
     public Enigma(String pergunta, String[] opcoes, int indiceCorreto, Dificuldade dificuldade) {
         this.pergunta = pergunta;
         this.opcoes = opcoes;
         this.indiceCorreto = indiceCorreto;
         this.dificuldade = dificuldade;
-
-        // Valores por defeito (para não dar erro se o JSON não tiver nada)
-        this.efeitoSucesso = "NONE";   // Se acertar, não acontece nada extra
-        this.efeitoFalha = "BLOCK";    // Se errar, perde o turno (padrão)
+        this.efeitoSucesso = "NONE";
+        this.efeitoFalha = "BLOCK";
     }
 
-    // --- MÉTODOS NOVOS ---
+    /**
+     * Sets the effect codes for success and failure.
+     * @param sucesso the effect code to apply when the riddle is answered correctly
+     * @param falha   the effect code to apply when the riddle is answered incorrectly
+     */
     public void setEfeitos(String sucesso, String falha) {
         this.efeitoSucesso = sucesso;
         this.efeitoFalha = falha;
     }
 
+    /**
+     * Returns the effect code applied when the riddle is answered correctly.
+     * @return the success effect code
+     */
     public String getEfeitoSucesso() { return efeitoSucesso; }
+    /**
+     * Returns the effect code applied when the riddle is answered incorrectly.
+     * @return the failure effect code
+     */
     public String getEfeitoFalha() { return efeitoFalha; }
 
-    // --- MÉTODOS ANTIGOS (Mantêm-se iguais) ---
+    /**
+     * Returns the question text.
+     * @return the question
+     */
     public String getPergunta() { return pergunta; }
+
+    /**
+     * Returns the array of possible options.
+     * @return the options array
+     */
     public String[] getOpcoes() { return opcoes; }
+
+    /**
+     * Returns the difficulty level of this riddle
+     * @return the difficulty
+     */
     public Dificuldade getDificuldade() { return dificuldade; }
 
+    /**
+     * Verifies whether the chosen option corresponds to the correct answer.
+     * @param opcaoEscolhida the chosen option number (1-based)
+     * @return true if the chosen option is the correct one, false otherwise
+     */
     public boolean verificarResposta(int opcaoEscolhida) {
-        // O utilizador escolhe 1, 2, 3... nós convertemos para índice 0, 1, 2...
         return (opcaoEscolhida - 1) == indiceCorreto;
     }
 }

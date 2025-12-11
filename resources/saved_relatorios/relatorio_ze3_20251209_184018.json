@@ -1,0 +1,88 @@
+{
+  "vencedor": "Bot_1",
+  "dataHora": "2025-12-09T18:40:18.105181500",
+  "duracao": 6,
+  "mapaNome": "ze3",
+  "dificuldade": "FACIL",
+  "totalEnigmasResolvidos": 7,
+  "totalEnigmasTentados": 9,
+  "totalObstaculos": 3,
+  "jogadores": [
+    {
+      "nome": "Bot_1",
+      "tipo": "Bot",
+      "localAtual": "Câmara do Tesouro",
+      "turnosJogados": 6,
+      "vencedor": true,
+      "percurso": ["Corredor 16", "Corredor 16", "Corredor 8", "Sala Misteriosa 3", "Sala Misteriosa 5", "Corredor 8", "Sala Misteriosa 3", "Sala Misteriosa 3", "Sala Misteriosa 5", "Ante-Câmara 1", "Corredor 8", "Sala Misteriosa 3", "Sala Misteriosa 5", "Ante-Câmara 1", "Câmara do Tesouro"],
+      "obstaculos": ["Armadilha em Corredor 16", "Armadilha em Sala Misteriosa 5", "Armadilha em Ante-Câmara 1"],
+      "enigmas": [
+        {
+          "sala": "Corredor 8",
+          "pergunta": "Qual método é chamado automaticamente ao criar um objeto?",
+          "resposta": "Correto",
+          "resolvido": true,
+          "efeito": "EXTRA_TURN"
+        },
+        {
+          "sala": "Sala Misteriosa 3",
+          "pergunta": "Qual é a extensão de um ficheiro Java compilado (bytecode)?",
+          "resposta": "Correto",
+          "resolvido": true,
+          "efeito": "EXTRA_TURN"
+        },
+        {
+          "sala": "Corredor 8",
+          "pergunta": "Qual destes nomes de variável é INVÁLIDO?",
+          "resposta": "Correto",
+          "resolvido": true,
+          "efeito": "EXTRA_TURN"
+        },
+        {
+          "sala": "Sala Misteriosa 3",
+          "pergunta": "Como se escreve um comentário de uma linha?",
+          "resposta": "Errado",
+          "resolvido": false,
+          "efeito": "BACK:1"
+        },
+        {
+          "sala": "Corredor 8",
+          "pergunta": "Qual é o valor binário de 5?",
+          "resposta": "Correto",
+          "resolvido": true,
+          "efeito": "EXTRA_TURN"
+        },
+        {
+          "sala": "Sala Misteriosa 3",
+          "pergunta": "O símbolo '!' em Java significa:",
+          "resposta": "Correto",
+          "resolvido": true,
+          "efeito": "EXTRA_TURN"
+        },
+        {
+          "sala": "Corredor 8",
+          "pergunta": "Qual é o resultado de (true && false)?",
+          "resposta": "Errado",
+          "resolvido": false,
+          "efeito": "BACK:1"
+        },
+        {
+          "sala": "Corredor 8",
+          "pergunta": "Qual é o índice do primeiro elemento de um array?",
+          "resposta": "Correto",
+          "resolvido": true,
+          "efeito": "EXTRA_TURN"
+        },
+        {
+          "sala": "Sala Misteriosa 3",
+          "pergunta": "Qual é a negação de (A OU B)?",
+          "resposta": "Correto",
+          "resolvido": true,
+          "efeito": "EXTRA_TURN"
+        }
+      ],
+      "efeitosAplicados": [],
+      "totalEnigmasResolvidos": 7
+    }
+  ]
+}

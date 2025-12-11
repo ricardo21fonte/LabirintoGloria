@@ -1,61 +1,121 @@
 package game;
 
 import enums.TipoDivisao;
-
+/**
+ * Represents a single room (or division) in the labyrinth.
+ */
 public class Divisao {
-    
-    // --- LÓGICA DE IDENTIDADE ÚNICA ---
-    private static int nextId = 1; // Contador global partilhado
-    private int id;                // ID único desta instância específica
 
+    /**
+     * Global counter used to assign unique IDs to each new Divisao.
+     */
+    private static int nextId = 1;
+
+    /**
+     * Unique ID of this specific Divisao.
+     */
+    private int id;
+
+    /**
+     * Name of the room.
+     */
     private String nome;
-    private TipoDivisao tipo;
-    
-    // Objetos e Variáveis de Puzzle
-    private Alavanca alavancaDoPuzzle; 
-    private int idDaPortaQueAbre = -1; 
 
+    /**
+     * Type of this room, which describes its function in the game.
+     */
+    private TipoDivisao tipo;
+    /**
+     * Lever associated with this room's puzzle, if any.
+     */
+    private Alavanca alavancaDoPuzzle;
+
+    /**
+     * ID of the door that this room can unlock via its puzzle/lever.
+     */
+    private int idDaPortaQueAbre = -1;
+    /**
+     * Creates a new Divisao
+     * @param nome the room name
+     * @param tipo the type of the room
+     */
     public Divisao(String nome, TipoDivisao tipo) {
-        this.id = nextId++; // Por defeito, atribui novo ID e incrementa
+        this.id = nextId++;
         this.nome = nome;
         this.tipo = tipo;
     }
 
-    // --- MÉTODOS DE CORREÇÃO DE ID (CRÍTICOS PARA LOAD) ---
-
     /**
-     * Permite ao MapLoader atualizar o contador global para evitar duplicados.
-     * @param valor O novo valor para o próximo ID a ser gerado.
+     * Updates the global ID counter used to generate IDs for new instances.
+     * @param valor the new value to be used as the next ID to generate
      */
     public static void setNextId(int valor) {
         nextId = valor;
     }
 
     /**
-     * Permite forçar um ID específico ao carregar de ficheiro.
-     * @param id O ID lido do JSON (ex: 50 se o código for "S50").
+     * Forces this Divisao to use a specific ID, when loading from a file or external representation.
+     * @param id the ID read from the external source
      */
     public void definirIdManual(int id) {
         this.id = id;
     }
-    // -----------------------------------------------------
 
+    /**
+     * Returns the unique ID of this room.
+     * @return the room ID
+     */
     public int getId() { return id; }
-
-    public void setAlavanca(Alavanca a) { this.alavancaDoPuzzle = a; }
+    /**
+     * Associates a lever puzzle with this room.
+     * @param a the lever to set
+     */
+    public void setAlavanca(Alavanca a) {
+        this.alavancaDoPuzzle = a;
+    }
+    /**
+     * Returns the lever associated with this room
+     * @return the lever puzzle
+     */
     public Alavanca getAlavanca() { return alavancaDoPuzzle; }
 
+    /**
+     * Sets the ID of the door that this room can unlock
+     * @param id the ID of the door that can be unlocked from this room
+     */
     public void setIdDesbloqueio(int id) { this.idDaPortaQueAbre = id; }
-    public int getIdDesbloqueio() { return idDaPortaQueAbre; }
 
+    /**
+     * Returns the ID of the door that this room can unlock.
+     * @return the door ID to unlock
+     */
+    public int getIdDesbloqueio() { return idDaPortaQueAbre; }
+    /**
+     * Returns the display name of the room.
+     * @return the room name
+     */
     public String getNome() { return nome; }
+
+    /**
+     * Returns the type of this room.
+     * @return the TipoDivisao of the room
+     */
     public TipoDivisao getTipo() { return tipo; }
 
+    /**
+     * Returns a string representation of this room
+     * @return a string representation of this room
+     */
     @Override
     public String toString() {
         return nome + " [" + tipo + "] (ID:" + id + ")";
     }
 
+    /**
+     * Compares this room to another object for equality.
+     * @param obj the object to compare with
+     * @return true if both represent the same room ID, or false otherwise
+     */
     @Override
     public boolean equals(Object obj) {
         if (this == obj) return true;
@@ -64,8 +124,13 @@ public class Divisao {
         return this.id == outra.id; 
     }
 
+    /**
+     * Returns a hash code based solely on this room's unique ID.
+     * @return the value
+     */
     @Override
     public int hashCode() {
+
         return Integer.hashCode(id);
     }
 }

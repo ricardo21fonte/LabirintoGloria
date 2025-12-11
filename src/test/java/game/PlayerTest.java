@@ -6,7 +6,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.Test;
 
 import enums.TipoDivisao;
-
+import enums.TipoDivisao; // Adicionar este import
+import ui.GameView;
 class PlayerTest {
 
     @Test
@@ -35,7 +36,7 @@ class PlayerTest {
     void testeMovimentoERecuo() {
         Divisao inicio = new Divisao("Inicio", TipoDivisao.ENTRADA);
         Divisao corredor = new Divisao("Corredor", TipoDivisao.SALA_NORMAL);
-        
+        GameView view = new GameView();
         Player p = new Player("Corredor", inicio);
         
         // Mover para a frente
@@ -43,7 +44,7 @@ class PlayerTest {
         assertEquals(corredor, p.getLocalAtual(), "O jogador devia estar no Corredor");
         
         // Testar Recuo
-        p.recuar(1);
+        p.recuar(1, view);
         assertEquals(inicio, p.getLocalAtual(), "O jogador devia ter voltado ao Inicio");
     }
 }

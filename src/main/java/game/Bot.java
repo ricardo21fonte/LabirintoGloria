@@ -9,15 +9,38 @@ import enums.Dificuldade;
 import enums.TipoDivisao;
 import graph.LabyrinthGraph;
 import ui.GameView;
-
+/**
+ * Represents an AI-controlled player (bot) in the labyrinth game.
+ */
 public class Bot extends Player {
 
+    /**
+     * Intelligence level (difficulty) of this bot.
+     * Affects chance of solving riddles correctly.
+     */
     private Dificuldade inteligencia;
+
+    /**
+     * Graph representing the labyrinth as known by the bot.
+     * Used for pathfinding and movement decisions.
+     */
     private LabyrinthGraph<Divisao> mapaConhecido;
+
+    /**
+     * List of lever memories, one entry per room with levers the bot has visited.
+     * Each MemoriaAlavanca stores which levers were already tried.
+     */
     private ArrayUnorderedList<MemoriaAlavanca> memoriasAlavancas = new ArrayUnorderedList<>();
 
 
-
+    /**
+     * Creates a new Bot with a given name, starting room, difficulty, and known map.
+     *
+     * @param nome         the bot's name
+     * @param inicio       the starting division (room) of the bot
+     * @param inteligencia the bot's intelligence/difficulty level
+     * @param mapa         the labyrinth graph known by the bot
+     */
     public Bot(String nome, Divisao inicio, Dificuldade inteligencia, LabyrinthGraph<Divisao> mapa) {
         super(nome, inicio);
         this.inteligencia = inteligencia;
@@ -25,35 +48,35 @@ public class Bot extends Player {
     }
 
     // =================================================================
-    // 1. CÉREBRO DO BOT (DECISÃO DE MOVIMENTO)
+    // 1. BOT (MOVEMENT DECISION)
     // =================================================================
-    
-    // REMOVI O @OVERRIDE AQUI PORQUE O PLAYER NÃO TEM ESTE MÉTODO
+    /**
+     * Decides the next move of the bot according to a priority strategy:
+     * @return the next Divisao the bot wants to move to
+     */
     public Divisao escolherMovimento() {
-        // PRIORIDADE 1: Tentar ir para o Tesouro
-        // (Procura SALA_CENTRAL, false para alavancas uteis pq não é alavanca)
+
         Divisao passoParaTesouro = executarBFS(TipoDivisao.SALA_CENTRAL, false);
 
         if (passoParaTesouro != null) {
             return passoParaTesouro;
         }
 
-        // PRIORIDADE 2: Procurar Alavanca Útil
-        // (Procura SALA_ALAVANCA, true para verificar se é útil)
         Divisao passoParaAlavanca = executarBFS(TipoDivisao.SALA_ALAVANCA, true);
 
         if (passoParaAlavanca != null) {
             return passoParaAlavanca;
         }
 
-        // PRIORIDADE 3: Movimento Aleatório (Desespero)
         return movimentoAleatorio();
     }
 
-    // =================================================================
-    // 2. ALGORITMOS DE BUSCA (PATHFINDING)
-    // =================================================================
-
+    /**
+     * Executes a BFS (Breadth-First Search) from the bot's current location in order to find a room of a given type.
+     * @param tipoAlvo             the target room type to search for
+     * @param apenasAlavancasUteis if true, lever rooms already "solved"
+     * @return the next Divisao step towards the found target room
+     */
     private Divisao executarBFS(TipoDivisao tipoAlvo, boolean apenasAlavancasUteis) {
         LinkedQueue<Divisao> fila = new LinkedQueue<>();
         ArrayUnorderedList<Divisao> visitados = new ArrayUnorderedList<>();
@@ -87,8 +110,6 @@ public class Bot extends Player {
                     break;
                 }
             }
-            // ----------------------------------------------------
-
             Iterator<Divisao> it = mapaConhecido.getVizinhos(atual).iterator();
             while (it.hasNext()) {
                 Divisao vizinho = it.next();
@@ -108,7 +129,13 @@ public class Bot extends Player {
         }
         return null;
     }
-
+    /**
+     * Verifies whether the bot can pass from one division to another, based on the corridor event between them.
+     *
+     * @param origem  the origin division
+     * @param destino the destination division
+     * @return true if the bot can pass through the corridor or false otherwise
+     */
     private boolean podePassar(Divisao origem, Divisao destino) {
         EventoCorredor evento = mapaConhecido.getCorredorEvento(origem, destino);
         
@@ -119,6 +146,13 @@ public class Bot extends Player {
         return true;
     }
 
+    /**
+     * Reconstructs the first step towards a destination division using the generated BFS tree.
+     *
+     * @param arvore   list of relationships produced by BFS
+     * @param destino  the target division
+     * @return the first Divisao to move to from the current location in order to reach destination
+     */
     private Divisao reconstruirPrimeiroPasso(ArrayUnorderedList<Parente> arvore, Divisao destino) {
         Divisao passo = destino;
         Divisao anterior = null;
@@ -130,7 +164,10 @@ public class Bot extends Player {
         }
         return anterior;
     }
-
+    /**
+     * Chooses a random adjacent division from the bot's current location.
+     * @return a randomly chosen neighbor division
+     */
     private Divisao movimentoAleatorio() {
         ArrayUnorderedList<Divisao> vizinhos = mapaConhecido.getVizinhos(getLocalAtual());
         if (vizinhos.isEmpty()) return null;
@@ -140,10 +177,11 @@ public class Bot extends Player {
         return it.next();
     }
 
-    // =================================================================
-    // 3. LÓGICA DE ENIGMAS
-    // =================================================================
-
+    /**
+     * Tries to solve a given riddle (enigma), based on the bot's difficulty level.
+     * @param enigma the riddle to attempt
+     * @return true if the bot solves the riddle, or false otherwise
+     */
     public boolean tentarResolverEnigma(Enigma enigma) {
         double chanceAcerto = 0.0; 
         switch (inteligencia) {
@@ -154,6 +192,13 @@ public class Bot extends Player {
         return Math.random() <= chanceAcerto;
     }
 
+    /**
+     * Finds the parent division of a given child division inside the BFS tree.
+     *
+     * @param lista list of relationships
+     * @param filho the child division
+     * @return the parent division
+     */
     private Divisao obterPai(ArrayUnorderedList<Parente> lista, Divisao filho) {
         Iterator<Parente> it = lista.iterator();
         while (it.hasNext()) {
@@ -162,24 +207,30 @@ public class Bot extends Player {
         }
         return null;
     }
-
+    /**
+     * Helper class used to store parent-child relationships during BFS.
+     */
     private class Parente {
+
         Divisao filho, pai;
+        /**
+         * Creates a new parent-child pair.
+         */
         public Parente(Divisao f, Divisao p) { this.filho = f; this.pai = p; }
     }
-    
-    public Dificuldade getInteligencia() { return inteligencia; }
-    // =================================================================
-    // 4. MEMÓRIA DE ALAVANCAS (inteligência do Bot nas salas de alavanca)
-    // =================================================================
 
     /**
-     * Escolhe uma alavanca numa determinada sala, evitando repetir
-     * alavancas que este Bot já tentou nessa sala.
+     * Returns the bot's difficulty level.
+     * @return the difficulty level
+     */
+    public Dificuldade getInteligencia() { return inteligencia; }
+
+    /**
+     * Chooses a lever in a given room, avoiding levers that this bot has already tried in that specific room.
      *
-     * @param sala          sala onde está a alavanca
-     * @param numAlavancas  número total de alavancas (normalmente 3)
-     * @return              índice da alavanca (1..numAlavancas)
+     * @param sala         the room that contains the levers
+     * @param numAlavancas the total number of levers
+     * @return the chosen lever index in the range
      */
     public int escolherAlavanca(Divisao sala, int numAlavancas) {
         MemoriaAlavanca mem = obterMemoriaAlavanca(sala, numAlavancas);
@@ -192,7 +243,7 @@ public class Bot extends Player {
             }
         }
 
-        // se já tentou todas, faz fallback aleatório (não deve acontecer muitas vezes)
+        // se já tentou todas, faz fallback aleatório
         if (disponiveis == 0) {
             return 1 + (int)(Math.random() * numAlavancas);
         }
@@ -203,18 +254,21 @@ public class Bot extends Player {
             if (!mem.tentadas[i]) {
                 if (salto == 0) {
                     mem.tentadas[i] = true; // marca como tentada
-                    return i + 1;           // alavancas são 1..N
+                    return i + 1;
                 }
                 salto--;
             }
         }
 
-        // segurança (não devia chegar aqui)
         return 1;
     }
 
     /**
-     * Procura (ou cria) a memória de alavancas para uma determinada sala.
+     * Retrieves (or creates) the lever memory associated with a given room.
+     *
+     * @param sala         the room whose lever memory is needed
+     * @param numAlavancas the total number of levers in that room
+     * @return an existing MemoriaAlavanca for the room, or a new one if none existed yet
      */
     private MemoriaAlavanca obterMemoriaAlavanca(Divisao sala, int numAlavancas) {
         Iterator<MemoriaAlavanca> it = memoriasAlavancas.iterator();
@@ -225,53 +279,81 @@ public class Bot extends Player {
             }
         }
 
-        // se ainda não existe memória para esta sala, criar
+        // se ainda não existe memória para esta sala, cria
         MemoriaAlavanca nova = new MemoriaAlavanca(sala, numAlavancas);
         memoriasAlavancas.addToRear(nova);
         return nova;
     }
 
     /**
-     * Classe interna que guarda a memória de quais alavancas
-     * já foram tentadas numa sala específica.
+     * Internal static class that stores which levers have already been tried in a specific room.
      */
     private static class MemoriaAlavanca {
+        /**
+         * Room associated with this memory.
+         */
         Divisao sala;
+        /**
+         * Array indicating which levers were already tried.
+         */
         boolean[] tentadas;
-
+        /**
+         * Creates a new lever memory for a given room.
+         */
         MemoriaAlavanca(Divisao sala, int numAlavancas) {
             this.sala = sala;
             this.tentadas = new boolean[numAlavancas]; // tudo a false por defeito
         }
     }
-
+    /**
+     * Rolls the dice for the bot, notifies the view, and returns the result.
+     * @param view the game view used to display feedback
+     * @return the dice value in the range {@code 1..6}
+     */
     @Override
-public int lancarDados(GameView view) {
-    view.avisarBotLancaDados();
-    try { Thread.sleep(1000); } catch (Exception e){}
-    int val = (int)(Math.random() * 6) + 1;
-    view.mostrarResultadoDados(true, val);
-    return val;
-}
+    public int lancarDados(GameView view) {
+        view.avisarBotLancaDados();
+        try { Thread.sleep(1000); } catch (Exception e){}
+        int val = (int)(Math.random() * 6) + 1;
+        view.mostrarResultadoDados(true, val);
+        return val;
+    }
 
-@Override
-public Divisao escolherDestino(ArrayUnorderedList<Divisao> vizinhos, GameView view) {
-    Divisao d = this.escolherMovimento(); // O teu método de IA
-    if(d != null) view.mostrarBotDecisao(d.getNome());
-    return d;
-}
-
-@Override
-public boolean resolverEnigma(Enigma e, GameView view) {
-    view.mostrarBotAnalisaEnigma(getNome(), getInteligencia().toString());
-    return this.tentarResolverEnigma(e); // O teu método de IA
-}
-
-@Override
-public int decidirAlavanca(Divisao sala, GameView view) {
-    int escolha = this.escolherAlavanca(sala, 3); // O teu método de memória
-    view.mostrarBotEscolheAlavanca(escolha);
-    return escolha;
-}
+    /**
+     * Chooses the destination division where the bot will move next among the list of adjacent divisions, using the bot's AI.
+     * @param vizinhos list of neighboring divisions
+     * @param view     the game view used to display the decision
+     * @return the chosen destination division, or null if none
+     */
+    @Override
+    public Divisao escolherDestino(ArrayUnorderedList<Divisao> vizinhos, GameView view) {
+        Divisao d = this.escolherMovimento();
+        if(d != null) view.mostrarBotDecisao(d.getNome());
+        return d;
+    }
+    /**
+     * Asks the bot to try to solve a riddle, notifying the view and then using the bot's AI to determine success.
+     *
+     * @param e    the riddle (enigma) to solve
+     * @param view the game view used to display the analysis
+     * @return true if the bot solves the riddle, false otherwise
+     */
+    @Override
+    public boolean resolverEnigma(Enigma e, GameView view) {
+        view.mostrarBotAnalisaEnigma(getNome(), getInteligencia().toString());
+        return this.tentarResolverEnigma(e);
+    }
+    /**
+     * Asks the bot to choose which lever to pull in a given room, using its lever memory, and notifies the view.
+     * @param sala the room containing the levers
+     * @param view the game view used to display the choice
+     * @return the chosen lever index
+     */
+    @Override
+    public int decidirAlavanca(Divisao sala, GameView view) {
+        int escolha = this.escolherAlavanca(sala, 3);
+        view.mostrarBotEscolheAlavanca(escolha);
+        return escolha;
+    }
 
 }

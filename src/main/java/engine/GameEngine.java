@@ -172,7 +172,7 @@ public class GameEngine {
             player.desbloquearTranca(sala.getIdDesbloqueio());
             return false;
         } else if (resultado == AlavancaEnum.PENALIZAR) {
-            player.recuar(2);
+            player.recuar(2, view);
             return true;
         }
         return false;
@@ -197,7 +197,7 @@ public class GameEngine {
         } else if (effect.startsWith("BACK:")) {
             try {
                 int steps = Integer.parseInt(effect.split(":")[1]);
-                p.recuar(steps);
+                p.recuar(steps, view);
             } catch (Exception e) {}
         } else if (effect.equals("BLOCK")) {
             p.bloquear(1);
@@ -303,7 +303,7 @@ public class GameEngine {
             p.bloquear(ev.getValor());
         }
         if (ev.getTipo() == CorredorEvento.MOVE_BACK) {
-            p.recuar(ev.getValor());
+            p.recuar(ev.getValor(), view);
         }
         
         // Relocalizar

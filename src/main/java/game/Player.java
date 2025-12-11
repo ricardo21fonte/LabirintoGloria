@@ -1,4 +1,4 @@
-package game; // Confirma que está no package 'game' ou 'core.model' conforme a tua estrutura
+package game;
 
 import java.util.Iterator;
 
@@ -8,16 +8,55 @@ import Lists.UnorderedLinkedList;
 import Stacks.LinkedStack;
 import ui.GameView;
 
+/**
+ * Represents a player in the labyrinth.
+ */
 public class Player {
+    /**
+     * Player's string name.
+     */
     private String nome;
+
+    /**
+     * Current division where the player is located.
+     */
     private Divisao localAtual;
+
+    /**
+     * Movement and action history log for this player.
+     */
     private UnorderedLinkedList<String> historico;
+
+    /**
+     * Number of extra moves the player has accumulated.
+     */
     private int jogadasExtra;
+
+    /**
+     * Number of turns during which the player is blocked.
+     */
     private int turnosBloqueado;
+
+    /**
+     * Stack representing the path the player has taken through the labyrinth.
+     */
     private LinkedStack<Divisao> caminho;
+
+    /**
+     * Minimum allowed size of the path stack for "recuar" operations.
+     */
     private int limiteRecuoMinSize;
+
+    /**
+     * List of IDs representing locks that this player has already unlocked.
+     */
     private ArrayUnorderedList<Integer> trancasDesbloqueadas;
 
+    /**
+     * Creates a new player with the given name and starting division.
+     * @param nome   the player's name
+     * @param inicio the starting division for the player
+     */
     public Player(String nome, Divisao inicio) {
         this.nome = nome;
         this.localAtual = inicio;
@@ -31,13 +70,10 @@ public class Player {
         historico.addToRear("Inicio: " + inicio.getNome());
     }
 
-    // =========================================================
-    // 🎮 MÉTODOS QUE O BOT VAI DAR OVERRIDE
-    // (Estes métodos têm de existir aqui para o Bot não dar erro)
-    // =========================================================
-
     /**
-     * Comportamento Base (Humano): Pede para carregar Enter e lança.
+     * Human behaviour for rolling the dice.
+     * @param view the game view used to display prompts and results
+     * @return the dice value in the range 1 to 6
      */
     public int lancarDados(GameView view) {
         view.pedirHumanoLancaDados();
@@ -47,7 +83,10 @@ public class Player {
     }
 
     /**
-     * Comportamento Base (Humano): Mostra menu e pede escolha.
+     * Human behaviour for choosing a destination.
+     * @param vizinhos list of neighbouring divisions
+     * @param view     the game view used to display options and read input
+     * @return the chosen Divisao
      */
     public Divisao escolherDestino(ArrayUnorderedList<Divisao> vizinhos, GameView view) {
         if (vizinhos == null || vizinhos.isEmpty()) return null;
@@ -76,7 +115,10 @@ public class Player {
     }
 
     /**
-     * Comportamento Base (Humano): Mostra pergunta e pede input numérico.
+     * Human behaviour for solving a riddle.
+     * @param enigma the riddle to solve
+     * @param view   the game view used to display the riddle and read input
+     * @return true if the player answers correctly, or false otherwise
      */
     public boolean resolverEnigma(Enigma enigma, GameView view) {
         view.mostrarPergunta(enigma.getPergunta());
@@ -96,8 +138,12 @@ public class Player {
         return acertou;
     }
 
+
     /**
-     * Comportamento Base (Humano): Escolhe alavanca (1, 2 ou 3) via menu.
+     * Human behaviour for deciding which lever to pull in a lever room.
+     * @param sala the lever room
+     * @param view the game view used to display options and read input
+     * @return the chosen lever index
      */
     public int decidirAlavanca(Divisao sala, GameView view) {
         view.mostrarSalaAlavanca();
@@ -114,25 +160,37 @@ public class Player {
         return escolha;
     }
 
-    // =========================================================
-    // ⚙️ GETTERS, SETTERS E LÓGICA INTERNA
-    // =========================================================
-
+    /**
+     * Moves the player to the given room
+     * @param novaSala the new division to move to
+     */
     public void moverPara(Divisao novaSala) {
         this.localAtual = novaSala;
         historico.addToRear("Moveu para: " + novaSala.getNome());
         caminho.push(novaSala);
     }
+    /**
+     * Moves the player backwards along the path by a given number of steps.
+     * @param casas number of steps to move back
+     */
+    public void recuar(int casas, GameView view) {
+        Divisao posicaoInicial = getLocalAtual();
+        int passosRealizados = 0;
 
-    public void recuar(int casas) {
         if (caminho == null || caminho.size() <= limiteRecuoMinSize) {
-            // Pode adicionar mensagem na View aqui se quiseres
+            // Se já está no limite de recuo, não recua mais
+            view.mostrarAvisoSemRecuo(this.nome);
             return;
         }
-        
+
         int passos = casas;
         while (passos > 0 && caminho.size() > limiteRecuoMinSize) {
-            try { caminho.pop(); } catch (EmptyCollectionException e) { break; }
+            try {
+                caminho.pop();
+                passosRealizados++;
+            } catch (EmptyCollectionException e) {
+                break;
+            }
             passos--;
         }
 
@@ -140,29 +198,54 @@ public class Player {
             Divisao novaPosicao = caminho.peek();
             this.localAtual = novaPosicao;
             historico.addToRear("Recuou para: " + novaPosicao.getNome());
-        } catch (EmptyCollectionException e) {}
-    }
 
+            // 💡 CHAMADA À VIEW PARA MOSTRAR O RESULTADO
+            view.mostrarRecuo(this.nome, casas, novaPosicao.getNome());
+
+        } catch (EmptyCollectionException e) {
+            // Não deve acontecer se a verificação de limite foi bem feita
+            this.localAtual = posicaoInicial; // Fica onde estava se der erro
+            view.mostrarAvisoSemRecuo(this.nome);
+        }
+    }
+    /**
+     * Increases the number of turns this player will remain blocked.
+     * @param turnos number of turns to add to the blocked counter
+     */
     public void bloquear(int turnos) {
         this.turnosBloqueado += turnos;
     }
-
+    /**
+     * Sets the current room of the player and pushes it onto the path stack
+     * @param novaSala the new current division
+     */
     public void setLocalAtual(Divisao novaSala) {
         this.localAtual = novaSala;
         if (caminho == null) caminho = new LinkedStack<>();
         caminho.push(novaSala);
     }
-
+    /**
+     * Marks the current size of the path stack as the minimum allowed for future "recuar" operations.
+     */
     public void marcarLimiteRecuo() {
         this.limiteRecuoMinSize = caminho.size();
     }
 
+    /**
+     * Marks a lock as unlocked for this player, if it is not already present.
+     * @param id the ID of the lock to unlock
+     */
     public void desbloquearTranca(int id) {
         if (!podePassarTranca(id)) {
             trancasDesbloqueadas.addToRear(id);
         }
     }
-
+    /**
+     * Checks whether this player can pass through a lock with the given ID.
+     *
+     * @param id the lock ID to check
+     * @return true if the player has already unlocked this ID, or false otherwise
+     */
     public boolean podePassarTranca(int id) {
         Iterator<Integer> it = trancasDesbloqueadas.iterator();
         while (it.hasNext()) {
@@ -171,17 +254,66 @@ public class Player {
         return false;
     }
 
-    // --- Getters Simples ---
+    /**
+     * Returns the player's name.
+     * @return the name
+     */
     public String getNome() { return nome; }
+
+    /**
+     * Returns the current division where the player is located.
+     * @return the current division
+     */
     public Divisao getLocalAtual() { return localAtual; }
+
+    /**
+     * Returns the movement/action history of this player.
+     * @return the history list
+     */
     public UnorderedLinkedList<String> getHistorico() { return historico; }
+
+    /**
+     * Returns the number of extra moves the player currently has.
+     * @return the extra moves count
+     */
     public int getJogadasExtra() { return jogadasExtra; }
+
+    /**
+     * Sets the number of extra moves the player has.
+     * @param n the new number of extra moves
+     */
     public void setJogadasExtra(int n) { this.jogadasExtra = n; }
+
+    /**
+     * Adds extra moves to the player's current total.
+     * @param n the number of extra moves to add
+     */
     public void adicionarJogadasExtras(int n) { this.jogadasExtra += n; }
+
+    /**
+     * Returns whether the player is currently blocked from playing.
+     *
+     * @return true if turnosBloqueado is greater than zero, false otherwise
+     */
     public boolean isBloqueado() { return turnosBloqueado > 0; }
+
+    /**
+     * Returns the number of blocked turns.
+     * @return the number of blocked turns
+     */
     public int getTurnosBloqueado() { return turnosBloqueado; }
-    public void consumirUmTurnoBloqueado() { if (turnosBloqueado > 0) turnosBloqueado--; }
-    
+
+    /**
+     * Consumes one blocked turn, if there are any remaining.
+     */
+    public void consumirUmTurnoBloqueado() {
+        if (turnosBloqueado > 0) turnosBloqueado--;
+    }
+
+    /**
+     * Returns a string representation of the player
+     * @return a string representation of this player
+     */
     @Override
     public String toString() { return "Jogador " + nome + " @ " + localAtual.getNome(); }
 }

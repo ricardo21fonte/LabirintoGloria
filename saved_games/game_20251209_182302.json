@@ -1,0 +1,37 @@
+{
+  "vencedor": "Bot_2",
+  "dataHora": "2025-12-09T18:23:02.060025100",
+  "duracao": 2,
+  "mapaNome": "Mapa do Jogo",
+  "dificuldade": "FACIL",
+  "totalEnigmasResolvidos": 0,
+  "totalObstaculos": 0,
+  "jogadores": [
+    {
+      "nome": "Bot_1",
+      "tipo": "Bot",
+      "localAtual": "",
+      "turnosJogados": 0,
+      "vencedor": false,
+      "percurso": ["Sala da Tranca 1"],
+      "obstaculos": [],
+      "enigmas": [
+      ],
+      "efeitosAplicados": [],
+      "totalEnigmasResolvidos": 0
+    },
+    {
+      "nome": "Bot_2",
+      "tipo": "Bot",
+      "localAtual": "Tesouro",
+      "turnosJogados": 2,
+      "vencedor": true,
+      "percurso": ["Sala da Tranca 1", "Entrada Única", "Sala da Tranca 1", "Tesouro"],
+      "obstaculos": [],
+      "enigmas": [
+      ],
+      "efeitosAplicados": [],
+      "totalEnigmasResolvidos": 0
+    }
+  ]
+}

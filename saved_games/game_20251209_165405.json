@@ -1,0 +1,57 @@
+{
+  "vencedor": "Bot_1",
+  "dataHora": "2025-12-09T16:54:05.970159900",
+  "duracao": 4,
+  "mapaNome": "Mapa do Jogo",
+  "dificuldade": "FACIL",
+  "totalEnigmasResolvidos": 0,
+  "totalObstaculos": 2,
+  "jogadores": [
+    {
+      "nome": "Bot_1",
+      "tipo": "Bot",
+      "localAtual": "Câmara do Tesouro",
+      "turnosJogados": 4,
+      "vencedor": true,
+      "percurso": ["Corredor 20", "Corredor 20", "Ante-Câmara 2", "Câmara do Tesouro"],
+      "obstaculos": ["Armadilha em Corredor 20"],
+      "enigmas": [
+      ],
+      "efeitosAplicados": [],
+      "totalEnigmasResolvidos": 0
+    },
+    {
+      "nome": "Bot_2",
+      "tipo": "Bot",
+      "localAtual": "",
+      "turnosJogados": 0,
+      "vencedor": false,
+      "percurso": ["Corredor 20"],
+      "obstaculos": ["Armadilha em Corredor 20"],
+      "enigmas": [
+      ],
+      "efeitosAplicados": [],
+      "totalEnigmasResolvidos": 0
+    },
+    {
+      "nome": "Bot_3",
+      "tipo": "Bot",
+      "localAtual": "",
+      "turnosJogados": 0,
+      "vencedor": false,
+      "percurso": [],
+      "obstaculos": [],
+      "enigmas": [
+        {
+          "sala": "Portão 4",
+          "pergunta": "Se x=5 e y=2, quanto é x/y em divisão inteira?",
+          "resposta": "2",
+          "resolvido": false,
+          "efeito": "BACK:1"
+        }
+      ],
+      "efeitosAplicados": [],
+      "totalEnigmasResolvidos": 0
+    }
+  ]
+}

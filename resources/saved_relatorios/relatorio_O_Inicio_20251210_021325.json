@@ -1,0 +1,32 @@
+{
+  "vencedor": "kjgkhgih",
+  "dataHora": "2025-12-10T02:13:25.717401300",
+  "duracao": 1,
+  "mapaNome": "O_Inicio",
+  "dificuldade": "FACIL",
+  "totalEnigmasResolvidos": 1,
+  "totalEnigmasTentados": 1,
+  "totalObstaculos": 0,
+  "jogadores": [
+    {
+      "nome": "kjgkhgih",
+      "tipo": "Humano",
+      "localAtual": "Câmara do Tesouro",
+      "turnosJogados": 1,
+      "vencedor": true,
+      "percurso": ["Pátio de Pedra", "Biblioteca Mágica", "Sala das Máquinas", "Câmara do Tesouro"],
+      "obstaculos": [],
+      "enigmas": [
+        {
+          "sala": "Pátio de Pedra",
+          "pergunta": "O que faz o comando 'git init'?",
+          "resposta": "3",
+          "resolvido": true,
+          "efeito": "EXTRA_TURN"
+        }
+      ],
+      "efeitosAplicados": [],
+      "totalEnigmasResolvidos": 1
+    }
+  ]
+}

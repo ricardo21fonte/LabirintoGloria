@@ -1,0 +1,65 @@
+{
+  "vencedor": "Bot_2",
+  "dataHora": "2025-12-09T16:55:22.871560300",
+  "duracao": 8,
+  "mapaNome": "Mapa do Jogo",
+  "dificuldade": "FACIL",
+  "totalEnigmasResolvidos": 0,
+  "totalObstaculos": 3,
+  "jogadores": [
+    {
+      "nome": "Bot_1",
+      "tipo": "Bot",
+      "localAtual": "",
+      "turnosJogados": 0,
+      "vencedor": false,
+      "percurso": ["Corredor 25", "Corredor 25", "Corredor 25", "Corredor 25"],
+      "obstaculos": [],
+      "enigmas": [
+        {
+          "sala": "Corredor 25",
+          "pergunta": "O que significa CPU?",
+          "resposta": "2",
+          "resolvido": false,
+          "efeito": "BACK:1"
+        },
+        {
+          "sala": "Corredor 25",
+          "pergunta": "Qual método é chamado automaticamente ao criar um objeto?",
+          "resposta": "2",
+          "resolvido": false,
+          "efeito": "BACK:1"
+        },
+        {
+          "sala": "Corredor 25",
+          "pergunta": "Como se escreve um comentário de uma linha?",
+          "resposta": "2",
+          "resolvido": false,
+          "efeito": "BACK:1"
+        },
+        {
+          "sala": "Corredor 25",
+          "pergunta": "Qual é o valor padrão (default) de um inteiro em Java?",
+          "resposta": "2",
+          "resolvido": false,
+          "efeito": "BACK:1"
+        }
+      ],
+      "efeitosAplicados": [],
+      "totalEnigmasResolvidos": 0
+    },
+    {
+      "nome": "Bot_2",
+      "tipo": "Bot",
+      "localAtual": "Câmara do Tesouro",
+      "turnosJogados": 8,
+      "vencedor": true,
+      "percurso": ["Corredor 12", "Ante-Câmara 3", "Corredor 12", "Corredor 12", "Corredor 12", "Ante-Câmara 3", "Câmara do Tesouro"],
+      "obstaculos": ["Armadilha em Ante-Câmara 3", "Armadilha em Corredor 12", "Armadilha em Corredor 12"],
+      "enigmas": [
+      ],
+      "efeitosAplicados": [],
+      "totalEnigmasResolvidos": 0
+    }
+  ]
+}

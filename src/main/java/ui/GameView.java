@@ -3,23 +3,34 @@ package ui;
 import java.util.Scanner;
 
 import enums.AlavancaEnum;
-
+/**
+ * This class responsible for all user interaction for the labyrinth game
+ */
 public class GameView {
 
+    /**
+     * Scanner used to read user input from standard input.
+     */
     private Scanner scanner;
 
+    /**
+     * Creates a new GameView
+     */
     public GameView() {
         this.scanner = new Scanner(System.in);
     }
 
+    /**
+     * Closes the underlying input scanner.
+     */
     public void fechar() {
         scanner.close();
     }
 
-    // =======================================================
-    // MÉTODOS DE INPUT GENÉRICOS
-    // =======================================================
-    
+    /**
+     * Reads an integer from the input.
+     * @return the integer read
+     */
     public int lerInteiro() {
         try {
             if (scanner.hasNextLine()) {
@@ -30,7 +41,10 @@ public class GameView {
             return -1;
         }
     }
-
+    /**
+     * Reads a String line from the input
+     * @return the string read
+     */
     public String lerString() {
         try {
             if (scanner.hasNextLine()) {
@@ -41,116 +55,198 @@ public class GameView {
             return "";
         }
     }
-
+    /**
+     * Waits for the user to press ENTER.
+     */
     public void esperarEnter() {
         System.out.println("(Enter para continuar...)");
         if (scanner.hasNextLine()) scanner.nextLine();
     }
 
-    // =======================================================
-    // SETUP E MENUS
-    // =======================================================
-
+    /**
+     * Displays a message indicating that game resources are loading.
+     */
     public void mostrarMensagemCarregar() {
         System.out.println("\n--- A CARREGAR RECURSOS DO JOGO ---");
     }
 
+    /**
+     * Asks the user to choose the difficulty level for riddles.
+     * @return the difficulty option chosen
+     */
     public int pedirDificuldade() {
         System.out.println("\nEscolha a Dificuldade dos Enigmas:");
         System.out.println("1 - FÁCIL | 2 - MÉDIO | 3 - DIFÍCIL");
         System.out.print("Opção: ");
         return lerInteiro();
     }
-
+    /**
+     * Shows a generic "invalid option" error message for a menu choice.
+     * @param min minimum valid option
+     * @param max maximum valid option
+     */
     public void mostrarErroOpcaoInvalida(int min, int max) {
         System.out.println("⚠️ Opção inválida. Escolha entre " + min + " e " + max + ".");
     }
 
+    /**
+     * Displays the difficulty that was selected and the number of riddles.
+     * @param dif difficulty text
+     * @param qtd number of riddles
+     */
     public void mostrarDificuldadeDefinida(String dif, int qtd) {
         System.out.println("Dificuldade definida: " + dif + " (" + qtd + " enigmas).");
     }
 
+    /**
+     * Displays an error indicating that the map has no entrance rooms.
+     */
     public void mostrarErroSemEntradas() {
         System.out.println("❌ Erro: O mapa não tem Entradas!");
     }
 
+    /**
+     * Displays a warning indicating the game is full with human players and bots cannot be added.
+     */
     public void mostrarAvisoJogoCheio() {
         System.out.println("\n(O jogo está cheio com 8 humanos. Não é possível adicionar bots.)");
     }
 
+    /**
+     * Displays a message indicating there are no players and the game ends.
+     */
     public void mostrarSemJogadores() {
         System.out.println("Sem jogadores. Fim.");
     }
 
+    /**
+     * Displays the start-of-game banner.
+     */
     public void mostrarInicioJogo() {
         System.out.println("\n⚔️ QUE COMECE A CORRIDA! ⚔️");
     }
 
-    // --- SETUP JOGADORES ---
-
+    /**
+     * Asks how many human players will participate.
+     * @param max maximum number of allowed human players
+     * @return the number of human players chosen
+     */
     public int pedirQuantidadeHumanos(int max) {
         System.out.print("\nQuantos Humanos? (0-" + max + "): ");
         return lerInteiro();
     }
 
+    /**
+     * Asks for the name of a given human player.
+     * @param i player index used in the prompt
+     * @return the name entered by the user
+     */
     public String pedirNomeJogador(int i) {
         System.out.print("Nome do Jogador " + i + ": ");
         return lerString();
     }
 
+    /**
+     * Shows the spawn room where a player or bot starts.
+     * @param nomeSala the name of the starting room
+     */
     public void mostrarSpawn(String nomeSala) {
         System.out.println("   🎲 Spawn: " + nomeSala);
     }
 
+    /**
+     * Asks how many bots will participate.
+     * @param max maximum number of allowed bots
+     * @return the number of bots chosen
+     */
     public int pedirQuantidadeBots(int max) {
         System.out.print("\nQuantos Bots? (0-" + max + "): ");
         return lerInteiro();
     }
 
+    /**
+     * Asks for the difficulty of a specific bot.
+     * @param i bot index (1-based) used in the prompt
+     * @return the chosen difficulty option
+     */
     public int pedirDificuldadeBot(int i) {
         System.out.println("Dificuldade do Bot " + i + ": [1-Fácil, 2-Médio, 3-Difícil]");
         System.out.print("> ");
         return lerInteiro();
     }
 
+    /**
+     * Displays a message indicating that a bot was created in the given room.
+     * @param nomeSala the name of the room where the bot spawns
+     */
     public void mostrarBotCriado(String nomeSala) {
         System.out.println("   🤖 Bot criado no " + nomeSala);
     }
 
-    // =======================================================
-    // GAME LOOP (TURNOS E DADOS)
-    // =======================================================
 
+    // GAME LOOP (TURNOS E DADOS)
+
+    /**
+     * Shows the header for the beginning of a player's turn.
+     * @param nome  player name
+     * @param local current room name
+     */
     public void mostrarInicioTurno(String nome, String local) {
         System.out.println("\n================================================");
         System.out.println("👤 VEZ DE: " + nome.toUpperCase());
         System.out.println("📍 Local: " + local);
     }
 
+    /**
+     * Displays a message indicating a player is blocked and for how many turns.
+     * @param nome   player name
+     * @param turnos remaining blocked turns
+     */
     public void mostrarBloqueado(String nome, int turnos) {
         System.out.println("🚫 " + nome + " está bloqueado!");
         System.out.println("   Faltam " + turnos + " turno(s) de bloqueio.");
     }
 
+    /**
+     * Displays that a bot is about to roll the dice.
+     */
     public void avisarBotLancaDados() {
         System.out.println("🤖 O Bot vai lançar os dados...");
     }
 
+    /**
+     * Prompts a human player to press ENTER to roll the dice.
+     */
     public void pedirHumanoLancaDados() {
         System.out.println("🎲 Pressiona ENTER para lançar o dado...");
         lerString(); 
     }
 
+    /**
+     * Displays the result of a dice roll.
+     * @param isBot code true if the current player is a bot or false otherwise
+     * @param valor dice value
+     */
     public void mostrarResultadoDados(boolean isBot, int valor) {
         if(isBot) System.out.println("🎲 O Bot rolou um " + valor + "!");
         else      System.out.println("🎲 ROLASTE UM " + valor + "!");
     }
 
+    /**
+     * Displays bonus movement information for the current turn.
+     * @param extra number of extra movements
+     * @param total total movements allowed this turn
+     */
     public void mostrarBonusJogadas(int extra, int total) {
         System.out.println("✨ BÓNUS: tens " + extra + " movimento(s) extra acumulado(s)!");
         System.out.println("➡️ Total de movimentos neste turno: " + total);
     }
-
+    /**
+     * Shows movement status information, including remaining steps and current location.
+     * @param isBot  true if the current player is a bot or false otherwise
+     * @param passos remaining steps
+     * @param local  current room name
+     */
     public void mostrarStatusMovimento(boolean isBot, int passos, String local) {
         if (isBot) {
             System.out.println("\n🤖 [Bot] Passos: " + passos + " | Local: " + local);
@@ -160,14 +256,25 @@ public class GameView {
         }
     }
 
+    /**
+     * Displays the end-of-turn message for the given player.
+     * @param nome player name
+     */
     public void mostrarFimTurno(String nome) {
         System.out.println("Fim do turno de " + nome + ".");
     }
 
+    /**
+     * Displays the final winner of the game.
+     * @param nome winner's name
+     */
     public void mostrarVencedor(String nome) {
         System.out.println("\n🎉🎉 VENCEDOR: " + nome + "! PARABÉNS! 🎉🎉");
     }
 
+    /**
+     * Displays the end-of-game message.
+     */
     public void mostrarFimJogo() {
         System.out.println("Obrigado por jogar!");
     }
@@ -176,78 +283,140 @@ public class GameView {
     // MOVIMENTO E INTERAÇÕES
     // =======================================================
 
+    /**
+     * Displays one movement option in a menu, representing a neighbour room.
+     * @param indice   menu index
+     * @param nomeSala room name
+     * @param tipoSala room type as a string
+     */
     public void mostrarOpcaoMovimento(int indice, String nomeSala, String tipoSala) {
         System.out.println("   [" + indice + "] Ir para: " + nomeSala + " (" + tipoSala + ")");
     }
 
+    /**
+     * Displays the "stop" movement option.
+     */
     public void mostrarOpcaoParar() {
         System.out.println("   [0] Parar");
     }
 
+    /**
+     * Asks the user to choose a movement option.
+     * @return the chosen option
+     */
     public int pedirEscolhaMovimento() {
         System.out.print("Escolha: ");
         return lerInteiro();
     }
 
+    /**
+     * Displays the destination chosen by a bot.
+     * @param destino the name of the destination room
+     */
     public void mostrarBotDecisao(String destino) {
         System.out.println("   📍 A avançar para: " + destino);
     }
 
-    // Mensagens de Eventos de Corredor
+    /**
+     * Displays a message indicating the door is locked by a specific lock ID.
+     * @param id the lock ID
+     */
     public void mostrarPortaoTrancado(int id) {
         System.out.println("🔒 Portão Trancado (Tranca #" + id + ").");
         System.out.println("   Ativa primeiro a Sala de Controlo #" + id + " com este jogador.");
     }
 
+    /**
+     * Displays that the lock is already open for a given player.
+     * @param id   the lock ID
+     * @param nome player name
+     */
     public void mostrarTrancaJaAberta(int id, String nome) {
         System.out.println("🔓 Tranca #" + id + " já foi desbloqueada para " + nome + ". Passas.");
     }
 
+    /**
+     * Displays a message indicating a trap was activated and the turn ends.
+     */
     public void mostrarArmadilhaAtivada() {
         System.out.println("⛔ Armadilha ativada! Turno encerrado.");
     }
 
-    // =======================================================
-    // ENIGMAS
-    // =======================================================
+    
+    public void mostrarRecuo(String nomeJogador, int casas, String nomeNovaSala) {
+        System.out.println("🔙 " + nomeJogador + " recuou " + casas + " casa(s)!");
+        System.out.println("   📍 Nova Posição: " + nomeNovaSala);
+    }
 
+    // Também pode ser útil para penalidades
+    public void mostrarAvisoSemRecuo(String nomeJogador) {
+        System.out.println("⚠️ " + nomeJogador + ": Tentativa de recuo cancelada (Limite de recuo atingido).");
+    }
+    // ENIGMAS
+
+    /**
+     * Displays a message indicating there is a riddle at the door.
+     */
     public void mostrarEnigmaNaPorta() {
         System.out.println("\n🕵️ ENIGMA NA PORTA!");
     }
 
+    /**
+     * Displays the riddle question text.
+     * @param p the question string
+     */
     public void mostrarPergunta(String p) {
         System.out.println("P: " + p);
     }
 
+    /**
+     * Displays that a bot is analyzing a riddle.
+     * @param nome bot name
+     * @param dif  difficulty description
+     */
     public void mostrarBotAnalisaEnigma(String nome, String dif) {
         System.out.println("   🤔 O Bot " + nome + " (" + dif + ") está a analisar o enigma...");
     }
 
+    /**
+     * Displays the answer options for a riddle.
+     * @param ops array of option strings
+     */
     public void mostrarOpcoesEnigma(String[] ops) {
         for(int k=0; k<ops.length; k++) {
             System.out.println("   ("+(k+1)+") "+ops[k]);
         }
     }
 
+    /**
+     * Asks the user to provide an answer for a riddle.
+     * @return the chosen option (1-based)
+     */
     public int pedirRespostaEnigma() {
         System.out.print("Resp: ");
         return lerInteiro();
     }
 
+    /**
+     * Displays the result of an attempt to solve a riddle.
+     * @param acertou  true if the player answered correctly or false otherwise
+     */
     public void mostrarResultadoEnigma(boolean acertou) {
         if (acertou) System.out.println("✅ Correto! Podes passar.");
         else         System.out.println("❌ Errado! A porta fecha-se na tua cara.");
     }
 
+    /**
+     * Displays a textual description of the effect associated with a riddle outcome.
+     * @param efeito the effect code string
+     */
+
     public void mostrarEfeito(String efeito) {
-    // 1. Se não houver efeito, sai logo (não imprime nada)
+    // 1. Se não houver efeito, sai logo
     if (efeito == null || efeito.equals("NONE")) {
         return; 
     }
-
     System.out.print("🔮 Efeito do enigma: ");
-
-    // --- O QUE FALTAVA (CORREÇÃO) ---
     if (efeito.equals("EXTRA_TURN")) {
         System.out.println("ganhaste uma jogada extra!");
         return;
@@ -257,9 +426,7 @@ public class GameView {
         System.out.println("perdes o turno!");
         return;
     }
-    // --------------------------------
 
-    // SUCESSO: BONUS_MOVE:x
     if (efeito.startsWith("BONUS_MOVE:")) {
         try {
             int casas = Integer.parseInt(efeito.split(":")[1]);
@@ -270,13 +437,11 @@ public class GameView {
         return;
     }
 
-    // SUCESSO: BONUS_DICE
     if (efeito.equals("BONUS_DICE")) {
         System.out.println("lanças um dado e avanças o valor obtido!");
         return;
     }
 
-    // FALHA: BACK:x
     if (efeito.startsWith("BACK:")) {
         try {
             int casas = Integer.parseInt(efeito.split(":")[1]);
@@ -287,13 +452,11 @@ public class GameView {
         return;
     }
 
-    // FALHA: BLOCK_EXTRA
     if (efeito.equals("BLOCK_EXTRA")) {
         System.out.println("ficas bloqueado por mais 1 turno!");
         return;
     }
-    
-    // Caso de "fallback" (se aparecer algo novo que não previste, imprime o código)
+
     System.out.println(efeito); 
 }
 
@@ -355,4 +518,5 @@ public class GameView {
         String prefixo = isAtivo ? " 👉 " : "    "; // Seta aponta para quem vai jogar
         System.out.println(prefixo + "👤 " + nome + " \t-> 📍 " + sala);
     }
+
 }

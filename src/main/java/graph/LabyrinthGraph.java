@@ -5,7 +5,7 @@ import java.util.Iterator;
 import Lists.ArrayUnorderedList;
 import enums.CorredorEvento;
 import game.EventoCorredor;
-import structures.GraphList;
+import Graphs.GraphList;
 import structures.MapaNode;
 
 public class LabyrinthGraph<T> extends GraphList<T> {

@@ -28,7 +28,6 @@ public class EnigmaLoader {
             JSONArray enigmasArray = (JSONArray) jsonObject.get("enigmas");
 
             if (enigmasArray == null) {
-                // Se não houver lista devolve vazio
                 return listaEnigmas;
             }
 

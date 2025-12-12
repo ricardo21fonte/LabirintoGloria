@@ -8,6 +8,7 @@ import enums.CorredorEvento;
 import game.Divisao;
 import game.EventoCorredor;
 import structures.MapaNode;
+
 /**
  * Graph representation for the labyrinth game.
  * @param <T> the type of vertices stored in the labyrinth graph

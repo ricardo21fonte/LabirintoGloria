@@ -5,7 +5,6 @@ package enums;
 public enum CorredorEvento {
     NONE,
     EXTRA_TURN,
-    SWAP_POSITION,
     MOVE_BACK,
     BLOCK_TURN ,
     LOCKED

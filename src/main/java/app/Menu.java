@@ -101,7 +101,7 @@ public class Menu {
      */
     private LabyrinthGraph<Divisao> menuMapasJogador() {
         System.out.println("\n MAPAS DO JOGADOR ");
-        System.out.println("Escreva o nome do ficheiro JSON (ex: 'ze3.json'):");
+        System.out.println("Escreva o nome do ficheiro JSON (ex: 'ze3.json' ):");
         System.out.print("> ");
         String nome = lerString();
 
@@ -180,22 +180,22 @@ public class Menu {
         LabyrinthGraph<Divisao> mapa = loader.loadMap(path);
 
         if (mapa == null || mapa.size() == 0) {
-            System.out.println(" Falha crítica: O mapa não pôde ser carregado.");
-            System.out.println("   Verifica se o ficheiro existe: " + path);
+            System.out.println("Falha crítica: O mapa não pôde ser carregado.");
+            System.out.println("Verifica se o ficheiro existe: " + path);
             return apresentarMenuPrincipal();
         }
 
         System.out.println("\n Mapa carregado com sucesso: " + mapa.getVertices().length + " divisões.");
         System.out.println("1. Jogar agora");
         System.out.println("2. Editar Mapa (Adicionar/Modificar)");
-        System.out.println("3. Exportar para DOT (Gráfico)"); // Adicionar nova opção
+        System.out.println("3. Exportar para DOT (Gráfico)");
         System.out.print("Escolha: ");
 
         int op = lerInteiro();
         if (op == 2) {
             return menuEditor(mapa);
         }
-        // lógica para o DOT
+        // DOT
         else if (op == 3) {
             MapExporter exporter = new MapExporter();
             String nomeFicheiroDot = nomeMapaAtual + ".dot";
@@ -368,8 +368,8 @@ public class Menu {
         int falhados = tentados - resolvidos;
 
         System.out.println("Total de Enigmas Tentados: " + tentados);
-        System.out.println(" -> Resolvidos: " + resolvidos);
-        System.out.println(" -> Falhados: " + falhados);
+        System.out.println("-> Resolvidos: " + resolvidos);
+        System.out.println("-> Falhados: " + falhados);
 
         System.out.println("\n========== JOGADORES ==========");
 

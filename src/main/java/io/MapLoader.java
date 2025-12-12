@@ -165,7 +165,6 @@ public class MapLoader {
 
     /**
      * Looks up a Divisao
-     *
      * @param salas    list of all rooms loaded from the file
      * @param codigos  list of the corresponding textual codes
      * @param alvo     the target code to search for

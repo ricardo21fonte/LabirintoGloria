@@ -85,7 +85,7 @@ public class GameView {
         return lerInteiro();
     }
     /**
-     * Shows a generic "invalid option" error message for a menu choice.
+     * Shows a generic invalid option error message for a menu choice.
      * @param min minimum valid option
      * @param max maximum valid option
      */

@@ -43,7 +43,7 @@ public class Player {
     private LinkedStack<Divisao> caminho;
 
     /**
-     * Minimum allowed size of the path stack for "recuar" operations.
+     * Minimum allowed size of the path stack for back positions operations.
      */
     private int limiteRecuoMinSize;
 
@@ -104,7 +104,7 @@ public class Player {
 
         while (true) {
             int escolha = view.pedirEscolhaMovimento();
-            if (escolha == 0) return null; // Parar
+            if (escolha == 0) return null;
             if (escolha > 0 && escolha <= vizinhos.size()) {
                 return opcoes[escolha - 1];
             }
@@ -223,7 +223,6 @@ public class Player {
      * Marks the current size of the path stack as the minimum allowed for future "recuar" operations.
      */
     public void marcarLimiteRecuo() {
-
         this.limiteRecuoMinSize = caminho.size();
     }
 

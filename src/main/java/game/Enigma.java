@@ -38,7 +38,7 @@ public class Enigma {
      * Creates a new Enigma with the given question, options, correct answer index and difficulty.
      * @param pergunta       the question text
      * @param opcoes         the list of possible options
-     * @param indiceCorreto  the index (0-based) of the correct option in {@code opcoes}
+     * @param indiceCorreto  the index of the correct option in opcoes
      * @param dificuldade    the difficulty level of this riddle
      */
     public Enigma(String pergunta, String[] opcoes, int indiceCorreto, Dificuldade dificuldade) {

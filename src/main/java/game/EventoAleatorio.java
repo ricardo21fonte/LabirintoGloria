@@ -134,7 +134,7 @@ public class EventoAleatorio {
         Player alvoTroca = alvo.escolherAlvoParaTroca(jogadores, view);
 
         if (alvoTroca == null || alvoTroca.equals(alvo)) {
-            System.out.println("   (Troca cancelada ou alvo inválido)");
+            System.out.println("Troca cancelada ou alvo inválido");
             return;
         }
 

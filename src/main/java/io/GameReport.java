@@ -346,8 +346,8 @@ public class GameReport {
         /**
          * Creates a new EnigmaEvent with all its properties.
          * @param p  the enigma question
-         * @param r  the player's answer (or recorded answer)
-         * @param res {@code true} if solved correctly, {@code false} otherwise
+         * @param r  the player's answer
+         * @param res true if solved correctly
          * @param ef the effect code applied
          * @param s  the room where the enigma occurred
          */

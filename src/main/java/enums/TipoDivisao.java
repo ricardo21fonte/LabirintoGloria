@@ -7,6 +7,5 @@ package enums;
     SALA_NORMAL,
     SALA_ENIGMA,
     SALA_ALAVANCA,
-    SALA_CENTRAL,
-    SALA_SAIDA
+    SALA_CENTRAL
 }

@@ -4,722 +4,541 @@
       "pergunta": "Quanto é 10 + 5 * 2?",
       "opcoes": ["30", "20", "25", "15"],
       "correta": 1,
-      "dificuldade": "FACIL",
-      "sucesso": "EXTRA_TURN",
-      "falha": "BACK:1"
+      "dificuldade": "FACIL"
     },
     {
       "pergunta": "Qual destes NÃO é um tipo primitivo em Java?",
       "opcoes": ["int", "boolean", "String", "char"],
       "correta": 2,
-      "dificuldade": "FACIL",
-      "sucesso": "EXTRA_TURN",
-      "falha": "BACK:1"
+      "dificuldade": "FACIL"
     },
     {
       "pergunta": "O que significa CPU?",
       "opcoes": ["Central Process Unit", "Computer Personal Unit", "Central Power Unit", "Core Process Unit"],
       "correta": 0,
-      "dificuldade": "FACIL",
-      "sucesso": "EXTRA_TURN",
-      "falha": "BACK:1"
+      "dificuldade": "FACIL"
     },
     {
       "pergunta": "Em Java, como terminas uma instrução?",
       "opcoes": [":", ".", ";", "}"],
       "correta": 2,
-      "dificuldade": "FACIL",
-      "sucesso": "EXTRA_TURN",
-      "falha": "BACK:1"
+      "dificuldade": "FACIL"
     },
     {
       "pergunta": "Qual é o valor binário de 5?",
       "opcoes": ["100", "101", "111", "011"],
       "correta": 1,
-      "dificuldade": "FACIL",
-      "sucesso": "EXTRA_TURN",
-      "falha": "BACK:1"
+      "dificuldade": "FACIL"
     },
     {
       "pergunta": "Qual é o resultado de (true && false)?",
       "opcoes": ["true", "false", "null", "erro"],
       "correta": 1,
-      "dificuldade": "FACIL",
-      "sucesso": "EXTRA_TURN",
-      "falha": "BACK:1"
+      "dificuldade": "FACIL"
     },
     {
-      "pergunta": "Qual ciclo garante que o código corre pelo menos uma vez?",
+      "pergunta": "Qual ciclo que garante que o código corre pelo menos uma vez?",
       "opcoes": ["for", "while", "do-while", "foreach"],
       "correta": 2,
-      "dificuldade": "FACIL",
-      "sucesso": "EXTRA_TURN",
-      "falha": "BACK:1"
+      "dificuldade": "FACIL"
     },
     {
       "pergunta": "Qual palavra-chave define uma constante em Java?",
       "opcoes": ["const", "final", "static", "fixed"],
       "correta": 1,
-      "dificuldade": "FACIL",
-      "sucesso": "EXTRA_TURN",
-      "falha": "BACK:1"
+      "dificuldade": "FACIL"
     },
     {
       "pergunta": "O que indica a palavra 'extends'?",
       "opcoes": ["Interface", "Polimorfismo", "Herança", "Encapsulamento"],
       "correta": 2,
-      "dificuldade": "FACIL",
-      "sucesso": "EXTRA_TURN",
-      "falha": "BACK:1"
+      "dificuldade": "FACIL"
     },
     {
       "pergunta": "Onde são guardados os objetos em Java (memória)?",
       "opcoes": ["Stack", "Heap", "Cache", "Register"],
       "correta": 1,
-      "dificuldade": "FACIL",
-      "sucesso": "EXTRA_TURN",
-      "falha": "BACK:1"
+      "dificuldade": "FACIL"
     },
     {
       "pergunta": "Qual destes nomes de variável é INVÁLIDO?",
       "opcoes": ["minhaVariavel", "_valor", "2way", "$dinheiro"],
       "correta": 2,
-      "dificuldade": "FACIL",
-      "sucesso": "EXTRA_TURN",
-      "falha": "BACK:1"
+      "dificuldade": "FACIL"
     },
     {
       "pergunta": "O símbolo '!' em Java significa:",
       "opcoes": ["OU (OR)", "E (AND)", "DIFERENTE", "NÃO (NOT)"],
       "correta": 3,
-      "dificuldade": "FACIL",
-      "sucesso": "EXTRA_TURN",
-      "falha": "BACK:1"
+      "dificuldade": "FACIL"
     },
     {
       "pergunta": "Qual o tamanho em bits de um 'int'?",
       "opcoes": ["8", "16", "32", "64"],
       "correta": 2,
-      "dificuldade": "FACIL",
-      "sucesso": "EXTRA_TURN",
-      "falha": "BACK:1"
+      "dificuldade": "FACIL"
     },
     {
       "pergunta": "Como se escreve um comentário de uma linha?",
       "opcoes": ["/* ... */", "// ...", "# ...", ""],
       "correta": 1,
-      "dificuldade": "FACIL",
-      "sucesso": "EXTRA_TURN",
-      "falha": "BACK:1"
+      "dificuldade": "FACIL"
     },
     {
       "pergunta": "Qual é a extensão de um ficheiro Java compilado (bytecode)?",
       "opcoes": [".java", ".exe", ".class", ".jar"],
       "correta": 2,
-      "dificuldade": "FACIL",
-      "sucesso": "EXTRA_TURN",
-      "falha": "BACK:1"
+      "dificuldade": "FACIL"
     },
     {
       "pergunta": "Qual estrutura de dados segue a regra LIFO (Last-In, First-Out)?",
       "opcoes": ["Fila (Queue)", "Lista Ligada", "Pilha (Stack)", "Árvore"],
       "correta": 2,
-      "dificuldade": "MEDIO",
-      "sucesso": "EXTRA_TURN",
-      "falha": "BACK:1"
+      "dificuldade": "MEDIO"
     },
     {
       "pergunta": "Num array de tamanho 10, qual é o índice do último elemento?",
       "opcoes": ["10", "9", "0", "11"],
       "correta": 1,
-      "dificuldade": "MEDIO",
-      "sucesso": "EXTRA_TURN",
-      "falha": "BACK:1"
+      "dificuldade": "MEDIO"
     },
     {
       "pergunta": "Para percorrer um Grafo em largura (BFS), que estrutura auxiliar usamos?",
       "opcoes": ["Pilha", "Fila", "Matriz", "Árvore"],
       "correta": 1,
-      "dificuldade": "MEDIO",
-      "sucesso": "EXTRA_TURN",
-      "falha": "BACK:1"
+      "dificuldade": "MEDIO"
     },
     {
       "pergunta": "Qual destas estruturas garante acesso direto (rápido) por índice?",
       "opcoes": ["LinkedList", "Array", "Stack", "Queue"],
       "correta": 1,
-      "dificuldade": "MEDIO",
-      "sucesso": "EXTRA_TURN",
-      "falha": "BACK:1"
+      "dificuldade": "MEDIO"
     },
     {
       "pergunta": "O que acontece numa Hash Table quando duas chaves geram o mesmo índice?",
       "opcoes": ["Erro de Compilação", "Overflow", "Colisão", "Deadlock"],
       "correta": 2,
-      "dificuldade": "MEDIO",
-      "sucesso": "EXTRA_TURN",
-      "falha": "BACK:1"
+      "dificuldade": "MEDIO"
     },
     {
       "pergunta": "Qual a operação para remover um elemento de uma Stack?",
       "opcoes": ["push", "enqueue", "pop", "peek"],
       "correta": 2,
-      "dificuldade": "MEDIO",
-      "sucesso": "EXTRA_TURN",
-      "falha": "BACK:1"
+      "dificuldade": "MEDIO"
     },
     {
       "pergunta": "Como se chama o nó principal (topo) de uma Árvore?",
       "opcoes": ["Folha (Leaf)", "Raiz (Root)", "Ramo", "Tronco"],
       "correta": 1,
-      "dificuldade": "MEDIO",
-      "sucesso": "EXTRA_TURN",
-      "falha": "BACK:1"
+      "dificuldade": "MEDIO"
     },
     {
       "pergunta": "Qual a operação para adicionar um elemento a uma Queue?",
       "opcoes": ["push", "enqueue", "pop", "dequeue"],
       "correta": 1,
-      "dificuldade": "MEDIO",
-      "sucesso": "EXTRA_TURN",
-      "falha": "BACK:1"
+      "dificuldade": "MEDIO"
     },
     {
       "pergunta": "Uma Interface em Java pode guardar estado (variáveis de instância)?",
       "opcoes": ["Sim", "Não", "Só se forem privadas", "Depende da versão"],
       "correta": 1,
-      "dificuldade": "MEDIO",
-      "sucesso": "EXTRA_TURN",
-      "falha": "BACK:1"
+      "dificuldade": "MEDIO"
     },
     {
       "pergunta": "O que é essencial para parar uma função recursiva?",
       "opcoes": ["Loop for", "Caso Base", "Return null", "Break"],
       "correta": 1,
-      "dificuldade": "MEDIO",
-      "sucesso": "EXTRA_TURN",
-      "falha": "BACK:1"
+      "dificuldade": "MEDIO"
     },
     {
       "pergunta": "O que faz o Garbage Collector?",
       "opcoes": ["Compila o código", "Gere memória e elimina objetos não usados", "Otimiza loops", "Gere threads"],
       "correta": 1,
-      "dificuldade": "MEDIO",
-      "sucesso": "EXTRA_TURN",
-      "falha": "BACK:1"
+      "dificuldade": "MEDIO"
     },
     {
       "pergunta": "Qual a complexidade de inserir no INÍCIO de uma LinkedList?",
       "opcoes": ["O(1)", "O(n)", "O(log n)", "O(n^2)"],
       "correta": 0,
-      "dificuldade": "MEDIO",
-      "sucesso": "EXTRA_TURN",
-      "falha": "BACK:1"
+      "dificuldade": "MEDIO"
     },
     {
       "pergunta": "Para implementar a função 'Undo' (Desfazer), usamos qual estrutura?",
       "opcoes": ["Queue", "Tree", "Stack", "Graph"],
       "correta": 2,
-      "dificuldade": "MEDIO",
-      "sucesso": "EXTRA_TURN",
-      "falha": "BACK:1"
+      "dificuldade": "MEDIO"
     },
     {
       "pergunta": "O que acontece se não houver 'break' num switch case?",
       "opcoes": ["Erro", "Sai do switch", "Executa o próximo case (Fall-through)", "Loop infinito"],
       "correta": 2,
-      "dificuldade": "MEDIO",
-      "sucesso": "EXTRA_TURN",
-      "falha": "BACK:1"
+      "dificuldade": "MEDIO"
     },
     {
       "pergunta": "O que significa 'NullPointerException'?",
       "opcoes": ["Variável não inicializada", "Apontador para nulo", "Erro de sintaxe", "Tentar usar um objeto que é null"],
       "correta": 3,
-      "dificuldade": "MEDIO",
-      "sucesso": "EXTRA_TURN",
-      "falha": "BACK:1"
+      "dificuldade": "MEDIO"
     },
     {
       "pergunta": "Qual a complexidade temporal de acesso num Array vs LinkedList?",
       "opcoes": ["O(1) vs O(n)", "O(n) vs O(1)", "O(n) vs O(n)", "O(1) vs O(1)"],
       "correta": 0,
-      "dificuldade": "DIFICIL",
-      "sucesso": "EXTRA_TURN",
-      "falha": "BACK:1"
+      "dificuldade": "DIFICIL"
     },
     {
       "pergunta": "Qual é a pior complexidade (Worst Case) do Bubble Sort?",
       "opcoes": ["O(n)", "O(n log n)", "O(n^2)", "O(1)"],
       "correta": 2,
-      "dificuldade": "DIFICIL",
-      "sucesso": "EXTRA_TURN",
-      "falha": "BACK:1"
+      "dificuldade": "DIFICIL"
     },
     {
       "pergunta": "Num grafo denso (muitas arestas), qual a melhor representação?",
       "opcoes": ["Lista de Adjacência", "Matriz de Adjacência", "Pilha Dupla", "Árvore Binária"],
       "correta": 1,
-      "dificuldade": "DIFICIL",
-      "sucesso": "EXTRA_TURN",
-      "falha": "BACK:1"
+      "dificuldade": "DIFICIL"
     },
     {
       "pergunta": "Qual a complexidade da pesquisa binária (Binary Search)?",
       "opcoes": ["O(n)", "O(1)", "O(log n)", "O(n^2)"],
       "correta": 2,
-      "dificuldade": "DIFICIL",
-      "sucesso": "EXTRA_TURN",
-      "falha": "BACK:1"
+      "dificuldade": "DIFICIL"
     },
     {
       "pergunta": "O que é um Grafo Conexo?",
       "opcoes": ["Não tem ciclos", "Todos os vértices têm grau 2", "Existe caminho entre quaisquer dois vértices", "Tem pesos negativos"],
       "correta": 2,
-      "dificuldade": "DIFICIL",
-      "sucesso": "EXTRA_TURN",
-      "falha": "BACK:1"
+      "dificuldade": "DIFICIL"
     },
     {
       "pergunta": "Qual a complexidade de pesquisa numa Árvore Binária (BST) equilibrada?",
       "opcoes": ["O(n)", "O(log n)", "O(1)", "O(n^2)"],
       "correta": 1,
-      "dificuldade": "DIFICIL",
-      "sucesso": "EXTRA_TURN",
-      "falha": "BACK:1"
+      "dificuldade": "DIFICIL"
     },
     {
       "pergunta": "Num Max-Heap, onde está sempre o maior elemento?",
       "opcoes": ["Na Raiz", "Na última folha", "No meio", "Aleatório"],
       "correta": 0,
-      "dificuldade": "DIFICIL",
-      "sucesso": "EXTRA_TURN",
-      "falha": "BACK:1"
+      "dificuldade": "DIFICIL"
     },
     {
       "pergunta": "Qual algoritmo de travessia de Grafos usa uma Stack (Pilha)?",
       "opcoes": ["BFS (Largura)", "DFS (Profundidade)", "Dijkstra", "Prim"],
       "correta": 1,
-      "dificuldade": "DIFICIL",
-      "sucesso": "EXTRA_TURN",
-      "falha": "BACK:1"
+      "dificuldade": "DIFICIL"
     },
     {
       "pergunta": "O que é o 'Load Factor' numa Hash Table?",
       "opcoes": ["Tempo de CPU", "Memória usada", "Relação Elementos / Capacidade", "Número de colisões"],
       "correta": 2,
-      "dificuldade": "DIFICIL",
-      "sucesso": "EXTRA_TURN",
-      "falha": "BACK:1"
+      "dificuldade": "DIFICIL"
     },
     {
       "pergunta": "Qual destes algoritmos de ordenação é considerado 'Estável'?",
       "opcoes": ["QuickSort", "HeapSort", "MergeSort", "SelectionSort"],
       "correta": 2,
-      "dificuldade": "DIFICIL",
-      "sucesso": "EXTRA_TURN",
-      "falha": "BACK:1"
+      "dificuldade": "DIFICIL"
     },
     {
       "pergunta": "Qual a complexidade de espaço (memória auxiliar) do Merge Sort?",
       "opcoes": ["O(1)", "O(n)", "O(log n)", "O(n^2)"],
       "correta": 1,
-      "dificuldade": "DIFICIL",
-      "sucesso": "EXTRA_TURN",
-      "falha": "BACK:1"
+      "dificuldade": "DIFICIL"
     },
     {
       "pergunta": "Para encontrar o caminho mais curto num grafo com pesos, usamos:",
       "opcoes": ["BFS", "DFS", "Dijkstra", "Kruskal"],
       "correta": 2,
-      "dificuldade": "DIFICIL",
-      "sucesso": "EXTRA_TURN",
-      "falha": "BACK:1"
+      "dificuldade": "DIFICIL"
     },
     {
       "pergunta": "Qual é a altura máxima de uma Árvore Binária Completa com N nós?",
       "opcoes": ["N", "log N", "N/2", "N^2"],
       "correta": 1,
-      "dificuldade": "DIFICIL",
-      "sucesso": "EXTRA_TURN",
-      "falha": "BACK:1"
+      "dificuldade": "DIFICIL"
     },
     {
       "pergunta": "Por que usamos números primos no tamanho de Hash Tables?",
       "opcoes": ["Poupar memória", "Cálculo mais rápido", "Reduzir colisões", "É regra do Java"],
       "correta": 2,
-      "dificuldade": "DIFICIL",
-      "sucesso": "EXTRA_TURN",
-      "falha": "BACK:1"
+      "dificuldade": "DIFICIL"
     },
     {
       "pergunta": "Qual destes algoritmos NÃO é baseado em comparação?",
       "opcoes": ["Merge Sort", "Quick Sort", "Radix Sort", "Bubble Sort"],
       "correta": 2,
-      "dificuldade": "DIFICIL",
-      "sucesso": "EXTRA_TURN",
-      "falha": "BACK:1"
+      "dificuldade": "DIFICIL"
     },
     {
       "pergunta": "Qual é o operador para calcular o resto da divisão?",
       "opcoes": ["/", "REST", "%", "#"],
       "correta": 2,
-      "dificuldade": "FACIL",
-      "sucesso": "EXTRA_TURN",
-      "falha": "BACK:1"
+      "dificuldade": "FACIL"
     },
     {
       "pergunta": "O que imprime 'System.out.println(1 + \"2\")'?",
       "opcoes": ["3", "12", "Erro", "NaN"],
       "correta": 1,
-      "dificuldade": "FACIL",
-      "sucesso": "EXTRA_TURN",
-      "falha": "BACK:1"
+      "dificuldade": "FACIL"
     },
     {
       "pergunta": "Qual é o valor padrão (default) de um inteiro em Java?",
       "opcoes": ["1", "null", "0", "-1"],
       "correta": 2,
-      "dificuldade": "FACIL",
-      "sucesso": "EXTRA_TURN",
-      "falha": "BACK:1"
+      "dificuldade": "FACIL"
     },
     {
       "pergunta": "O que significa a sigla HTML?",
       "opcoes": ["HyperText Markup Language", "HighTech Modern Language", "HyperText Machine Learning", "Home Tool Markup Language"],
       "correta": 0,
-      "dificuldade": "FACIL",
-      "sucesso": "EXTRA_TURN",
-      "falha": "BACK:1"
+      "dificuldade": "FACIL"
     },
     {
       "pergunta": "Qual destas NÃO é uma linguagem de programação?",
       "opcoes": ["Python", "Java", "HTML", "C++"],
       "correta": 2,
-      "dificuldade": "FACIL",
-      "sucesso": "EXTRA_TURN",
-      "falha": "BACK:1"
+      "dificuldade": "FACIL"
     },
     {
       "pergunta": "Quantos bytes tem 1 Kilobyte (KB)?",
       "opcoes": ["1000", "1024", "8", "512"],
       "correta": 1,
-      "dificuldade": "FACIL",
-      "sucesso": "EXTRA_TURN",
-      "falha": "BACK:1"
+      "dificuldade": "FACIL"
     },
     {
       "pergunta": "Qual método é chamado automaticamente ao criar um objeto?",
       "opcoes": ["main", "start", "init", "Construtor"],
       "correta": 3,
-      "dificuldade": "FACIL",
-      "sucesso": "EXTRA_TURN",
-      "falha": "BACK:1"
+      "dificuldade": "FACIL"
     },
     {
       "pergunta": "O que faz o comando 'git init'?",
       "opcoes": ["Envia código", "Apaga ficheiros", "Inicia um repositório", "Cria um commit"],
       "correta": 2,
-      "dificuldade": "FACIL",
-      "sucesso": "EXTRA_TURN",
-      "falha": "BACK:1"
+      "dificuldade": "FACIL"
     },
     {
       "pergunta": "Qual é a negação de (A OU B)?",
       "opcoes": ["A E B", "NÃO A E NÃO B", "NÃO A OU NÃO B", "A OU NÃO B"],
       "correta": 1,
-      "dificuldade": "FACIL",
-      "sucesso": "EXTRA_TURN",
-      "falha": "BACK:1"
+      "dificuldade": "FACIL"
     },
     {
       "pergunta": "Qual é o índice do primeiro elemento de um array?",
       "opcoes": ["1", "0", "-1", "Depende do tamanho"],
       "correta": 1,
-      "dificuldade": "FACIL",
-      "sucesso": "EXTRA_TURN",
-      "falha": "BACK:1"
+      "dificuldade": "FACIL"
     },
     {
       "pergunta": "O que é um 'loop infinito'?",
       "opcoes": ["Um erro de sintaxe", "Um ciclo que nunca para", "Uma variável muito grande", "Um tipo de grafo"],
       "correta": 1,
-      "dificuldade": "FACIL",
-      "sucesso": "EXTRA_TURN",
-      "falha": "BACK:1"
+      "dificuldade": "FACIL"
     },
     {
       "pergunta": "Qual destes tipos guarda números decimais?",
       "opcoes": ["int", "boolean", "double", "char"],
       "correta": 2,
-      "dificuldade": "FACIL",
-      "sucesso": "EXTRA_TURN",
-      "falha": "BACK:1"
+      "dificuldade": "FACIL"
     },
     {
       "pergunta": "Como se chama a 'receita' para criar objetos?",
       "opcoes": ["Classe", "Método", "Variável", "Pacote"],
       "correta": 0,
-      "dificuldade": "FACIL",
-      "sucesso": "EXTRA_TURN",
-      "falha": "BACK:1"
+      "dificuldade": "FACIL"
     },
     {
       "pergunta": "O que significa 'GUI'?",
       "opcoes": ["Global User Interface", "Graphical User Interface", "General Unit Integer", "Game User Input"],
       "correta": 1,
-      "dificuldade": "FACIL",
-      "sucesso": "EXTRA_TURN",
-      "falha": "BACK:1"
+      "dificuldade": "FACIL"
     },
     {
       "pergunta": "Se x=5 e y=2, quanto é x/y em divisão inteira?",
       "opcoes": ["2.5", "2", "3", "Erro"],
       "correta": 1,
-      "dificuldade": "FACIL",
-      "sucesso": "EXTRA_TURN",
-      "falha": "BACK:1"
+      "dificuldade": "FACIL"
     },
     {
       "pergunta": "O que é Polimorfismo?",
       "opcoes": ["Muitas formas para o mesmo método", "Esconder dados", "Herança múltipla", "Criar interfaces"],
       "correta": 0,
-      "dificuldade": "MEDIO",
-      "sucesso": "EXTRA_TURN",
-      "falha": "BACK:1"
+      "dificuldade": "MEDIO"
     },
     {
       "pergunta": "Qual a principal diferença entre Array e ArrayList?",
       "opcoes": ["O Array é mais lento", "O ArrayList é dinâmico (muda de tamanho)", "O Array aceita genéricos", "Não há diferença"],
       "correta": 1,
-      "dificuldade": "MEDIO",
-      "sucesso": "EXTRA_TURN",
-      "falha": "BACK:1"
+      "dificuldade": "MEDIO"
     },
     {
       "pergunta": "Para que serve a palavra 'super'?",
       "opcoes": ["Declarar constante", "Aceder à superclasse (pai)", "Criar super objeto", "Aumentar memória"],
       "correta": 1,
-      "dificuldade": "MEDIO",
-      "sucesso": "EXTRA_TURN",
-      "falha": "BACK:1"
+      "dificuldade": "MEDIO"
     },
     {
       "pergunta": "O que é uma 'Queue' (Fila)?",
       "opcoes": ["LIFO (Last-In, First-Out)", "FIFO (First-In, First-Out)", "Acesso Aleatório", "Árvore Binária"],
       "correta": 1,
-      "dificuldade": "MEDIO",
-      "sucesso": "EXTRA_TURN",
-      "falha": "BACK:1"
+      "dificuldade": "MEDIO"
     },
     {
       "pergunta": "Qual a complexidade de inserir no final de uma ArrayList (sem resize)?",
       "opcoes": ["O(n)", "O(log n)", "O(1)", "O(n^2)"],
       "correta": 2,
-      "dificuldade": "MEDIO",
-      "sucesso": "EXTRA_TURN",
-      "falha": "BACK:1"
+      "dificuldade": "MEDIO"
     },
     {
       "pergunta": "O que é o encapsulamento?",
       "opcoes": ["Esconder detalhes internos (private)", "Herança de classes", "Sobrecarga de métodos", "Uso de interfaces"],
       "correta": 0,
-      "dificuldade": "MEDIO",
-      "sucesso": "EXTRA_TURN",
-      "falha": "BACK:1"
+      "dificuldade": "MEDIO"
     },
     {
       "pergunta": "Qual exceção ocorre se acederes a um índice negativo num array?",
       "opcoes": ["NullPointerException", "IndexOutOfBoundsException", "ClassCastException", "IOException"],
       "correta": 1,
-      "dificuldade": "MEDIO",
-      "sucesso": "EXTRA_TURN",
-      "falha": "BACK:1"
+      "dificuldade": "MEDIO"
     },
     {
       "pergunta": "O que faz o comando 'this'?",
       "opcoes": ["Refere-se à classe pai", "Refere-se ao objeto atual", "Cria um novo objeto", "Apaga a variável"],
       "correta": 1,
-      "dificuldade": "MEDIO",
-      "sucesso": "EXTRA_TURN",
-      "falha": "BACK:1"
+      "dificuldade": "MEDIO"
     },
     {
       "pergunta": "Qual destes NÃO pode ser instanciado?",
       "opcoes": ["Classe Publica", "Classe Abstrata", "Classe Final", "Classe Estática"],
       "correta": 1,
-      "dificuldade": "MEDIO",
-      "sucesso": "EXTRA_TURN",
-      "falha": "BACK:1"
+      "dificuldade": "MEDIO"
     },
     {
       "pergunta": "Numa lista duplamente ligada, cada nó tem referências para:",
       "opcoes": ["Apenas o próximo", "O anterior e o próximo", "O índice e o valor", "A raiz e a folha"],
       "correta": 1,
-      "dificuldade": "MEDIO",
-      "sucesso": "EXTRA_TURN",
-      "falha": "BACK:1"
+      "dificuldade": "MEDIO"
     },
     {
       "pergunta": "Qual a vantagem de uma Hash Table (Mapa)?",
       "opcoes": ["Ordenação automática", "Acesso muito rápido (médio O(1))", "Não ocupa memória", "Permite chaves duplicadas"],
       "correta": 1,
-      "dificuldade": "MEDIO",
-      "sucesso": "EXTRA_TURN",
-      "falha": "BACK:1"
+      "dificuldade": "MEDIO"
     },
     {
       "pergunta": "O que é um 'Deadlock'?",
       "opcoes": ["Erro de memória", "Dois processos bloqueados à espera um do outro", "Um loop infinito", "Um ponteiro nulo"],
       "correta": 1,
-      "dificuldade": "MEDIO",
-      "sucesso": "EXTRA_TURN",
-      "falha": "BACK:1"
+      "dificuldade": "MEDIO"
     },
     {
       "pergunta": "Qual estrutura é usada para implementar Recursividade no sistema?",
       "opcoes": ["Queue", "Heap", "Stack", "Graph"],
       "correta": 2,
-      "dificuldade": "MEDIO",
-      "sucesso": "EXTRA_TURN",
-      "falha": "BACK:1"
+      "dificuldade": "MEDIO"
     },
     {
       "pergunta": "O que significa FIFO?",
       "opcoes": ["Fast In Fast Out", "First In First Out", "First Integer First Object", "File Input File Output"],
       "correta": 1,
-      "dificuldade": "MEDIO",
-      "sucesso": "EXTRA_TURN",
-      "falha": "BACK:1"
+      "dificuldade": "MEDIO"
     },
     {
       "pergunta": "Qual destas ordenações é a mais lenta (O(n^2))?",
       "opcoes": ["Merge Sort", "Quick Sort", "Bubble Sort", "Heap Sort"],
       "correta": 2,
-      "dificuldade": "MEDIO",
-      "sucesso": "EXTRA_TURN",
-      "falha": "BACK:1"
+      "dificuldade": "MEDIO"
     },
     {
       "pergunta": "O que distingue uma Árvore AVL de uma BST normal?",
       "opcoes": ["Aceita duplicados", "É sempre balanceada", "Tem 3 filhos", "Não usa recursividade"],
       "correta": 1,
-      "dificuldade": "DIFICIL",
-      "sucesso": "EXTRA_TURN",
-      "falha": "BACK:1"
+      "dificuldade": "DIFICIL"
     },
     {
       "pergunta": "Qual a complexidade do algoritmo de Dijkstra (com Priority Queue)?",
       "opcoes": ["O(V + E)", "O(V^2)", "O(E + V log V)", "O(E log V)"],
       "correta": 3,
-      "dificuldade": "DIFICIL",
-      "sucesso": "EXTRA_TURN",
-      "falha": "BACK:1"
+      "dificuldade": "DIFICIL"
     },
     {
       "pergunta": "O que é uma colisão em Hashing?",
       "opcoes": ["Hash Table cheia", "Duas chaves diferentes dão o mesmo hash", "Erro de sintaxe", "Acesso a índice negativo"],
       "correta": 1,
-      "dificuldade": "DIFICIL",
-      "sucesso": "EXTRA_TURN",
-      "falha": "BACK:1"
+      "dificuldade": "DIFICIL"
     },
     {
       "pergunta": "Qual destas estruturas NÃO é linear?",
       "opcoes": ["Stack", "Queue", "LinkedList", "Graph"],
       "correta": 3,
-      "dificuldade": "DIFICIL",
-      "sucesso": "EXTRA_TURN",
-      "falha": "BACK:1"
+      "dificuldade": "DIFICIL"
     },
     {
       "pergunta": "Numa travessia 'In-Order' de uma BST, os valores saem:",
       "opcoes": ["Aleatórios", "Ordenados crescentemente", "Invertidos", "Pela ordem de inserção"],
       "correta": 1,
-      "dificuldade": "DIFICIL",
-      "sucesso": "EXTRA_TURN",
-      "falha": "BACK:1"
+      "dificuldade": "DIFICIL"
     },
     {
       "pergunta": "O problema do Caixeiro Viajante (TSP) é de que classe?",
       "opcoes": ["P", "NP-Hard", "Linear", "Logarítmico"],
       "correta": 1,
-      "dificuldade": "DIFICIL",
-      "sucesso": "EXTRA_TURN",
-      "falha": "BACK:1"
+      "dificuldade": "DIFICIL"
     },
     {
       "pergunta": "Qual a altura máxima de uma Red-Black Tree com N nós?",
       "opcoes": ["N", "2 * log(N+1)", "N/2", "sqrt(N)"],
       "correta": 1,
-      "dificuldade": "DIFICIL",
-      "sucesso": "EXTRA_TURN",
-      "falha": "BACK:1"
+      "dificuldade": "DIFICIL"
     },
     {
       "pergunta": "O que faz o algoritmo de Kruskal?",
       "opcoes": ["Caminho mais curto", "Ordenação topológica", "Árvore de extensão mínima (MST)", "Fluxo máximo"],
       "correta": 2,
-      "dificuldade": "DIFICIL",
-      "sucesso": "EXTRA_TURN",
-      "falha": "BACK:1"
+      "dificuldade": "DIFICIL"
     },
     {
       "pergunta": "Qual estrutura é melhor para implementar 'Autocomplete'?",
       "opcoes": ["LinkedList", "Hash Map", "Trie (Prefix Tree)", "Stack"],
       "correta": 2,
-      "dificuldade": "DIFICIL",
-      "sucesso": "EXTRA_TURN",
-      "falha": "BACK:1"
+      "dificuldade": "DIFICIL"
     },
     {
       "pergunta": "Em Java, 'String' é imutável. O que isso significa?",
       "opcoes": ["Não pode ser apagada", "O valor em memória não muda após criação", "É uma primitiva", "Não tem métodos"],
       "correta": 1,
-      "dificuldade": "DIFICIL",
-      "sucesso": "EXTRA_TURN",
-      "falha": "BACK:1"
+      "dificuldade": "DIFICIL"
     },
     {
       "pergunta": "Qual a complexidade espacial de uma Matriz de Adjacência?",
       "opcoes": ["O(V)", "O(E)", "O(V^2)", "O(V + E)"],
       "correta": 2,
-      "dificuldade": "DIFICIL",
-      "sucesso": "EXTRA_TURN",
-      "falha": "BACK:1"
+      "dificuldade": "DIFICIL"
     },
     {
       "pergunta": "Se uma função chama a si mesma duas vezes (ex: Fibonacci), a complexidade é:",
       "opcoes": ["O(n)", "O(n^2)", "O(2^n)", "O(log n)"],
       "correta": 2,
-      "dificuldade": "DIFICIL",
-      "sucesso": "EXTRA_TURN",
-      "falha": "BACK:1"
+      "dificuldade": "DIFICIL"
     },
     {
       "pergunta": "Qual a diferença entre 'Processo' e 'Thread'?",
       "opcoes": ["Não há diferença", "Threads partilham memória, Processos não", "Processos são mais leves", "Threads não correm em paralelo"],
       "correta": 1,
-      "dificuldade": "DIFICIL",
-      "sucesso": "EXTRA_TURN",
-      "falha": "BACK:1"
+      "dificuldade": "DIFICIL"
     },
     {
       "pergunta": "O que é 'Memoization' em Programação Dinâmica?",
       "opcoes": ["Apagar memória", "Guardar resultados para não recalcular", "Usar recursividade", "Aumentar a stack"],
       "correta": 1,
-      "dificuldade": "DIFICIL",
-      "sucesso": "EXTRA_TURN",
-      "falha": "BACK:1"
+      "dificuldade": "DIFICIL"
     },
     {
       "pergunta": "Qual destes é um Grafo Bipartido?",
       "opcoes": ["Todos os vértices ligados", "Vértices divididos em 2 conjuntos sem ligações internas", "Grafo com 2 ciclos", "Árvore Binária"],
       "correta": 1,
-      "dificuldade": "DIFICIL",
-      "sucesso": "EXTRA_TURN",
-      "falha": "BACK:1"
+      "dificuldade": "DIFICIL"
     }
   ]
-
 }
